@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import chalk from 'chalk';
 import { CLIApplication, Command } from './cli/index.js';
 import { getFilesByPattern } from './shared/libs/index.js';
 
@@ -16,7 +17,7 @@ async function bootstrap() {
     try {
       commands.push(new CommandClass());
     } catch (error) {
-      console.error(`No command found in ${fileName}`);
+      console.error(chalk.red(`No command found in ${chalk.bold(fileName)}`));
     }
   }
   cliApplication.registerCommands(commands);

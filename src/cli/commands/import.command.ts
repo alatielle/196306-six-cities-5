@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import { Command } from './command.interface.js';
 import { Offer } from '../../shared/types/offer.type.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
@@ -78,7 +79,7 @@ export class ImportCommand implements Command {
 
   public run(...parameters: string[]): void {
     if (!parameters.length) {
-      console.error('No filename to import from');
+      console.error(chalk.red('No filename to import from'));
       return;
     }
 
@@ -136,8 +137,8 @@ export class ImportCommand implements Command {
         throw err;
       }
 
-      console.error(`Can't import data from file: ${filename}`);
-      console.error(`Details: ${err.message}`);
+      console.error(chalk.red(`Can't import data from file: ${chalk.bold(filename)}`));
+      console.error(chalk.red(`Details: ${err.message}`));
     }
   }
 }
