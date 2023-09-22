@@ -11,3 +11,5 @@ plugins:
 extends:
   - "plugin:@typescript-eslint/recommended"
   - "htmlacademy/node"
+rules:
+  'node/no-unsupported-features/es-syntax': 'off'
