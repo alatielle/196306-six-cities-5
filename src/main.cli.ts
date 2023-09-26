@@ -1,12 +1,22 @@
 #!/usr/bin/env node
 import chalk from 'chalk';
+import { readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { CLIApplication, Command } from './cli/index.js';
-import { getFilesByPattern } from './shared/libs/index.js';
 
 const COMMAND = {
   DIR: './src/cli/commands',
   PATTERN: '.command.ts',
 };
+
+function getFilesByPattern(dirPath: string, pattern: string) {
+  const dirContent = readdirSync(resolve(dirPath));
+  const regExp = new RegExp(pattern, 'i');
+
+  return dirContent
+    .filter((fileName) => regExp.test(fileName))
+    .map((fileName) => resolve(dirPath, fileName));
+}
 
 async function bootstrap() {
   const cliApplication = new CLIApplication();
@@ -16,7 +26,7 @@ async function bootstrap() {
     const { default: CommandClass } = await import(fileName);
     try {
       commands.push(new CommandClass());
-    } catch (error) {
+    } catch {
       console.error(chalk.red(`No command found in ${chalk.bold(fileName)}`));
     }
   }
