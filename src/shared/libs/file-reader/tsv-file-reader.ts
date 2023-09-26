@@ -19,10 +19,7 @@ export class TSVFileReader extends EventEmitter implements FileReader {
     let nextLinePosition = -1;
     let importedRowCount = 0;
 
-    // FIXME: investigate
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    for await (const chunk of readStream) {
+    readStream.on('data', (chunk) => {
       remainingData += chunk.toString();
 
       while ((nextLinePosition = remainingData.indexOf('\n')) >= 0) {
@@ -32,8 +29,10 @@ export class TSVFileReader extends EventEmitter implements FileReader {
 
         this.emit('line', completeRow);
       }
-    }
+    });
 
-    this.emit('end', importedRowCount);
+    readStream.on('close', () => {
+      this.emit('end', importedRowCount);
+    });
   }
 }
