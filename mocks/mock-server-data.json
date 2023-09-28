@@ -1,0 +1,71 @@
+{
+  "api": {
+    "titles": [
+      "Charming Urban Oasis in the Heart of the City",
+      "Luxurious Beachfront Paradise",
+      "Luxurious Penthouse Retreat with Panoramic Views",
+      "Tranquil Mountain Retreat: Rustic Elegance with Modern Comfort",
+      "Modern Urban Haven in the Heart of the City",
+      "Modern Urban Retreat in the Heart of the City"
+    ],
+    "descriptions": [
+      "Welcome to your home away from home in the vibrant heart of the city! Our cozy and stylish apartment is the perfect base for your next urban adventure. Whether you're a solo traveler, a couple seeking a romantic getaway, or a small group of friends exploring the city, our Airbnb-style apartment has everything you need for a comfortable and memorable stay.",
+      "Escape to your own slice of paradise at our exquisite beachfront apartment. This Airbnb-style retreat offers the ultimate in luxury, comfort, and relaxation. Whether you're a couple seeking a romantic beach getaway or a family looking for a sun-soaked adventure, our apartment is the perfect destination.",
+      "Elevate your city stay with a touch of opulence at our stunning penthouse apartment. Perched high above the bustling streets, this Airbnb-style apartment offers an unforgettable urban getaway. Perfect for discerning travelers and couples seeking a lavish experience, our penthouse redefines luxury living.",
+      "Welcome to your secluded mountain sanctuary, where the beauty of nature meets the comforts of modern living. Nestled in the heart of a serene forest, our Airbnb-style cabin offers a peaceful escape for those seeking relaxation, adventure, or a romantic getaway.",
+      "Discover the epitome of city living in our contemporary apartment nestled in the bustling heart of downtown. Whether you're a solo traveler, a couple on a romantic getaway, or a group of friends exploring the city's vibrant culture, our Airbnb-style apartment offers the ideal blend of comfort, style, and convenience.",
+      "Discover your ideal urban getaway in our stylish and contemporary apartment located right in the heart of the city. Whether you're a solo traveler, a couple seeking a romantic escape, or a group of friends exploring the urban delights, our Airbnb-style apartment offers the perfect blend of comfort, convenience, and modern elegance."
+    ],
+    "previewImages": [
+      "https://loremflickr.com/320/240/apartment?lock=7930348279169024",
+      "https://loremflickr.com/320/240/apartment?lock=417870053900288",
+      "https://loremflickr.com/320/240/apartment?lock=7616080983883776",
+      "https://loremflickr.com/320/240/apartment?lock=3952689633296384",
+      "https://loremflickr.com/320/240/apartment?lock=8952323971743744",
+      "https://loremflickr.com/320/240/apartment?lock=4469215201329152"
+    ],
+    "roomImages": [
+      "https://loremflickr.com/640/480/room?lock=5978553621413888",
+      "https://loremflickr.com/640/480/room?lock=3212152007557120",
+      "https://loremflickr.com/640/480/room?lock=4530660563746816",
+      "https://loremflickr.com/640/480/room?lock=4106759761297408",
+      "https://loremflickr.com/640/480/room?lock=91022344323072",
+      "https://loremflickr.com/640/480/room?lock=5345736875048960"
+    ],
+    "users": [
+      "Rene",
+      "Geovanni",
+      "Reid",
+      "Emerson",
+      "George",
+      "Santina",
+      "Ryleigh",
+      "Simeon",
+      "Garnett",
+      "Dawn"
+    ],
+    "emails": [
+      "Dandre97@hotmail.com",
+      "Lewis0@hotmail.com",
+      "Gerard_Ratke@yahoo.com",
+      "Godfrey53@gmail.com",
+      "Joanny.Mayert51@yahoo.com",
+      "Zackery47@yahoo.com",
+      "Kenya29@hotmail.com",
+      "Josianne.Johnson@hotmail.com",
+      "Maryse67@yahoo.com"
+    ],
+    "avatars": [
+      "https://s3.amazonaws.com/uifaces/faces/twitter/aleclarsoniv/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/privetwagner/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/colgruv/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/balintorosz/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/arpitnj/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/daykiine/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/baliomega/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/adhiardana/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/ponchomendivil/128.jpg",
+      "https://s3.amazonaws.com/uifaces/faces/twitter/hugocornejo/128.jpg"
+    ]
+  }
+}
