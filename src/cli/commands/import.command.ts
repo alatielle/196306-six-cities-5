@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import { Command } from './command.interface.js';
 import { TSVFileReader } from '../../shared/libs/index.js';
 import { createOffer, getErrorMessage } from '../../shared/helpers/index.js';
+import { logError, logInfo } from '../../shared/helpers/console.js';
 
 export class ImportCommand implements Command {
   public getName(): string {
@@ -14,12 +15,12 @@ export class ImportCommand implements Command {
   }
 
   private onCompleteImport(count: number) {
-    console.info(chalk.bold(`${count} rows imported.`));
+    logInfo(`${count} rows imported.`);
   }
 
   public async run(...parameters: string[]): Promise<void> {
     if (!parameters.length) {
-      console.error(chalk.red('No filename to import from'));
+      logError('No filename to import from');
       return;
     }
 
@@ -32,10 +33,8 @@ export class ImportCommand implements Command {
     try {
       await fileReader.read();
     } catch (error) {
-      console.error(
-        chalk.red(`Can't import data from file: ${chalk.bold(filename)}`),
-      );
-      console.error(chalk.red(getErrorMessage(error)));
+      logError(`Can't import data from file: ${chalk.bold(filename)}`);
+      logError(getErrorMessage(error));
     }
   }
 }

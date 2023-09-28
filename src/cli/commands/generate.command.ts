@@ -46,6 +46,7 @@ export class GenerateCommand implements Command {
 
     if (!url) {
       logError('Wring parameter: url');
+      return;
     }
 
     try {
