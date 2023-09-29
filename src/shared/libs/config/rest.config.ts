@@ -1,7 +1,20 @@
+import { DotenvParseOutput, config } from 'dotenv';
 import { Config } from './config.interface.js';
+import { Logger } from '../logger/index.js';
 
 export class RestConfig implements Config {
-  constructor(private readonly config: NodeJS.ProcessEnv) {}
+  private readonly config: NodeJS.ProcessEnv;
+
+  constructor(private readonly logger: Logger) {
+    const parsedOutput = config();
+
+    if (parsedOutput.error) {
+      throw new Error('Can\'t read .env file. Does it exist?');
+    }
+
+    this.config = parsedOutput.parsed as DotenvParseOutput;
+    this.logger.info('.env file found and parsed');
+  }
 
   public get(key: string) {
     return this.config[key];
