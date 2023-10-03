@@ -23,7 +23,10 @@ export class RestApplication {
       this.config.get('DB_NAME'),
     );
 
-    return this.databaseClient.connect(mongoUri);
+    return this.databaseClient.connect(mongoUri, {
+      maxRetries: this.config.get('DB_MAX_RETRIES'),
+      retryTimeout: this.config.get('DB_RETRY_TIMEOUT'),
+    });
   }
 
   public async init() {
