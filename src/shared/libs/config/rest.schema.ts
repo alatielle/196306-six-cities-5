@@ -11,6 +11,8 @@ export type RestSchema = {
   DB_PASSWORD: string;
   DB_PORT: string;
   DB_NAME: string;
+  DB_MAX_RETRIES: number;
+  DB_RETRY_TIMEOUT: number;
 };
 
 export const configRestSchema = convict<RestSchema>({
@@ -55,5 +57,17 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'DB_NAME',
     default: null,
+  },
+  DB_MAX_RETRIES: {
+    doc: 'Max amount of DB connection retries',
+    format: Number,
+    env: 'DB_MAX_RETRIES',
+    default: 5,
+  },
+  DB_RETRY_TIMEOUT: {
+    doc: 'Timeout between DB connection retries (milliseconds)',
+    format: Number,
+    env: 'DB_RETRY_TIMEOUT',
+    default: 1000,
   },
 });
