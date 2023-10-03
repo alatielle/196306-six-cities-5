@@ -13,3 +13,4 @@ extends:
   - "htmlacademy/node"
 rules:
   'node/no-unsupported-features/es-syntax': 'off'
+  '@typescript-eslint/no-unsafe-declaration-merging': 'off'
