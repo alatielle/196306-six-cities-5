@@ -23,12 +23,12 @@ export class MongoDatabaseClient implements DatabaseClient {
       throw new Error('MongoDB client is already connected');
     }
 
-    this.logger.info('Trying to connect to MongoDB…');
+    this.logger.info('🍃Trying to connect to MongoDB…');
 
     this.mongoose = await Mongoose.connect(uri);
     this.isConnected = true;
 
-    this.logger.info('Database connection established.');
+    this.logger.info('🍃Database connection established.');
   }
 
   public async disconnect() {
@@ -40,6 +40,6 @@ export class MongoDatabaseClient implements DatabaseClient {
     await this.mongoose.disconnect?.();
     this.isConnected = false;
 
-    this.logger.info('Database connection closed.');
+    this.logger.info('🍃Database connection closed.');
   }
 }
