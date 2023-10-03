@@ -6,10 +6,7 @@ import { DefaultUserService } from './default-user.service.js';
 export function createUserContainer() {
   const userContainer = new Container();
 
-  userContainer
-    .bind<UserService>(Component.UserService)
-    .to(DefaultUserService)
-    .inSingletonScope();
+  userContainer.bind<UserService>(Component.UserService).to(DefaultUserService).inSingletonScope();
 
   return userContainer;
 }
