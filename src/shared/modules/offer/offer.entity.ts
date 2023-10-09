@@ -1,6 +1,14 @@
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
-import { AmenityType, City, Coordinates, HousingType } from '../../types/index.js';
+import { AmenityType, City, HousingType } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
+
+class Coordinates {
+  @prop({ required: true })
+  public latitude: number;
+
+  @prop({ required: true })
+  public longitude: number;
+}
 
 export interface OfferEntity extends defaultClasses.Base {}
 
@@ -29,7 +37,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true })
   public imagePreview: string;
 
-  @prop({ required: true })
+  @prop({ required: true, type: [String] })
   public images: string[];
 
   @prop({ required: true })
@@ -58,7 +66,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public price: number;
 
   @prop({
-    type: String,
+    type: [String],
     enum: AmenityType,
     required: true,
   })
