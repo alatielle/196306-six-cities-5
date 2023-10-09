@@ -38,12 +38,11 @@ function parseUserType(type: string): UserType {
   throw new Error(`User type ${type} is not supported`);
 }
 
-function parseUser(email: string, name: string, type: string, avatarPath: string, password: string): User {
+function parseUser(email: string, name: string, type: string, avatarPath: string): User {
   return {
     avatarPath,
     email,
     name,
-    password,
     type: parseUserType(type),
   };
 }
@@ -74,7 +73,6 @@ export function createOffer(offerData: string): Offer {
     email,
     userType,
     avatarPath,
-    password,
     commentAmount,
     location,
   ] = offerData.replace('\n', '').split('\t');
@@ -94,7 +92,7 @@ export function createOffer(offerData: string): Offer {
     guestAmount: Number.parseInt(guestAmount, 10),
     price: Number.parseInt(price, 10),
     amenities: parseAmenities(amenities),
-    author: parseUser(email, name, userType, avatarPath, password),
+    author: parseUser(email, name, userType, avatarPath),
     commentAmount: Number.parseInt(commentAmount, 10),
     location: parseLocation(location),
   };
