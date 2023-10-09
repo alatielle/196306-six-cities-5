@@ -7,7 +7,6 @@ export interface OfferEntity extends defaultClasses.Base {}
 @modelOptions({
   schemaOptions: {
     collection: 'offers',
-    timestamps: true,
   },
 })
 export class OfferEntity extends defaultClasses.TimeStamps {

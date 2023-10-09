@@ -8,18 +8,17 @@ export interface UserEntity extends defaultClasses.Base {}
 @modelOptions({
   schemaOptions: {
     collection: 'users',
-    timestamps: true,
   },
 })
 export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ unique: true, required: true })
-  public email = '';
+  public email;
 
   @prop({ required: false, default: '' })
-  public avatarPath = '';
+  public avatarPath;
 
   @prop({ required: true, default: '' })
-  public name = '';
+  public name;
 
   @prop({ required: true, default: '' })
   private password?: string;
