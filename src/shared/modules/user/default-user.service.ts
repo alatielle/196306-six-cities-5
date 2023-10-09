@@ -30,10 +30,6 @@ export class DefaultUserService implements UserService {
   public async findOrCreate(dto: CreateUserDto, salt: string) {
     const existingUser = await this.findByEmail(dto.email);
 
-    if (existingUser) {
-      return existingUser;
-    }
-
-    return this.create(dto, salt);
+    return existingUser ? existingUser : this.create(dto, salt);
   }
 }
