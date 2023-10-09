@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import 'reflect-metadata';
 import chalk from 'chalk';
 import { readdirSync } from 'node:fs';
 import { resolve } from 'node:path';
