@@ -73,7 +73,6 @@ export function createOffer(offerData: string): Offer {
     email,
     userType,
     avatarPath,
-    commentAmount,
     location,
   ] = offerData.replace('\n', '').split('\t');
 
@@ -93,7 +92,6 @@ export function createOffer(offerData: string): Offer {
     price: Number.parseInt(price, 10),
     amenities: parseAmenities(amenities),
     author: parseUser(email, name, userType, avatarPath),
-    commentAmount: Number.parseInt(commentAmount, 10),
     location: parseLocation(location),
   };
 }

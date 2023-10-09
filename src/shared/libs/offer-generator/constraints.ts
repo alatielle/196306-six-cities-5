@@ -23,11 +23,6 @@ export const GUESTS = {
   MAX: 10,
 };
 
-export const COMMENTS = {
-  MIN: 0,
-  MAX: 10000,
-};
-
 export const LATITUDE = {
   MIN: -90,
   MAX: 90,

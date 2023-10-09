@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { OfferGenerator } from './offer-generator.interface.js';
 import { AmenityType, City, HousingType, type MockServerData, UserType } from '../../types/index.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
-import { COMMENTS, GUESTS, LATITUDE, LONGITUDE, PRICE, RATING, ROOMS, WEEK_DAY } from './constraints.js';
+import { GUESTS, LATITUDE, LONGITUDE, PRICE, RATING, ROOMS, WEEK_DAY } from './constraints.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
@@ -26,7 +26,6 @@ export class TSVOfferGenerator implements OfferGenerator {
     const email = getRandomItem(this.mockData.emails);
     const userType = getRandomItem(Object.values(UserType));
     const avatarPath = getRandomItem(this.mockData.avatars);
-    const commentAmount = generateRandomValue(COMMENTS.MIN, COMMENTS.MAX);
     const location = [
       generateRandomValue(LATITUDE.MIN, LATITUDE.MAX, 6),
       generateRandomValue(LONGITUDE.MIN, LONGITUDE.MAX, 6),
@@ -51,7 +50,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       email,
       userType,
       avatarPath,
-      commentAmount,
       location,
     ].join('\t');
   }
