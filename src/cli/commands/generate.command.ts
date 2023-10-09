@@ -2,12 +2,16 @@ import got from 'got';
 import { Command } from './command.interface.js';
 import { MockServerData } from '../../shared/types/index.js';
 import { TSVOfferGenerator } from '../../shared/libs/index.js';
-import { getErrorMessage } from '../../shared/helpers/index.js';
 import { TSVFileWriter } from '../../shared/libs/file-writer/index.js';
-import { logError, logInfo } from '../../shared/helpers/index.js';
+import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
 
 export class GenerateCommand implements Command {
   private initialData: MockServerData;
+  private readonly logger: Logger;
+
+  constructor() {
+    this.logger = new ConsoleLogger();
+  }
 
   private async load(url: string) {
     try {
@@ -35,27 +39,26 @@ export class GenerateCommand implements Command {
     const offerCount = Number.parseInt(count, 10);
 
     if (!Number.isInteger(offerCount)) {
-      logError('Wrong parameter: count');
+      this.logger.warn('Wrong parameter: count');
       return;
     }
 
     if (!filepath) {
-      logError('Wrong parameter: filepath');
+      this.logger.warn('Wrong parameter: filepath');
       return;
     }
 
     if (!url) {
-      logError('Wring parameter: url');
+      this.logger.warn('Wrong parameter: url');
       return;
     }
 
     try {
       await this.load(url);
       await this.write(filepath, offerCount);
-      logInfo(`File ${filepath} was created!`);
+      this.logger.info(`File ${filepath} was created!`);
     } catch (error) {
-      logError('Can\'t generate data');
-      logError(getErrorMessage(error));
+      this.logger.error('Can\'t generate data', error as Error);
     }
   }
 }
