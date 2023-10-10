@@ -1,0 +1,79 @@
+openapi: 3.1.0
+info:
+  title: API-server
+  description: |-
+    * List of resources and paths for the Six Cities Project
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+tags:
+  - name: offers
+  - name: users
+  - name: comments
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: User registration
+      description: Registers a new user.
+      requestBody:
+        description: Information to create a new user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+      responses:
+        201:
+          description: User has been registered. User object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        409:
+          description: User with this email already exists.
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: User authorization
+      description: Authorizes an existing user based on login and password.
+      responses: {}
+    get:
+      tags:
+        - users
+      summary: User information
+      description: Returns authorized user information.
+      responses: {}
+  /users/{userId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Avatar image upload
+      description: Uploads a user avatar image. Image should have a `jpg` or `png` format.
+      responses: {}
+components:
+  schemas:
+    createUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        name:
+          type: string
+          example: Keks
+        password:
+          type: string
+          example: 123456
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        email:
+          type: string
+          example: keks@htmlacademy.ru
