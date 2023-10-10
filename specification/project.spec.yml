@@ -11,6 +11,7 @@ tags:
   - name: offers
   - name: users
   - name: comments
+
 paths:
   /users/register:
     post:
@@ -26,48 +27,130 @@ paths:
               $ref: '#/components/schemas/createUser'
         required: true
       responses:
-        201:
+        '201':
           description: User has been registered. User object.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/user'
-        409:
-          description: User with this email already exists.
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/validationError'
+        '409':
+          description: A user with this email already exists.
+
   /users/login:
     post:
       tags:
         - users
       summary: User authorization
       description: Authorizes an existing user based on login and password.
-      responses: {}
+      requestBody:
+        description: Information to authorize an existing user.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authorizeUser'
+        required: true
+      responses:
+        '200':
+          description: A user has been authorized. User token.
+          content:
+            text/plain:
+              schema:
+                type: string
+        '404':
+          description: A user with specified credentials was not found.
+
     get:
       tags:
         - users
-      summary: User information
-      description: Returns authorized user information.
-      responses: {}
-  /users/{userId}/avatar:
+      summary: User authorization state
+      description: Returns authorized user's information.
+      responses:
+        '200':
+          description: User session token is valid. User object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '401':
+          description: User session token is invalid.
+
+  /users/logout:
     post:
       tags:
         - users
-      summary: Avatar image upload
-      description: Uploads a user avatar image. Image should have a `jpg` or `png` format.
-      responses: {}
+      summary: User session finalization
+      description: Ends authorized user's session.
+      responses:
+        '204':
+          description: Session is successfully ended.
+        '401':
+          description: User session token is invalid.
+
 components:
   schemas:
+    validationError:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A description of the validation error.
+          example: Password too short
+        field:
+          type: string
+          description: The name of the field that failed validation.
+          example: password
+        code:
+          type: string
+          description: An error code associated with the validation error.
+          example: validation.createUser.password.tooShort
+
     createUser:
       type: object
       properties:
         email:
           type: string
+          format: email
+          required: true
           example: keks@htmlacademy.ru
         name:
           type: string
+          required: true
           example: Keks
         password:
           type: string
+          format: password
+          required: true
           example: 123456
+        type:
+          type: string
+          enum:
+            - Normal
+            - Pro
+          required: true
+          example: Pro
+        avatarPath:
+          type: string
+          required: false
+          example: https://s3.amazonaws.com/uifaces/faces/twitter/hugocornejo/128.jpg
+
+    authorizeUser:
+      type: object
+      properties:
+        login:
+          type: string
+          example: keks@htmlacademy.ru
+        password:
+          type: string
+          example: 123456
+
     user:
       type: object
       properties:
@@ -77,3 +160,15 @@ components:
         email:
           type: string
           example: keks@htmlacademy.ru
+        name:
+          type: string
+          example: Keks
+        avatarPath:
+          type: string
+          example: https://s3.amazonaws.com/uifaces/faces/twitter/hugocornejo/128.jpg
+        type:
+          type: string
+          enum:
+            - Normal
+            - Pro
+          example: Pro
