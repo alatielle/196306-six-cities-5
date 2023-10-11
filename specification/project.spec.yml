@@ -314,7 +314,7 @@ paths:
     get:
       tags:
         - offers
-      summary: List of offers added to favorites
+      summary: List of favorite offers
       description: Returns all the offers that have been added to favorites list by a current user.
       responses:
         '200':
@@ -351,6 +351,31 @@ paths:
           description: Offer's `favorite` status has been successfully updated
         '401':
           description: User is not authorized to favorite offers.
+
+  /offers/premium:
+    get:
+      tags:
+        - offers
+      summary: List of premium offers
+      description: Returns a list of premium offers for a given city.
+      parameters:
+        - in: query
+          name: city
+          schema:
+            type: string
+            required: true
+            description: The city to get the premium offers for.
+            example: Paris
+      responses:
+        '200':
+          description: List of premium offers.
+          content:
+            application/json:
+              schema:
+                type: array
+                maxItems: 3
+                items:
+                  $ref: '#/components/schemas/offerPreview'
 
 components:
   schemas:
