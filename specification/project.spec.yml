@@ -783,6 +783,10 @@ components:
           minLength: 5
           maxLength: 1024
           required: true
+        rating:
+          type: integer
+          example: 4
+          required: true
         authorId:
           type: string
           example: 6329c3d6a04ab1061c6425ea
@@ -799,9 +803,8 @@ components:
           format: date-time
           example: 2023-10-11T13:15:56.868Z
         rating:
-          type: number
-          format: float
-          example: 4.2
+          type: integer
+          example: 4
         authorId:
           type: string
           example: 6329c3d6a04ab1061c6425ea
