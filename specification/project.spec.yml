@@ -310,6 +310,48 @@ paths:
         '404':
           description: Offer with the given ID does not exist.
 
+  /offers/favorites:
+    get:
+      tags:
+        - offers
+      summary: List of offers added to favorites
+      description: Returns all the offers that have been added to favorites list by a current user.
+      responses:
+        '200':
+          description: List of offers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerPreview'
+        '401':
+          description: User is not authorized to view favorite offers.
+
+  /offers/{offerId}/favorite:
+    put:
+      tags:
+        - offers
+      summary: Favorite the offer
+      description: Adds/removes an offer to/from the favorites list.
+      parameters:
+        - in: path
+          name: offerId
+          schema:
+            type: string
+            required: true
+            description: The ID of the offer.
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: boolean
+      responses:
+        '204':
+          description: Offer's `favorite` status has been successfully updated
+        '401':
+          description: User is not authorized to favorite offers.
+
 components:
   schemas:
     validationError:
