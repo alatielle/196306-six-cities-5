@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: API-server
   description: |-
-    * List of resources and paths for the Six Cities Project
+    List of resources and paths for the Six Cities Project
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
@@ -94,6 +94,222 @@ paths:
         '401':
           description: User session token is invalid.
 
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: List of offers
+      description: Returns a list of offers.
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            required: false
+            description: Amount of offers to get
+        - in: query
+          name: sortBy
+          schema:
+            type: string
+            enum:
+              - date-asc
+              - date-desc
+              - rating
+              - popularity
+            required: false
+            description: Sorting of the list
+      responses:
+        '200':
+          description: List of offers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerPreview'
+
+    post:
+      tags:
+        - offers
+      summary: Offer creation
+      description: Creates a new offer.
+      requestBody:
+        description: Information to create a new offer.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+      responses:
+        '201':
+          description: Offer has been created. Offer object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/validationError'
+        '401':
+          description: User is not authorized to create offers.
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Detailed offer information
+      description: Returns a full description of an offer.
+      parameters:
+        - in: path
+          name: offerId
+          schema:
+            type: string
+            required: true
+            description: The ID of the offer.
+      responses:
+        '200':
+          description: Detailed offer information.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        '404':
+          description: Offer with the given ID does not exist.
+
+    patch:
+      tags:
+        - offers
+      summary: Offer edit
+      description: Updates an offer.
+      parameters:
+        - in: path
+          name: offerId
+          schema:
+            type: string
+            required: true
+            description: The ID of the offer.
+      requestBody:
+        description: Information in the offer to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateOffer'
+        required: true
+      responses:
+        '200':
+          description: Offer has been successfully updated. Updated offer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/validationError'
+        '401':
+          description: User is not authorized to edit offers.
+        '403':
+          description: User is not authorized to edit this offer.
+        '404':
+          description: Offer with the given ID does not exist.
+
+    delete:
+      tags:
+        - offers
+      summary: Offer deletion
+      description: Deletes an offer.
+      parameters:
+        - in: path
+          name: offerId
+          schema:
+            type: string
+            required: true
+            description: The ID of the offer.
+      responses:
+        '204':
+          description: Offer has been successfully removed.
+        '401':
+          description: User is not authorized to delete offers.
+        '403':
+          description: User is not authorized to delete this offer.
+        '404':
+          description: Offer with the given ID does not exist.
+
+  /offers/{offerId}/comments:
+    get:
+      tags:
+        - offers
+        - comments
+      summary: List of comments
+      description: Returns a list of last comments for a given offer.
+      parameters:
+        - in: path
+          name: offerId
+          schema:
+            type: string
+            required: true
+            description: The ID of the offer.
+      responses:
+        '200':
+          description: List of comments.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+        '404':
+          description: Offer with the given ID does not exist.
+
+    post:
+      tags:
+        - offers
+        - comments
+      summary: Comment creation
+      description: Adds a comments to a given offer.
+      parameters:
+        - in: path
+          name: offerId
+          schema:
+            type: string
+            required: true
+            description: The ID of the offer.
+      requestBody:
+        description: Information to create a new comment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+      responses:
+        '201':
+          description: Comments has been created. Comment object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/validationError'
+        '401':
+          description: User is not authorized to add comments.
+        '404':
+          description: Offer with the given ID does not exist.
+
 components:
   schemas:
     validationError:
@@ -172,3 +388,353 @@ components:
             - Normal
             - Pro
           example: Pro
+
+    createOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          required: true
+          example: Beautiful & luxurious studio at great location
+        description:
+          type: string
+          required: true
+          example: A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+        city:
+          type: string
+          enum:
+            - Amsterdam
+            - Brussels
+            - Cologne
+            - Dusseldorf
+            - Hamburg
+            - Paris
+          required: true
+          example: Amsterdam
+        imagePreview:
+          type: string
+          required: true
+          example: https://s3.amasonaws.com/image-preview.png
+        images:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: string
+            example: https://s3.amasonaws.com/full-image.png
+          required: true
+        isPremium:
+          type: boolean
+          required: true
+          example: true
+        housingType:
+          type: string
+          enum:
+            - Apartment
+            - House
+            - Room
+            - Hotel
+          required: true
+          example: Apartment
+        roomAmount:
+          type: integer
+          required: true
+          example: 3
+        guestAmount:
+          type: integer
+          required: true
+          example: 5
+        price:
+          type: number
+          format: float
+          required: true
+          example: 100
+        amenities:
+          type: array
+          items:
+            type: string
+            enum:
+              - Breakfast
+              - AirConditioning
+              - LaptopFriendlyWorkspace
+              - BabySeat
+              - Washer
+              - Towels
+              - Fridge
+            example: Fridge
+          required: true
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: float
+              example: 48.85661
+            longitude:
+              type: number
+              format: float
+              example: 2.351499
+          required: true
+        authorId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+          required: true
+
+    updateOffer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Beautiful & luxurious studio at great location
+          required: false
+        description:
+          type: string
+          example: A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+          required: false
+        city:
+          type: string
+          enum:
+            - Amsterdam
+            - Brussels
+            - Cologne
+            - Dusseldorf
+            - Hamburg
+            - Paris
+          example: Amsterdam
+          required: false
+        imagePreview:
+          type: string
+          example: https://s3.amasonaws.com/image-preview.png
+          required: false
+        images:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: string
+            example: https://s3.amasonaws.com/full-image.png
+          required: false
+        isPremium:
+          type: boolean
+          example: true
+          required: false
+        housingType:
+          type: string
+          enum:
+            - Apartment
+            - House
+            - Room
+            - Hotel
+          example: Apartment
+          required: false
+        roomAmount:
+          type: integer
+          example: 3
+          required: false
+        guestAmount:
+          type: integer
+          example: 5
+          required: false
+        price:
+          type: number
+          format: float
+          example: 100
+          required: false
+        amenities:
+          type: array
+          items:
+            type: string
+            enum:
+              - Breakfast
+              - AirConditioning
+              - LaptopFriendlyWorkspace
+              - BabySeat
+              - Washer
+              - Towels
+              - Fridge
+            example: Fridge
+          required: false
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: float
+              example: 48.85661
+            longitude:
+              type: number
+              format: float
+              example: 2.351499
+          required: false
+
+    offer:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Beautiful & luxurious studio at great location
+        description:
+          type: string
+          example: A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
+        postDate:
+          type: string
+          format: date-time
+          example: 2023-10-11T13:15:56.868Z
+        city:
+          type: string
+          enum:
+            - Amsterdam
+            - Brussels
+            - Cologne
+            - Dusseldorf
+            - Hamburg
+            - Paris
+          example: Amsterdam
+        imagePreview:
+          type: string
+          example: https://s3.amasonaws.com/image-preview.png
+        images:
+          type: array
+          minItems: 6
+          maxItems: 6
+          items:
+            type: string
+            example: https://s3.amasonaws.com/full-image.png
+        isPremium:
+          type: boolean
+          example: true
+        isFavorite:
+          type: boolean
+          example: true
+        rating:
+          type: number
+          format: float
+          example: 4.2
+        housingType:
+          type: string
+          enum:
+            - Apartment
+            - House
+            - Room
+            - Hotel
+          example: Apartment
+        roomAmount:
+          type: integer
+          example: 3
+        guestAmount:
+          type: integer
+          example: 5
+        price:
+          type: number
+          format: float
+          example: 100
+        amenities:
+          type: array
+          items:
+            type: string
+            enum:
+              - Breakfast
+              - AirConditioning
+              - LaptopFriendlyWorkspace
+              - BabySeat
+              - Washer
+              - Towels
+              - Fridge
+            example: Fridge
+        location:
+          type: object
+          properties:
+            latitude:
+              type: number
+              format: float
+              example: 48.85661
+            longitude:
+              type: number
+              format: float
+              example: 2.351499
+        commentAmount:
+          type: integer
+          example: 5
+        authorId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+    offerPreview:
+      type: object
+      properties:
+        price:
+          type: number
+          format: float
+          example: 100
+        title:
+          type: string
+          example: Beautiful & luxurious studio at great location
+        housingType:
+          type: string
+          enum:
+            - Apartment
+            - House
+            - Room
+            - Hotel
+          example: Apartment
+        isFavorite:
+          type: boolean
+          example: true
+        postDate:
+          type: string
+          format: date-time
+          example: 2023-10-11T13:15:56.868Z
+        city:
+          type: string
+          enum:
+            - Amsterdam
+            - Brussels
+            - Cologne
+            - Dusseldorf
+            - Hamburg
+            - Paris
+          example: Amsterdam
+        imagePreview:
+          type: string
+          example: https://s3.amasonaws.com/image-preview.png
+        isPremium:
+          type: boolean
+          example: false
+        rating:
+          type: number
+          format: float
+          example: 4.2
+        commentAmount:
+          type: integer
+          example: 5
+
+    createComment:
+      type: object
+      properties:
+        text:
+          type: string
+          minLength: 5
+          maxLength: 1024
+          required: true
+        authorId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+          required: true
+
+    comment:
+      type: object
+      properties:
+        text:
+          type: string
+          example: Nice property!
+        postDate:
+          type: string
+          format: date-time
+          example: 2023-10-11T13:15:56.868Z
+        rating:
+          type: number
+          format: float
+          example: 4.2
+        authorId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
