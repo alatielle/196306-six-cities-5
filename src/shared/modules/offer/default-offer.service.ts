@@ -63,7 +63,14 @@ export class DefaultOfferService implements OfferService {
       .aggregate([
         {
           $match: {
-            _id: offerId,
+            $expr: {
+              $eq: [
+                '$_id',
+                {
+                  $toObjectId: offerId,
+                },
+              ],
+            },
           },
         },
         {
@@ -96,7 +103,7 @@ export class DefaultOfferService implements OfferService {
         },
       ])
       .exec()
-      .then(([result]) => result);
+      .then(([result]) => result ?? null);
   }
 
   public async findNew(limit: number): Promise<DocumentType<OfferEntity>[]> {

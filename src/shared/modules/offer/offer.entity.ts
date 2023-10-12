@@ -66,7 +66,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   })
   public amenities: AmenityType[];
 
-  @prop({ required: true })
+  @prop({ required: true, _id: false })
   public location: Coordinates;
 
   @prop({ default: 0 })
@@ -76,7 +76,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public rating: number;
 
   @prop({
-    ref: UserEntity,
+    ref: () => UserEntity,
     required: true,
   })
   public authorId: Ref<UserEntity>;
