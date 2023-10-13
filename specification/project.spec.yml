@@ -68,7 +68,7 @@ paths:
             text/plain:
               schema:
                 type: string
-        '404':
+        '401':
           description: A user with specified credentials was not found.
 
     get:
