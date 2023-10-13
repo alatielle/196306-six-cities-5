@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { OfferGenerator } from './offer-generator.interface.js';
 import { AmenityType, City, HousingType, type MockServerData, UserType } from '../../types/index.js';
 import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
-import { GUESTS, LATITUDE, LONGITUDE, PRICE, RATING, ROOMS, WEEK_DAY } from './constraints.js';
+import { GUESTS, LATITUDE, LONGITUDE, PRICE, ROOMS, WEEK_DAY } from './constraints.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
@@ -15,8 +15,6 @@ export class TSVOfferGenerator implements OfferGenerator {
     const imagePreview = getRandomItem(this.mockData.previewImages);
     const images = getRandomItems(this.mockData.roomImages).join(';');
     const isPremium = getRandomItem([true, false]);
-    const isFavorite = getRandomItem([true, false]);
-    const rating = generateRandomValue(RATING.MIN, RATING.MAX, 1);
     const housingType = getRandomItem(Object.values(HousingType));
     const roomAmount = generateRandomValue(ROOMS.MIN, ROOMS.MAX);
     const guestAmount = generateRandomValue(GUESTS.MIN, GUESTS.MAX);
@@ -39,8 +37,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       imagePreview,
       images,
       isPremium,
-      isFavorite,
-      rating,
       housingType,
       roomAmount,
       guestAmount,

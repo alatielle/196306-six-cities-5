@@ -12,14 +12,11 @@ export type Offer = {
   imagePreview: string;
   images: string[];
   isPremium: boolean;
-  isFavorite: boolean;
-  rating: number;
   housingType: HousingType;
   roomAmount: number;
   guestAmount: number;
   price: number;
   amenities: AmenityType[];
   author: User;
-  commentAmount?: number;
   location: Coordinates;
 };

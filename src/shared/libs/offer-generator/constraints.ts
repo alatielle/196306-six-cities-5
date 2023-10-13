@@ -8,11 +8,6 @@ export const WEEK_DAY = {
   LAST: 7,
 };
 
-export const RATING = {
-  MIN: 1,
-  MAX: 5,
-};
-
 export const ROOMS = {
   MIN: 1,
   MAX: 8,
