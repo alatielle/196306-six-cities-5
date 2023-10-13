@@ -1,5 +1,5 @@
 import { Command } from './command.interface.js';
-import { TSVFileReader } from '../../shared/libs/index.js';
+import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { createOffer, getMongoURI } from '../../shared/helpers/index.js';
 import { UserService } from '../../shared/modules/user/user-service.interface.js';
 import { DefaultOfferService, OfferModel, OfferService } from '../../shared/modules/offer/index.js';
