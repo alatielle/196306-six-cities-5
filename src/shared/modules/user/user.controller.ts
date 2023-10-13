@@ -25,6 +25,7 @@ export class UserController extends BaseController {
 
     this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
+    this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.checkToken });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -45,6 +46,10 @@ export class UserController extends BaseController {
       throw new HttpError(StatusCodes.UNAUTHORIZED, 'User with specified credentials was not found.', 'UserController');
     }
 
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
+  }
+
+  public async checkToken(): Promise<void> {
     throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
   }
 }
