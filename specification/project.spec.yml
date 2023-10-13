@@ -43,6 +43,10 @@ paths:
                   $ref: '#/components/schemas/validationError'
         '409':
           description: A user with this email already exists.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
   /users/login:
     post:
@@ -379,6 +383,14 @@ paths:
 
 components:
   schemas:
+    generalError:
+      type: object
+      properties:
+        error:
+          type: string
+          description: A description of the error.
+          example: User already exists
+
     validationError:
       type: object
       properties:
