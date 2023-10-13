@@ -26,6 +26,7 @@ export class UserController extends BaseController {
     this.addRoute({ path: '/register', method: HttpMethod.Post, handler: this.create });
     this.addRoute({ path: '/login', method: HttpMethod.Post, handler: this.login });
     this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.checkToken });
+    this.addRoute({ path: '/logout', method: HttpMethod.Post, handler: this.logout });
   }
 
   public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
@@ -50,6 +51,10 @@ export class UserController extends BaseController {
   }
 
   public async checkToken(): Promise<void> {
+    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
+  }
+
+  public async logout(): Promise<void> {
     throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
   }
 }
