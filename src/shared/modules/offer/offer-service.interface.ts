@@ -2,20 +2,19 @@ import { DocumentType } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
+import { SortOrder } from '../../types/sort-order.enum.js';
 
 export interface OfferService {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
-  find(): Promise<DocumentType<OfferEntity>[]>;
+  find(amount?: number, sort?: Record<string, SortOrder>): Promise<DocumentType<OfferEntity>[]>;
   findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(offerId: string, dto: UpdateOfferDto): Promise<DocumentType<OfferEntity> | null>;
-  findByCity(city: string, limit?: number): Promise<DocumentType<OfferEntity>[]>;
-  incrementCommentAmount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
-  updateAverageRating(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  findPremiumByCity(city: string, amount?: number): Promise<DocumentType<OfferEntity>[]>;
   exists(documentId: string): Promise<boolean>;
-  findNew(limit: number): Promise<DocumentType<OfferEntity>[]>;
-  findCheap(limit: number): Promise<DocumentType<OfferEntity>[]>;
-  findExpensive(limit: number): Promise<DocumentType<OfferEntity>[]>;
-  findPopular(limit: number): Promise<DocumentType<OfferEntity>[]>;
-  findBestRated(limit: number): Promise<DocumentType<OfferEntity>[]>;
+  findCheap(amount: number): Promise<DocumentType<OfferEntity>[]>;
+  findExpensive(amount: number): Promise<DocumentType<OfferEntity>[]>;
+  findPopular(amount: number): Promise<DocumentType<OfferEntity>[]>;
+  findBestRated(amount: number): Promise<DocumentType<OfferEntity>[]>;
+  findFavorites(userId: string, amount?: number): Promise<DocumentType<OfferEntity>[]>;
 }
