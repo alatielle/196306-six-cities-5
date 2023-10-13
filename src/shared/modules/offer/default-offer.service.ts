@@ -16,25 +16,14 @@ export class DefaultOfferService implements OfferService {
     @inject(Component.OfferModel) private readonly offerModel: types.ModelType<OfferEntity>,
   ) {}
 
-  private aggregationPipeline = [
+  /* Вычисление числа комментариев и среднего рейтинга */
+  private commentsPipeline = [
     {
       $lookup: {
         from: 'comments',
         let: { offerId: '$_id' },
-        pipeline: [
-          {
-            $match: { $expr: { $eq: ['$$offerId', '$offerId'] } },
-          },
-        ],
+        pipeline: [{ $match: { $expr: { $eq: ['$$offerId', '$offerId'] } } }, { $project: { _id: 0, rating: 1 } }],
         as: 'comments',
-      },
-    },
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'authorId',
-        foreignField: '_id',
-        as: 'author',
       },
     },
     {
@@ -43,7 +32,31 @@ export class DefaultOfferService implements OfferService {
         rating: { $avg: '$comments.rating' },
       },
     },
-    { $unset: ['comments', 'authorId'] },
+    { $unset: ['comments'] },
+  ];
+
+  /* Вычисление списка пользователей, добавивших предложение в избранное */
+  private favoritesPipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        let: { offerId: '$_id' },
+        pipeline: [{ $match: { $expr: { $in: ['$$offerId', '$favorites'] } } }, { $project: { _id: 1 } }],
+        as: 'favoredByUsers',
+      },
+    },
+  ];
+
+  /* Вычисление автора предложения */
+  private authorPipeline = [
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'authorId',
+        foreignField: '_id',
+        as: 'author',
+      },
+    },
   ];
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
@@ -57,7 +70,15 @@ export class DefaultOfferService implements OfferService {
     limit = DEFAULT_OFFER_AMOUNT,
     sort: Record<string, SortOrder> = { postDate: SortOrder.Desc },
   ): Promise<DocumentType<OfferEntity>[]> {
-    return this.offerModel.aggregate([...this.aggregationPipeline, { $limit: limit }, { $sort: sort }]).exec();
+    return this.offerModel
+      .aggregate([
+        ...this.commentsPipeline,
+        ...this.authorPipeline,
+        ...this.favoritesPipeline,
+        { $limit: limit },
+        { $sort: sort },
+      ])
+      .exec();
   }
 
   public async findPremiumByCity(city: string, limit = DEFAULT_OFFER_AMOUNT): Promise<DocumentType<OfferEntity>[]> {
@@ -68,7 +89,9 @@ export class DefaultOfferService implements OfferService {
             $and: [{ isPremium: true }, { city: city }],
           },
         },
-        ...this.aggregationPipeline,
+        ...this.commentsPipeline,
+        ...this.authorPipeline,
+        ...this.favoritesPipeline,
         { $limit: limit },
         { $sort: { postDate: SortOrder.Desc } },
       ])
@@ -78,17 +101,10 @@ export class DefaultOfferService implements OfferService {
   public async findFavorites(userId: string, limit = DEFAULT_OFFER_AMOUNT): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
-        {
-          $lookup: {
-            from: 'users',
-            let: { offerId: '$_id' },
-            pipeline: [{ $match: { $expr: { $in: ['$$offerId', '$favorites'] } } }, { $project: { _id: 1 } }],
-            as: 'favoredByUsers',
-          },
-        },
+        ...this.favoritesPipeline,
         { $match: { $expr: { $in: [{ _id: { $toObjectId: userId } }, '$favoredByUsers'] } } },
-        { $unset: 'favoredByUsers' },
-        ...this.aggregationPipeline,
+        ...this.commentsPipeline,
+        ...this.authorPipeline,
         { $limit: limit },
         { $sort: { postDate: SortOrder.Desc } },
       ])
@@ -105,7 +121,9 @@ export class DefaultOfferService implements OfferService {
             },
           },
         },
-        ...this.aggregationPipeline,
+        ...this.commentsPipeline,
+        ...this.authorPipeline,
+        ...this.favoritesPipeline,
       ])
       .exec()
       .then(([result]) => result ?? null);

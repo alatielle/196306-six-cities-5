@@ -75,6 +75,9 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ default: 0 })
   public rating: number;
 
+  @prop({ ref: () => UserEntity, type: () => [UserEntity], default: [] })
+  public favoredByUsers: Ref<UserEntity>[];
+
   @prop({
     ref: () => UserEntity,
     required: true,
