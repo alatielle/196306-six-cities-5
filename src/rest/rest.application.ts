@@ -45,12 +45,20 @@ export class RestApplication {
     this.server.use('/users', this.userController.router);
   }
 
+  private async _initMiddleware() {
+    this.server.use(express.json());
+  }
+
   public async init() {
     this.logger.info('Application initialization');
 
     this.logger.info('Initializing database…');
     await this._initDb();
     this.logger.info('Database initialization complete.');
+
+    this.logger.info('Initializing app-level middleware…');
+    await this._initMiddleware();
+    this.logger.info('App-level middleware initialization complete.');
 
     this.logger.info('Initializing controllers…');
     await this._initControllers();
