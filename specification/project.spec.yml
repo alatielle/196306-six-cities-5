@@ -111,17 +111,6 @@ paths:
             type: integer
             required: false
             description: Amount of offers to get
-        - in: query
-          name: sortBy
-          schema:
-            type: string
-            enum:
-              - date-asc
-              - date-desc
-              - rating
-              - popularity
-            required: false
-            description: Sorting of the list
       responses:
         '200':
           description: List of offers.
@@ -741,6 +730,9 @@ components:
     offerPreview:
       type: object
       properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
         price:
           type: number
           format: float

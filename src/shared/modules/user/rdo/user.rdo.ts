@@ -12,8 +12,5 @@ export class UserRdo {
   public name: string;
 
   @Expose()
-  public id: string;
-
-  @Expose()
   public type: UserType;
 }
