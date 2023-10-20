@@ -15,6 +15,8 @@ import { DocumentType } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { UpdateOfferRequest } from './type/update-offer-request.type.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
+import { CommentService } from '../comment/index.js';
+import { CommentRdo } from '../comment/rdo/comment.rdo.js';
 
 const DEFAULT_OFFER_AMOUNT = 60;
 const PREMIUM_OFFER_AMOUNT = 3;
@@ -24,6 +26,7 @@ export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.CommentService) private readonly commentService: CommentService,
   ) {
     super(logger);
 
@@ -37,6 +40,7 @@ export class OfferController extends BaseController {
     this.addRoute({ path: '/:offerId', method: HttpMethod.Patch, handler: this.update });
     this.addRoute({ path: '/:offerId', method: HttpMethod.Delete, handler: this.delete });
     this.addRoute({ path: '/:offerId/favorite', method: HttpMethod.Put, handler: this.favorite });
+    this.addRoute({ path: '/:offerId/comments', method: HttpMethod.Get, handler: this.getComments });
   }
 
   private transformOffer(offer: DocumentType<OfferEntity>) {
@@ -89,6 +93,8 @@ export class OfferController extends BaseController {
       throw new HttpError(StatusCodes.NOT_FOUND, `Offer with id ${offerId} not found.`, 'OfferController');
     }
 
+    await this.commentService.deleteByOfferId(offerId);
+
     this.noContent(res, null);
   }
 
@@ -111,5 +117,14 @@ export class OfferController extends BaseController {
 
   public async favorite(_req: Request, _res: Response): Promise<void> {
     throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'OfferController');
+  }
+
+  public async getComments({ params }: Request<ParamOfferId>, res: Response): Promise<void> {
+    if (!(await this.offerService.exists(params.offerId))) {
+      throw new HttpError(StatusCodes.NOT_FOUND, `Offer with id ${params.offerId} not found.`, 'OfferController');
+    }
+
+    const comments = await this.commentService.findByOfferId(params.offerId);
+    this.ok(res, fillDTO(CommentRdo, comments));
   }
 }
