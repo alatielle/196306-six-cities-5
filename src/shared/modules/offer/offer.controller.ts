@@ -1,22 +1,28 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
-import { BaseController, HttpMethod, ValidateObjectIdMiddleware } from '../../libs/rest/index.js';
+import { StatusCodes } from 'http-status-codes';
+import { DocumentType } from '@typegoose/typegoose';
+import {
+  BaseController,
+  HttpMethod,
+  ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware,
+  HttpError,
+} from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
-import { OfferService } from './offer-service.interface.js';
-import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
-import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { parseAsInteger } from '../../helpers/parse.js';
-import { OfferRdo } from './rdo/offer.rdo.js';
-import { HttpError } from '../../libs/rest/index.js';
-import { StatusCodes } from 'http-status-codes';
-import { DocumentType } from '@typegoose/typegoose';
-import { OfferEntity } from './offer.entity.js';
-import { UpdateOfferRequest } from './type/update-offer-request.type.js';
-import { ParamOfferId } from './type/param-offerid.type.js';
+import { OfferService } from './offer-service.interface.js';
 import { CommentService } from '../comment/index.js';
 import { CommentRdo } from '../comment/rdo/comment.rdo.js';
+import { OfferEntity } from './offer.entity.js';
+import { CreateOfferRequest } from './type/create-offer-request.type.js';
+import { UpdateOfferRequest } from './type/update-offer-request.type.js';
+import { ParamOfferId } from './type/param-offerid.type.js';
+import { OfferRdo } from './rdo/offer.rdo.js';
+import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
+import { CreateOfferDto } from './dto/create-offer.dto.js';
 
 const DEFAULT_OFFER_AMOUNT = 60;
 const PREMIUM_OFFER_AMOUNT = 3;
@@ -41,6 +47,7 @@ export class OfferController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateOfferDto)],
     });
     this.addRoute({ path: '/premium', method: HttpMethod.Get, handler: this.premium });
     this.addRoute({ path: '/favorites', method: HttpMethod.Get, handler: this.favorites });
