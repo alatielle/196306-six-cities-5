@@ -13,6 +13,7 @@ export type RestSchema = {
   DB_NAME: string;
   DB_MAX_RETRIES: number;
   DB_RETRY_TIMEOUT: number;
+  UPLOAD_DIRECTORY: string;
 };
 
 export const configRestSchema = convict<RestSchema>({
@@ -70,4 +71,10 @@ export const configRestSchema = convict<RestSchema>({
     env: 'DB_RETRY_TIMEOUT',
     default: 1000,
   },
+  UPLOAD_DIRECTORY: {
+    doc: 'Directory for upload files',
+    format: String,
+    env: 'UPLOAD_DIRECTORY',
+    default: null
+  }
 });
