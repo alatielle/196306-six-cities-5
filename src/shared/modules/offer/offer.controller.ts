@@ -23,6 +23,7 @@ import { ParamOfferId } from './type/param-offerid.type.js';
 import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
+import { UpdateOfferDto } from './dto/update-offer.dto.js';
 
 const DEFAULT_OFFER_AMOUNT = 60;
 const PREMIUM_OFFER_AMOUNT = 3;
@@ -61,7 +62,7 @@ export class OfferController extends BaseController {
       path: '/:offerId',
       method: HttpMethod.Patch,
       handler: this.update,
-      middlewares: [new ValidateObjectIdMiddleware('offerId')],
+      middlewares: [new ValidateObjectIdMiddleware('offerId'), new ValidateDtoMiddleware(UpdateOfferDto)],
     });
     this.addRoute({
       path: '/:offerId',
