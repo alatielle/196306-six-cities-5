@@ -98,6 +98,16 @@ paths:
         '401':
           description: User session token is invalid.
 
+  /users/{usedId}/avatar:
+    post:
+      tags:
+        - users
+      summary: Upload avatar image
+      description: Uploads user's avatar. Avatar image should have a `png` or `jpg` format.
+      responses:
+        '201':
+          description: Image has been uploaded.
+
   /offers:
     get:
       tags:
