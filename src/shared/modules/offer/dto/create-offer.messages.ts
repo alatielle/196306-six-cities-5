@@ -24,7 +24,8 @@ export const CreateOfferValidationMessage = {
     maxValue: 'Maximum price is 100000',
   },
   city: {
-    invalid: 'city must be one of: Paris, Cologne, Brussels, Amsterdam, Hamburg, Dusseldorf',
+    invalid:
+      'city must be one of: Paris, Cologne, Brussels, Amsterdam, Hamburg, Dusseldorf',
   },
   housingType: {
     invalid: 'housingType must be one of: apartment, house, room, hotel',
@@ -34,7 +35,8 @@ export const CreateOfferValidationMessage = {
   },
   amenities: {
     invalidFormat: 'amenities must be an array',
-    invalid: 'Must be Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge',
+    invalid:
+      'Must be Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge',
   },
   guests: {
     invalidFormat: 'guestAmount must be an integer',

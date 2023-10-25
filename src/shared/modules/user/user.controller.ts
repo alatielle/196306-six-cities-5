@@ -6,7 +6,7 @@ import {
   HttpMethod,
   UploadFileMiddleware,
   ValidateDtoMiddleware,
-  ValidateObjectIdMiddleware
+  ValidateObjectIdMiddleware,
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { HttpError } from '../../libs/rest/index.js';
@@ -27,7 +27,8 @@ export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config) private readonly configService: Config<RestSchema>,
+    @inject(Component.Config)
+    private readonly configService: Config<RestSchema>,
     @inject(Component.AuthService) private readonly authService: AuthService,
   ) {
     super(logger);
@@ -46,27 +47,48 @@ export class UserController extends BaseController {
       handler: this.login,
       middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
     });
-    this.addRoute({ path: '/login', method: HttpMethod.Get, handler: this.checkToken });
-    this.addRoute({ path: '/logout', method: HttpMethod.Post, handler: this.logout });
+    this.addRoute({
+      path: '/login',
+      method: HttpMethod.Get,
+      handler: this.checkToken,
+    });
+    this.addRoute({
+      path: '/logout',
+      method: HttpMethod.Post,
+      handler: this.logout,
+    });
     this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
         new ValidateObjectIdMiddleware('userId'),
-        new UploadFileMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'avatar'),
+        new UploadFileMiddleware(
+          this.configService.get('UPLOAD_DIRECTORY'),
+          'avatar',
+        ),
       ],
     });
   }
 
-  public async create({ body }: CreateUserRequest, res: Response): Promise<void> {
+  public async create(
+    { body }: CreateUserRequest,
+    res: Response,
+  ): Promise<void> {
     const isExistingUser = await this.userService.findByEmail(body.email);
 
     if (isExistingUser) {
-      throw new HttpError(StatusCodes.CONFLICT, `User with email "${body.email}" already exists.`, 'UserController');
+      throw new HttpError(
+        StatusCodes.CONFLICT,
+        `User with email "${body.email}" already exists.`,
+        'UserController',
+      );
     }
 
-    const result = await this.userService.create(body, this.configService.get('SALT'));
+    const result = await this.userService.create(
+      body,
+      this.configService.get('SALT'),
+    );
     this.created(res, fillDTO(UserRdo, result));
   }
 
@@ -81,11 +103,19 @@ export class UserController extends BaseController {
   }
 
   public async checkToken(): Promise<void> {
-    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
+    throw new HttpError(
+      StatusCodes.NOT_IMPLEMENTED,
+      'Not implemented',
+      'UserController',
+    );
   }
 
   public async logout(): Promise<void> {
-    throw new HttpError(StatusCodes.NOT_IMPLEMENTED, 'Not implemented', 'UserController');
+    throw new HttpError(
+      StatusCodes.NOT_IMPLEMENTED,
+      'Not implemented',
+      'UserController',
+    );
   }
 
   public async uploadAvatar(req: Request, res: Response) {

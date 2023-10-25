@@ -9,7 +9,12 @@ type PackageJSONConfig = {
 };
 
 function isPackageJSONConfig(value: unknown): value is PackageJSONConfig {
-  return typeof value === 'object' && value !== null && !Array.isArray(value) && Object.hasOwn(value, 'version');
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    !Array.isArray(value) &&
+    Object.hasOwn(value, 'version')
+  );
 }
 
 export class VersionCommand implements Command {
@@ -39,7 +44,10 @@ export class VersionCommand implements Command {
       const version = this.readVersion();
       this.logger.info(chalk.green(version));
     } catch (error) {
-      this.logger.error(`Failed to read version from ${chalk.bold(this.filePath)}`, error as Error);
+      this.logger.error(
+        `Failed to read version from ${chalk.bold(this.filePath)}`,
+        error as Error,
+      );
     }
   }
 }

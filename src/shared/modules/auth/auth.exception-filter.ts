@@ -11,7 +11,12 @@ export class AuthExceptionFilter implements ExceptionFilter {
     this.logger.info('Register AuthExceptionFilter');
   }
 
-  public catch(error: unknown, _req: Request, res: Response, next: NextFunction): void {
+  public catch(
+    error: unknown,
+    _req: Request,
+    res: Response,
+    next: NextFunction,
+  ): void {
     if (!(error instanceof BaseUserException)) {
       return next(error);
     }

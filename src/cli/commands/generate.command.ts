@@ -58,7 +58,7 @@ export class GenerateCommand implements Command {
       await this.write(filepath, offerCount);
       this.logger.info(`File ${filepath} was created!`);
     } catch (error) {
-      this.logger.error('Can\'t generate data', error as Error);
+      this.logger.error("Can't generate data", error as Error);
     }
   }
 }

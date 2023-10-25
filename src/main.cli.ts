@@ -14,7 +14,9 @@ function getFilesByPattern(dirPath: string, pattern: string) {
   const dirContent = readdirSync(resolve(dirPath));
   const regExp = new RegExp(pattern, 'i');
 
-  return dirContent.filter((fileName) => regExp.test(fileName)).map((fileName) => resolve(dirPath, fileName));
+  return dirContent
+    .filter((fileName) => regExp.test(fileName))
+    .map((fileName) => resolve(dirPath, fileName));
 }
 
 async function bootstrap() {

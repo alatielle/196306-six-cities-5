@@ -23,8 +23,12 @@ export class UpdateOfferDto {
   public title?: string;
 
   @IsOptional()
-  @MinLength(20, { message: UpdateOfferValidationMessage.description.minLength })
-  @MaxLength(1024, { message: UpdateOfferValidationMessage.description.maxLength })
+  @MinLength(20, {
+    message: UpdateOfferValidationMessage.description.minLength,
+  })
+  @MaxLength(1024, {
+    message: UpdateOfferValidationMessage.description.maxLength,
+  })
   public description?: string;
 
   @IsOptional()
@@ -47,7 +51,9 @@ export class UpdateOfferDto {
   public isPremium?: boolean;
 
   @IsOptional()
-  @IsEnum(HousingType, { message: UpdateOfferValidationMessage.housingType.invalid })
+  @IsEnum(HousingType, {
+    message: UpdateOfferValidationMessage.housingType.invalid,
+  })
   public housingType?: HousingType;
 
   @IsOptional()
@@ -70,7 +76,10 @@ export class UpdateOfferDto {
 
   @IsOptional()
   @IsArray({ message: UpdateOfferValidationMessage.amenities.invalidFormat })
-  @IsEnum(AmenityType, { each: true, message: UpdateOfferValidationMessage.amenities.invalid })
+  @IsEnum(AmenityType, {
+    each: true,
+    message: UpdateOfferValidationMessage.amenities.invalid,
+  })
   public amenities?: AmenityType[];
 
   @IsOptional()

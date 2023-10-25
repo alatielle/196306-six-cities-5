@@ -3,7 +3,7 @@ import { AmenityType, HousingType, Coordinates } from '../../../types/index.js';
 import { UserRdo } from '../../user/rdo/user.rdo.js';
 
 export class OfferRdo {
-  @Expose({ name: '_id'})
+  @Expose({ name: '_id' })
   public id: string;
 
   @Expose()
@@ -54,7 +54,7 @@ export class OfferRdo {
   @Expose()
   public commentAmount: number;
 
-  @Expose({ name: 'authorId'})
+  @Expose({ name: 'authorId' })
   @Type(() => UserRdo)
   public author: UserRdo;
 }

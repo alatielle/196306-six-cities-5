@@ -10,7 +10,13 @@ export async function retry(config: {
   attempts?: number;
   timeout?: number;
 }) {
-  const { operation, onSuccess, onError, attempts = RETRY_COUNT, timeout = RETRY_TIMEOUT } = config;
+  const {
+    operation,
+    onSuccess,
+    onError,
+    attempts = RETRY_COUNT,
+    timeout = RETRY_TIMEOUT,
+  } = config;
   let attempt = 0;
 
   while (attempt < attempts) {

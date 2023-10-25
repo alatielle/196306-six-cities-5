@@ -9,7 +9,10 @@ import { LoginUserDto, UserEntity, UserService } from '../user/index.js';
 import { AuthService } from './auth-service.interface.js';
 import { JWT_ALGORITHM, JWT_EXPIRED } from './auth.constant.js';
 import { TokenPayload } from './types/token-payload.js';
-import { UserNotFoundException, UserPasswordIncorrectException } from './errors/index.js';
+import {
+  UserNotFoundException,
+  UserPasswordIncorrectException,
+} from './errors/index.js';
 
 @injectable()
 export class DefaultAuthService implements AuthService {

@@ -13,7 +13,7 @@ export class RestConfig implements Config<RestSchema> {
     const parsedOutput = config();
 
     if (parsedOutput.error) {
-      throw new Error('Can\'t read .env file. Does it exist?');
+      throw new Error("Can't read .env file. Does it exist?");
     }
 
     configRestSchema.load({});
@@ -22,7 +22,7 @@ export class RestConfig implements Config<RestSchema> {
       configRestSchema.validate({ allowed: 'strict' });
     } catch (error) {
       this.logger.error('.env file is not valid', error as Error);
-      throw new Error('Can\'t validate config');
+      throw new Error("Can't validate config");
     }
 
     this.config = configRestSchema.getProperties();

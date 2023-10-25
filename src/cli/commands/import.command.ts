@@ -2,10 +2,20 @@ import { Command } from './command.interface.js';
 import { TSVFileReader } from '../../shared/libs/file-reader/index.js';
 import { createOffer, getMongoURI } from '../../shared/helpers/index.js';
 import { UserService } from '../../shared/modules/user/user-service.interface.js';
-import { DefaultOfferService, OfferModel, OfferService } from '../../shared/modules/offer/index.js';
-import { DatabaseClient, MongoDatabaseClient } from '../../shared/libs/database-client/index.js';
+import {
+  DefaultOfferService,
+  OfferModel,
+  OfferService,
+} from '../../shared/modules/offer/index.js';
+import {
+  DatabaseClient,
+  MongoDatabaseClient,
+} from '../../shared/libs/database-client/index.js';
 import { ConsoleLogger, Logger } from '../../shared/libs/logger/index.js';
-import { DefaultUserService, UserModel } from '../../shared/modules/user/index.js';
+import {
+  DefaultUserService,
+  UserModel,
+} from '../../shared/modules/user/index.js';
 import { Offer } from '../../shared/types/index.js';
 import { DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD } from './command.constant.js';
 
@@ -101,7 +111,6 @@ export class ImportCommand implements Command {
       return;
     }
 
-
     const uri = getMongoURI(login, password, host, DEFAULT_DB_PORT, dbname);
     this.salt = salt;
 
@@ -115,7 +124,10 @@ export class ImportCommand implements Command {
     try {
       await fileReader.read();
     } catch (error) {
-      this.logger.error(`Can't import data from file: ${filename}`, error as Error);
+      this.logger.error(
+        `Can't import data from file: ${filename}`,
+        error as Error,
+      );
     }
   }
 }

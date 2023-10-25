@@ -4,5 +4,5 @@ export const CreateLoginUserMessage = {
   },
   password: {
     invalidFormat: 'password is required',
-  }
+  },
 } as const;

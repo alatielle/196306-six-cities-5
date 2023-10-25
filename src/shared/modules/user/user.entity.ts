@@ -1,4 +1,10 @@
-import { getModelForClass, prop, defaultClasses, modelOptions, Ref } from '@typegoose/typegoose';
+import {
+  getModelForClass,
+  prop,
+  defaultClasses,
+  modelOptions,
+  Ref,
+} from '@typegoose/typegoose';
 
 import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
