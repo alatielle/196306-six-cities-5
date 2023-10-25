@@ -29,12 +29,12 @@ export class CommentController extends BaseController {
     });
   }
 
-  public async create({ body }: CreateCommentRequest, res: Response): Promise<void> {
+  public async create({ body, tokenPayload }: CreateCommentRequest, res: Response): Promise<void> {
     if (!(await this.offerService.exists(body.offerId))) {
       throw new HttpError(StatusCodes.NOT_FOUND, `Offer with id ${body.offerId} not found.`, 'CommentController');
     }
 
-    const comment = await this.commentService.create(body);
+    const comment = await this.commentService.create({ ...body, authorId: tokenPayload.id });
     this.created(res, fillDTO(CommentRdo, comment));
   }
 }
