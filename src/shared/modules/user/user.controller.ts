@@ -14,14 +14,16 @@ import { Config, RestSchema } from '../../libs/config/index.js';
 import { Component } from '../../types/index.js';
 import { AuthService } from '../auth/index.js';
 import { fillDTO } from '../../helpers/index.js';
-import { OfferPreviewRdo } from '../offer/index.js';
+import { OfferPreviewRdo, OfferService } from '../offer/index.js';
 import { UserService } from './user-service.interface.js';
-import { CreateUserRequest } from './create-user-request.type.js';
-import { LoginUserRequest } from './login-user-request.type.js';
+import { CreateUserRequest } from './types/create-user-request.type.js';
+import { LoginUserRequest } from './types/login-user-request.type.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
+import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
+import { FavoriteOfferRequest } from './types/favorite-offer-request.type.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -31,6 +33,7 @@ export class UserController extends BaseController {
     @inject(Component.Config)
     private readonly configService: Config<RestSchema>,
     @inject(Component.AuthService) private readonly authService: AuthService,
+    @inject(Component.OfferService) private readonly offerService: OfferService,
   ) {
     super(logger);
 
@@ -68,12 +71,33 @@ export class UserController extends BaseController {
         ),
       ],
     });
+
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()],
+    });
+
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Put,
+      handler: this.markAsFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateDtoMiddleware(FavoriteOfferDto),
+      ],
+    });
   }
 
   public async create(
-    { body }: CreateUserRequest,
+    { body, tokenPayload }: CreateUserRequest,
     res: Response,
   ): Promise<void> {
+    if (tokenPayload) {
+      throw new HttpError(StatusCodes.FORBIDDEN, 'Forbidden', 'UserController');
+    }
+
     const isExistingUser = await this.userService.findByEmail(body.email);
 
     if (isExistingUser) {
@@ -129,5 +153,46 @@ export class UserController extends BaseController {
     this.created(res, {
       filepath: avatarPath,
     });
+  }
+
+  public async getFavorites(
+    { tokenPayload: { id } }: Request,
+    res: Response,
+  ): Promise<void> {
+    const offers = await this.offerService.findFavoriteByUserId(id);
+    this.ok(res, fillDTO(OfferPreviewRdo, offers));
+  }
+
+  public async markAsFavorite(
+    { body, tokenPayload: { id, email } }: FavoriteOfferRequest,
+    res: Response,
+  ): Promise<void> {
+    if (!(await this.offerService.exists(body.offerId))) {
+      throw new HttpError(
+        StatusCodes.NOT_FOUND,
+        `Offer with id ${body.offerId} not found.`,
+        'UserController',
+      );
+    }
+
+    const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      throw new Error('User should be defined');
+    }
+
+    const favorites = new Set(user.favorites.map((offer) => offer.id));
+
+    if (body.isFavorite) {
+      favorites.add(body.offerId);
+    } else {
+      favorites.delete(body.offerId);
+    }
+
+    await this.userService.updateById(id, {
+      favorites: [...favorites],
+    });
+
+    this.noContent(res, null);
   }
 }

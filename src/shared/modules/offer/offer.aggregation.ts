@@ -1,4 +1,4 @@
-const commentsPipeline = [
+export const commentsPipeline = [
   {
     $lookup: {
       from: 'comments',
@@ -12,7 +12,7 @@ const commentsPipeline = [
   },
 ];
 
-const authorPipeline = [
+export const authorPipeline = [
   {
     $lookup: {
       from: 'users',
@@ -31,7 +31,7 @@ const authorPipeline = [
   },
 ];
 
-const getUserPipeline = (userId: string) => [
+export const getUserPipeline = (userId: string) => [
   {
     $lookup: {
       from: 'users',
@@ -53,7 +53,7 @@ const getUserPipeline = (userId: string) => [
   },
 ];
 
-const finalPipeline = [
+export const finalPipeline = [
   {
     $project: {
       _id: 0,

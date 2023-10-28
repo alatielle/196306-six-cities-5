@@ -2,8 +2,11 @@ import { DocumentType } from '@typegoose/typegoose';
 import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { SortOrder } from '../../types/sort-order.enum.js';
-import { DocumentExists, IsDocumentAuthor } from '../../types/index.js';
+import {
+  DocumentExists,
+  IsDocumentAuthor,
+  SortOrder,
+} from '../../types/index.js';
 
 export interface OfferService extends DocumentExists, IsDocumentAuthor {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
@@ -26,4 +29,5 @@ export interface OfferService extends DocumentExists, IsDocumentAuthor {
     city: string,
     amount?: number,
   ): Promise<DocumentType<OfferEntity>[]>;
+  findFavoriteByUserId(userId: string): Promise<DocumentType<OfferEntity>[]>;
 }

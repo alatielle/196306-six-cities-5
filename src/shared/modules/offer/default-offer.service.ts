@@ -1,14 +1,19 @@
 import { DocumentType, types } from '@typegoose/typegoose';
 import { inject, injectable } from 'inversify';
-import { Component } from '../../types/index.js';
+import { Component, SortOrder } from '../../types/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { OfferEntity } from './offer.entity.js';
 import { DEFAULT_OFFER_AMOUNT } from './offer.constant.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { SortOrder } from '../../types/sort-order.enum.js';
-import { getPipeline } from './offer.aggregation.js';
+import {
+  authorPipeline,
+  commentsPipeline,
+  finalPipeline,
+  getPipeline,
+  getUserPipeline,
+} from './offer.aggregation.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -54,6 +59,27 @@ export class DefaultOfferService implements OfferService {
         { $sort: { postDate: SortOrder.Desc } },
         { $limit: limit },
         ...getPipeline(currentUserId),
+      ])
+      .exec();
+  }
+
+  public async findFavoriteByUserId(
+    userId: string,
+  ): Promise<DocumentType<OfferEntity>[]> {
+    return this.offerModel
+      .aggregate([
+        ...getUserPipeline(userId),
+        {
+          $match: {
+            $expr: {
+              $in: ['$_id', '$user.favorites'],
+            },
+          },
+        },
+        { $sort: { postDate: SortOrder.Desc } },
+        ...commentsPipeline,
+        ...authorPipeline,
+        ...finalPipeline,
       ])
       .exec();
   }
