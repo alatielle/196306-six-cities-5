@@ -3,9 +3,9 @@ import { OfferEntity } from './offer.entity.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { SortOrder } from '../../types/sort-order.enum.js';
-import { DocumentExists } from '../../types/index.js';
+import { DocumentExists, IsDocumentAuthor } from '../../types/index.js';
 
-export interface OfferService extends DocumentExists {
+export interface OfferService extends DocumentExists, IsDocumentAuthor {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   find(
     amount?: number,
@@ -23,5 +23,4 @@ export interface OfferService extends DocumentExists {
     amount?: number,
     currentUserId?: string,
   ): Promise<DocumentType<OfferEntity>[]>;
-  exists(documentId: string): Promise<boolean>;
 }

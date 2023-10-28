@@ -9,6 +9,7 @@ import {
   HttpError,
   DocumentExistsMiddleware,
   PrivateRouteMiddleware,
+  ValidateAuthorMiddleware,
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
@@ -82,6 +83,7 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
 
