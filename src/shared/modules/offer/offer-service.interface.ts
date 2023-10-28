@@ -11,23 +11,17 @@ export interface OfferService extends DocumentExists {
     amount?: number,
     sort?: Record<string, SortOrder>,
   ): Promise<DocumentType<OfferEntity>[]>;
-  findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
+  findById(offerId: string, currentUserId?: string): Promise<DocumentType<OfferEntity> | null>;
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(
     offerId: string,
     dto: UpdateOfferDto,
+    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity> | null>;
   findPremiumByCity(
     city: string,
     amount?: number,
+    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity>[]>;
   exists(documentId: string): Promise<boolean>;
-  findCheap(amount: number): Promise<DocumentType<OfferEntity>[]>;
-  findExpensive(amount: number): Promise<DocumentType<OfferEntity>[]>;
-  findPopular(amount: number): Promise<DocumentType<OfferEntity>[]>;
-  findBestRated(amount: number): Promise<DocumentType<OfferEntity>[]>;
-  findFavorites(
-    userId: string,
-    amount?: number,
-  ): Promise<DocumentType<OfferEntity>[]>;
 }

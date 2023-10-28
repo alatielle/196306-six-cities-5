@@ -75,17 +75,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ required: true, _id: false })
   public location: Coordinates;
 
-  @prop({ default: 0 })
-  public commentAmount: number;
-
-  @prop({ default: 0 })
-  public rating: number;
-
-  @prop({ ref: () => UserEntity, type: () => [UserEntity], default: [] })
-  public favoredByUsers: Ref<UserEntity>[];
-
   @prop({
-    ref: () => UserEntity,
+    ref: () => 'UserEntity',
     required: true,
   })
   public authorId: Ref<UserEntity>;
