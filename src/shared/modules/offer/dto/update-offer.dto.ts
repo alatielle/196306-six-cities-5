@@ -12,6 +12,8 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+
 import { AmenityType, City, HousingType } from '../../../types/index.js';
 import { UpdateOfferValidationMessage } from './update-offer.messages.js';
 import { CoordinatesDto } from './coordinates.dto.js';
@@ -84,5 +86,6 @@ export class UpdateOfferDto {
 
   @IsOptional()
   @ValidateNested()
+  @Type(() => CoordinatesDto)
   public location?: CoordinatesDto;
 }

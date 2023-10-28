@@ -13,6 +13,8 @@ import {
   IsBoolean,
   ValidateNested,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
 import { CoordinatesDto } from './coordinates.dto.js';
 
@@ -42,7 +44,10 @@ export class CreateOfferDto {
   public imagePreview: string;
 
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
-  @MaxLength(256, { message: CreateOfferValidationMessage.images.maxLength })
+  @MaxLength(256, {
+    each: true,
+    message: CreateOfferValidationMessage.images.maxLength,
+  })
   @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
   @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
   public images: string[];
@@ -78,6 +83,7 @@ export class CreateOfferDto {
   public amenities: AmenityType[];
 
   @ValidateNested()
+  @Type(() => CoordinatesDto)
   public location: CoordinatesDto;
 
   public authorId: string;
