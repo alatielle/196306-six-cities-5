@@ -8,19 +8,22 @@ import { DocumentExists, IsDocumentAuthor } from '../../types/index.js';
 export interface OfferService extends DocumentExists, IsDocumentAuthor {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
   find(
+    currentUserId: string | undefined,
     amount?: number,
     sort?: Record<string, SortOrder>,
   ): Promise<DocumentType<OfferEntity>[]>;
-  findById(offerId: string, currentUserId?: string): Promise<DocumentType<OfferEntity> | null>;
+  findById(
+    currentUserId: string | undefined,
+    offerId: string,
+  ): Promise<DocumentType<OfferEntity> | null>;
   deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(
     offerId: string,
     dto: UpdateOfferDto,
-    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity> | null>;
   findPremiumByCity(
+    currentUserId: string | undefined,
     city: string,
     amount?: number,
-    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity>[]>;
 }

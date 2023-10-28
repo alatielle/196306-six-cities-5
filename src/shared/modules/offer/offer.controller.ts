@@ -110,15 +110,13 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index({ query }: Request, res: Response): Promise<void> {
-    // const userId = tokenPayload.id;
+  public async index({ query, tokenPayload }: Request, res: Response): Promise<void> {
     const amount = Math.max(
       parseAsInteger(query.limit) ?? 0,
       DEFAULT_OFFER_AMOUNT,
     );
-    const offers = await this.offerService.find(amount);
-    const responseData = fillDTO(OfferPreviewRdo, offers);
-    this.ok(res, responseData);
+    const offers = await this.offerService.find(tokenPayload?.id, amount);
+    this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
   public async create(
@@ -129,7 +127,7 @@ export class OfferController extends BaseController {
       ...body,
       authorId: tokenPayload.id,
     });
-    const offer = await this.offerService.findById(createdOffer.id, tokenPayload.id);
+    const offer = await this.offerService.findById(tokenPayload.id, createdOffer.id);
     this.created(res, fillDTO(OfferRdo, offer));
   }
 
@@ -137,18 +135,18 @@ export class OfferController extends BaseController {
     { params: { offerId }, tokenPayload }: Request<ParamOfferId>,
     res: Response,
   ): Promise<void> {
-    const offer = await this.offerService.findById(offerId, tokenPayload?.id);
-    const responseData = fillDTO(OfferRdo, offer);
-    this.ok(res, responseData);
+    const offer = await this.offerService.findById(tokenPayload?.id, offerId);
+    this.ok(res, fillDTO(OfferRdo, offer));
   }
 
   public async update(
-    { params, body }: UpdateOfferRequest,
+    { params, body, tokenPayload }: UpdateOfferRequest,
     res: Response,
   ): Promise<void> {
     const { offerId } = params;
-    const updatedOffer = await this.offerService.updateById(offerId, body);
-    this.ok(res, fillDTO(OfferRdo, updatedOffer));
+    await this.offerService.updateById(offerId, body);
+    const offer = await this.offerService.findById(tokenPayload.id, offerId);
+    this.ok(res, fillDTO(OfferRdo, offer));
   }
 
   public async delete(
@@ -161,7 +159,7 @@ export class OfferController extends BaseController {
     this.noContent(res, null);
   }
 
-  public async premium({ query }: Request, res: Response): Promise<void> {
+  public async premium({ query, tokenPayload }: Request, res: Response): Promise<void> {
     if (!query.city) {
       throw new HttpError(
         StatusCodes.BAD_REQUEST,
@@ -171,12 +169,12 @@ export class OfferController extends BaseController {
     }
 
     const offers = await this.offerService.findPremiumByCity(
+      tokenPayload?.id,
       query.city as string,
       PREMIUM_OFFER_AMOUNT,
     );
 
-    const responseData = fillDTO(OfferPreviewRdo, offers);
-    this.ok(res, responseData);
+    this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
   public async getComments(

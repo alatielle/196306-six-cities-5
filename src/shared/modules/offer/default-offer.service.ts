@@ -26,23 +26,23 @@ export class DefaultOfferService implements OfferService {
   }
 
   public async find(
+    currentUserId: string | undefined,
     limit = DEFAULT_OFFER_AMOUNT,
     sort: Record<string, SortOrder> = { postDate: SortOrder.Desc },
-    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
-        { $limit: limit },
         { $sort: sort },
+        { $limit: limit },
         ...getPipeline(currentUserId),
       ])
       .exec();
   }
 
   public async findPremiumByCity(
+    currentUserId: string | undefined,
     city: string,
     limit = DEFAULT_OFFER_AMOUNT,
-    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
@@ -51,16 +51,16 @@ export class DefaultOfferService implements OfferService {
             $and: [{ isPremium: true }, { city: city }],
           },
         },
-        { $limit: limit },
         { $sort: { postDate: SortOrder.Desc } },
+        { $limit: limit },
         ...getPipeline(currentUserId),
       ])
       .exec();
   }
 
   public async findById(
+    currentUserId: string | undefined,
     offerId: string,
-    currentUserId?: string,
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .aggregate([
