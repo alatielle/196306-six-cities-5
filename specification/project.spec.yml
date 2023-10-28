@@ -86,18 +86,6 @@ paths:
         '401':
           description: User session token is invalid.
 
-  /users/logout:
-    post:
-      tags:
-        - users
-      summary: User session finalization
-      description: Ends authorized user's session.
-      responses:
-        '204':
-          description: Session is successfully ended.
-        '401':
-          description: User session token is invalid.
-
   /users/{usedId}/avatar:
     post:
       tags:

@@ -56,12 +56,6 @@ export class UserController extends BaseController {
     });
 
     this.addRoute({
-      path: '/logout',
-      method: HttpMethod.Post,
-      handler: this.logout,
-    });
-
-    this.addRoute({
       path: '/:userId/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
@@ -107,14 +101,6 @@ export class UserController extends BaseController {
   }
 
   public async checkToken(): Promise<void> {
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
-  }
-
-  public async logout(): Promise<void> {
     throw new HttpError(
       StatusCodes.NOT_IMPLEMENTED,
       'Not implemented',
