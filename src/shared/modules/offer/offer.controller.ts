@@ -1,7 +1,6 @@
 import { inject, injectable } from 'inversify';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { DocumentType } from '@typegoose/typegoose';
 import {
   BaseController,
   HttpMethod,
@@ -18,7 +17,6 @@ import { parseAsInteger } from '../../helpers/parse.js';
 import { OfferService } from './offer-service.interface.js';
 import { CommentService } from '../comment/index.js';
 import { CommentRdo } from '../comment/rdo/comment.rdo.js';
-import { OfferEntity } from './offer.entity.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { UpdateOfferRequest } from './type/update-offer-request.type.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
@@ -26,9 +24,10 @@ import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-
-const DEFAULT_OFFER_AMOUNT = 60;
-const PREMIUM_OFFER_AMOUNT = 3;
+import {
+  DEFAULT_OFFER_AMOUNT,
+  PREMIUM_OFFER_AMOUNT,
+} from './offer.constant.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -65,12 +64,6 @@ export class OfferController extends BaseController {
     });
 
     this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.Get,
-      handler: this.favorites,
-    });
-
-    this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Get,
       handler: this.show,
@@ -104,16 +97,6 @@ export class OfferController extends BaseController {
     });
 
     this.addRoute({
-      path: '/:offerId/favorite',
-      method: HttpMethod.Put,
-      handler: this.favorite,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-      ],
-    });
-
-    this.addRoute({
       path: '/:offerId/comments',
       method: HttpMethod.Get,
       handler: this.getComments,
@@ -124,24 +107,13 @@ export class OfferController extends BaseController {
     });
   }
 
-  private transformOffer(offer: DocumentType<OfferEntity>) {
-    return Object.assign(offer, {
-      isFavorite: false,
-      rating: offer.rating ?? 0,
-    });
-  }
-
   public async index({ query }: Request, res: Response): Promise<void> {
-    // TODO: get user id and take isFavorite from offer.favoredByUsers
+    // const userId = tokenPayload.id;
     const amount = Math.max(
       parseAsInteger(query.limit) ?? 0,
       DEFAULT_OFFER_AMOUNT,
     );
-    const offers = await this.offerService
-      .find(amount)
-      .then((offerDocuments) =>
-        offerDocuments.map((offer) => this.transformOffer(offer)),
-      );
+    const offers = await this.offerService.find(amount);
     const responseData = fillDTO(OfferPreviewRdo, offers);
     this.ok(res, responseData);
   }
@@ -150,20 +122,20 @@ export class OfferController extends BaseController {
     { body, tokenPayload }: CreateOfferRequest,
     res: Response,
   ): Promise<void> {
-    const result = await this.offerService.create({
+    const createdOffer = await this.offerService.create({
       ...body,
       authorId: tokenPayload.id,
     });
-    this.created(res, fillDTO(OfferRdo, result));
+    const offer = await this.offerService.findById(createdOffer.id, tokenPayload.id);
+    this.created(res, fillDTO(OfferRdo, offer));
   }
 
   public async show(
-    { params }: Request<ParamOfferId>,
+    { params: { offerId }, tokenPayload }: Request<ParamOfferId>,
     res: Response,
   ): Promise<void> {
-    const { offerId } = params;
-    const offer = await this.offerService.findById(offerId);
-    const responseData = fillDTO(OfferRdo, this.transformOffer(offer!));
+    const offer = await this.offerService.findById(offerId, tokenPayload?.id);
+    const responseData = fillDTO(OfferRdo, offer);
     this.ok(res, responseData);
   }
 
@@ -173,7 +145,7 @@ export class OfferController extends BaseController {
   ): Promise<void> {
     const { offerId } = params;
     const updatedOffer = await this.offerService.updateById(offerId, body);
-    this.ok(res, fillDTO(OfferRdo, this.transformOffer(updatedOffer!)));
+    this.ok(res, fillDTO(OfferRdo, updatedOffer));
   }
 
   public async delete(
@@ -195,30 +167,13 @@ export class OfferController extends BaseController {
       );
     }
 
-    const offers = await this.offerService
-      .findPremiumByCity(query.city as string, PREMIUM_OFFER_AMOUNT)
-      .then((offerDocuments) =>
-        offerDocuments.map((offer) => this.transformOffer(offer)),
-      );
+    const offers = await this.offerService.findPremiumByCity(
+      query.city as string,
+      PREMIUM_OFFER_AMOUNT,
+    );
 
     const responseData = fillDTO(OfferPreviewRdo, offers);
     this.ok(res, responseData);
-  }
-
-  public async favorites(_req: Request, _res: Response): Promise<void> {
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'OfferController',
-    );
-  }
-
-  public async favorite(_req: Request, _res: Response): Promise<void> {
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'OfferController',
-    );
   }
 
   public async getComments(
