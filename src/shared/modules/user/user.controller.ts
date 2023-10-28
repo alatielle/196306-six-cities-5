@@ -100,12 +100,21 @@ export class UserController extends BaseController {
     this.ok(res, responseData);
   }
 
-  public async checkToken(): Promise<void> {
-    throw new HttpError(
-      StatusCodes.NOT_IMPLEMENTED,
-      'Not implemented',
-      'UserController',
-    );
+  public async checkToken(
+    { tokenPayload: { email } }: Request,
+    res: Response,
+  ): Promise<void> {
+    const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
+        'UserController',
+      );
+    }
+
+    this.ok(res, fillDTO(LoggedUserRdo, user));
   }
 
   public async uploadAvatar(req: Request, res: Response) {
