@@ -95,6 +95,7 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
 
