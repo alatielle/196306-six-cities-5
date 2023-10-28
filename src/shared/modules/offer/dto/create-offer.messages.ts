@@ -48,7 +48,4 @@ export const CreateOfferValidationMessage = {
     minValue: 'Minimum room amount is 1',
     maxValue: 'Maximum room amount is 8',
   },
-  authorId: {
-    invalidId: 'authorId field must be a valid id',
-  },
 } as const;

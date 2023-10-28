@@ -6,7 +6,6 @@ import {
   IsDateString,
   IsEnum,
   IsInt,
-  IsMongoId,
   Max,
   MaxLength,
   Min,
@@ -81,6 +80,5 @@ export class CreateOfferDto {
   @ValidateNested()
   public location: CoordinatesDto;
 
-  @IsMongoId({ message: CreateOfferValidationMessage.authorId.invalidId })
   public authorId: string;
 }

@@ -47,6 +47,7 @@ export class OfferController extends BaseController {
       method: HttpMethod.Get,
       handler: this.index,
     });
+
     this.addRoute({
       path: '/',
       method: HttpMethod.Post,
@@ -56,16 +57,19 @@ export class OfferController extends BaseController {
         new ValidateDtoMiddleware(CreateOfferDto),
       ],
     });
+
     this.addRoute({
       path: '/premium',
       method: HttpMethod.Get,
       handler: this.premium,
     });
+
     this.addRoute({
       path: '/favorites',
       method: HttpMethod.Get,
       handler: this.favorites,
     });
+
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Get,
@@ -75,6 +79,7 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
+
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Patch,
@@ -86,6 +91,7 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
+
     this.addRoute({
       path: '/:offerId',
       method: HttpMethod.Delete,
@@ -96,6 +102,7 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
+
     this.addRoute({
       path: '/:offerId/favorite',
       method: HttpMethod.Put,
@@ -105,6 +112,7 @@ export class OfferController extends BaseController {
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
       ],
     });
+
     this.addRoute({
       path: '/:offerId/comments',
       method: HttpMethod.Get,
@@ -139,10 +147,13 @@ export class OfferController extends BaseController {
   }
 
   public async create(
-    { body }: CreateOfferRequest,
+    { body, tokenPayload }: CreateOfferRequest,
     res: Response,
   ): Promise<void> {
-    const result = await this.offerService.create(body);
+    const result = await this.offerService.create({
+      ...body,
+      authorId: tokenPayload.id,
+    });
     this.created(res, fillDTO(OfferRdo, result));
   }
 
