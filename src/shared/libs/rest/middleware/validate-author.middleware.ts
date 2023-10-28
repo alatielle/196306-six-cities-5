@@ -1,28 +1,29 @@
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { DocumentExists } from '../../../types/index.js';
+
+import { IsDocumentAuthor } from '../../../types/index.js';
 import { HttpError } from '../errors/index.js';
 import { Middleware } from './middleware.interface.js';
 
-export class DocumentExistsMiddleware implements Middleware {
+export class ValidateAuthorMiddleware implements Middleware {
   constructor(
-    private readonly service: DocumentExists,
+    private readonly service: IsDocumentAuthor,
     private readonly entityName: string,
     private readonly paramName: string,
   ) {}
 
   public async execute(
-    { params }: Request,
+    { params, tokenPayload }: Request,
     _res: Response,
     next: NextFunction,
   ): Promise<void> {
     const documentId = params[this.paramName];
 
-    if (!(await this.service.exists(documentId))) {
+    if (!(await this.service.isAuthor(tokenPayload.id, documentId))) {
       throw new HttpError(
-        StatusCodes.NOT_FOUND,
-        `${this.entityName} with id ${documentId} not found.`,
-        'DocumentExistsMiddleware',
+        StatusCodes.FORBIDDEN,
+        `No rights for ${this.entityName} with id ${documentId}.`,
+        'ValidateAuthorMiddleware',
       );
     }
 

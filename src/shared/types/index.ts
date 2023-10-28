@@ -9,3 +9,4 @@ export * from './offer.type.js';
 export * from './user.type.js';
 export * from './user-type.enum.js';
 export * from './document-exists.interface.js';
+export * from './is-document-author.interface.js';
