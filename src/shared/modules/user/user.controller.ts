@@ -4,19 +4,20 @@ import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
   HttpMethod,
+  PrivateRouteMiddleware,
   UploadFileMiddleware,
   ValidateDtoMiddleware,
-  ValidateObjectIdMiddleware,
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { HttpError } from '../../libs/rest/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { Component } from '../../types/index.js';
 import { AuthService } from '../auth/index.js';
+import { fillDTO } from '../../helpers/index.js';
+import { OfferPreviewRdo } from '../offer/index.js';
 import { UserService } from './user-service.interface.js';
 import { CreateUserRequest } from './create-user-request.type.js';
 import { LoginUserRequest } from './login-user-request.type.js';
-import { fillDTO } from '../../helpers/index.js';
 import { UserRdo } from './rdo/user.rdo.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
@@ -56,11 +57,11 @@ export class UserController extends BaseController {
     });
 
     this.addRoute({
-      path: '/:userId/avatar',
+      path: '/avatar',
       method: HttpMethod.Post,
       handler: this.uploadAvatar,
       middlewares: [
-        new ValidateObjectIdMiddleware('userId'),
+        new PrivateRouteMiddleware(),
         new UploadFileMiddleware(
           this.configService.get('UPLOAD_DIRECTORY'),
           'avatar',
@@ -117,9 +118,16 @@ export class UserController extends BaseController {
     this.ok(res, fillDTO(LoggedUserRdo, user));
   }
 
-  public async uploadAvatar(req: Request, res: Response) {
+  public async uploadAvatar(
+    { tokenPayload: { id }, file }: Request,
+    res: Response,
+  ) {
+    const avatarPath = file?.path;
+
+    await this.userService.updateById(id, { avatarPath });
+
     this.created(res, {
-      filepath: req.file?.path,
+      filepath: avatarPath,
     });
   }
 }
