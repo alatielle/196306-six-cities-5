@@ -306,15 +306,25 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/validationError'
+                $ref: '#/components/schemas/validationError'
         '401':
           description: User is not authorized to edit offers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
         '403':
           description: User is not authorized to edit this offer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
         '404':
           description: Offer with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
     delete:
       tags:
@@ -609,26 +619,12 @@ components:
         title:
           type: string
           example: Beautiful & luxurious studio at great location
-          required: false
         description:
           type: string
           example: A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
-          required: false
-        city:
-          type: string
-          enum:
-            - Amsterdam
-            - Brussels
-            - Cologne
-            - Dusseldorf
-            - Hamburg
-            - Paris
-          example: Amsterdam
-          required: false
         imagePreview:
           type: string
           example: https://s3.amasonaws.com/image-preview.png
-          required: false
         images:
           type: array
           minItems: 6
@@ -636,59 +632,28 @@ components:
           items:
             type: string
             example: https://s3.amasonaws.com/full-image.png
-          required: false
         isPremium:
           type: boolean
           example: true
-          required: false
         housingType:
-          type: string
-          enum:
-            - Apartment
-            - House
-            - Room
-            - Hotel
-          example: Apartment
-          required: false
+          $ref: '#/components/schemas/housingType'
         roomAmount:
           type: integer
           example: 3
-          required: false
         guestAmount:
           type: integer
           example: 5
-          required: false
         price:
           type: number
           format: float
           example: 100
-          required: false
         amenities:
-          type: array
-          items:
-            type: string
-            enum:
-              - Breakfast
-              - AirConditioning
-              - LaptopFriendlyWorkspace
-              - BabySeat
-              - Washer
-              - Towels
-              - Fridge
-            example: Fridge
-          required: false
+          $ref: '#/components/schemas/amenities'
         location:
-          type: object
-          properties:
-            latitude:
-              type: number
-              format: float
-              example: 48.85661
-            longitude:
-              type: number
-              format: float
-              example: 2.351499
-          required: false
+          $ref: '#/components/schemas/location'
+        cityId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
 
     offer:
       type: object
