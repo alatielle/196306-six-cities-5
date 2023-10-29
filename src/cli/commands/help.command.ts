@@ -10,7 +10,7 @@ export class HelpCommand implements Command {
     console.info(`Программа для подготовки данных для REST API сервера.
 
 ${chalk.bold('ПРИМЕР')}
-    ${chalk.bold('cli.js')} --${chalk.underline('command')} [...${chalk.underline('arguments')}]
+    ${chalk.bold('npm run cli')} -- --${chalk.underline('command')} [...${chalk.underline('arguments')}]
 
 ${chalk.bold('КОМАНДЫ')}
     ${chalk.bold('--version')}
