@@ -12,6 +12,25 @@ export const commentsPipeline = [
   },
 ];
 
+export const cityPipeline = [
+  {
+    $lookup: {
+      from: 'cities',
+      localField: 'cityId',
+      foreignField: '_id',
+      as: 'cities',
+    },
+  },
+  {
+    $addFields: {
+      city: { $arrayElemAt: ['$cities', 0] },
+    },
+  },
+  {
+    $unset: ['cities'],
+  },
+];
+
 export const authorPipeline = [
   {
     $lookup: {
@@ -59,11 +78,11 @@ export const finalPipeline = [
       _id: 0,
       id: { $toString: '$_id' },
       author: 1,
+      city: 1,
       commentAmount: { $size: '$comments' },
       rating: { $ifNull: [{ $avg: '$comments.rating' }, 0] },
       isFavorite: { $in: ['$_id', { $ifNull: ['$user.favorites', []] }] },
       postDate: 1,
-      city: 1,
       isPremium: 1,
       imagePreview: 1,
       price: 1,
@@ -86,6 +105,7 @@ export const getPipeline = (userId?: string) => {
     ...commentsPipeline,
     ...authorPipeline,
     ...userPipeline,
+    ...cityPipeline,
     ...finalPipeline,
   ];
 };

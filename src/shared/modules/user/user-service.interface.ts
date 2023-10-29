@@ -11,5 +11,8 @@ export interface UserService {
     dto: CreateUserDto,
     salt: string,
   ): Promise<DocumentType<UserEntity>>;
-  updateById(userId: string, dto: UpdateUserDto): Promise<DocumentType<UserEntity> | null>;
+  updateById(
+    userId: string,
+    dto: UpdateUserDto,
+  ): Promise<DocumentType<UserEntity> | null>;
 }

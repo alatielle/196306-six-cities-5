@@ -20,9 +20,8 @@ export const UpdateOfferValidationMessage = {
     minValue: 'Minimum price is 100',
     maxValue: 'Maximum price is 100000',
   },
-  city: {
-    invalid:
-      'city must be one of: Paris, Cologne, Brussels, Amsterdam, Hamburg, Dusseldorf',
+  cityId: {
+    invalidId: 'cityId field must be a valid id',
   },
   housingType: {
     invalid: 'housingType must be one of: apartment, house, room, hotel',

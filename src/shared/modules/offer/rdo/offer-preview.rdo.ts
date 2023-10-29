@@ -1,5 +1,6 @@
-import { Expose } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { HousingType } from '../../../types/index.js';
+import { CityRdo } from '../../city/index.js';
 
 export class OfferPreviewRdo {
   @Expose()
@@ -15,7 +16,8 @@ export class OfferPreviewRdo {
   public postDate: string;
 
   @Expose()
-  public city: string;
+  @Type(() => CityRdo)
+  public city: CityRdo;
 
   @Expose()
   public imagePreview: string;

@@ -1,7 +1,8 @@
 import { Expose, Type } from 'class-transformer';
 import { AmenityType, HousingType } from '../../../types/index.js';
 import { UserRdo } from '../../user/rdo/user.rdo.js';
-import { CoordinatesRdo } from './coordinates.rdo.js';
+import { CoordinatesRdo } from '../../coordinates/index.js';
+import { CityRdo } from '../../city/index.js';
 
 export class OfferRdo {
   @Expose()
@@ -17,7 +18,8 @@ export class OfferRdo {
   public postDate: string;
 
   @Expose()
-  public city: string;
+  @Type(() => CityRdo)
+  public city: CityRdo;
 
   @Expose()
   public imagePreview: string;

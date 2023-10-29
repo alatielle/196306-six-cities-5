@@ -4,5 +4,5 @@ export const FavoriteOfferMessages = {
   },
   isFavorite: {
     invalidFormat: 'isFavorite must be a boolean',
-  }
+  },
 } as const;

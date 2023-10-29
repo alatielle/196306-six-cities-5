@@ -61,7 +61,7 @@ export class OfferController extends BaseController {
     this.addRoute({
       path: '/premium',
       method: HttpMethod.Get,
-      handler: this.premium,
+      handler: this.getPremium,
     });
 
     this.addRoute({
@@ -110,12 +110,16 @@ export class OfferController extends BaseController {
     });
   }
 
-  public async index({ query, tokenPayload }: Request, res: Response): Promise<void> {
+  public async index(
+    { query, tokenPayload }: Request,
+    res: Response,
+  ): Promise<void> {
     const amount = Math.max(
       parseAsInteger(query.limit) ?? 0,
       DEFAULT_OFFER_AMOUNT,
     );
     const offers = await this.offerService.find(tokenPayload?.id, amount);
+    console.log(offers);
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
@@ -127,7 +131,10 @@ export class OfferController extends BaseController {
       ...body,
       authorId: tokenPayload.id,
     });
-    const offer = await this.offerService.findById(tokenPayload.id, createdOffer.id);
+    const offer = await this.offerService.findById(
+      tokenPayload.id,
+      createdOffer.id,
+    );
     this.created(res, fillDTO(OfferRdo, offer));
   }
 
@@ -159,11 +166,16 @@ export class OfferController extends BaseController {
     this.noContent(res, null);
   }
 
-  public async premium({ query, tokenPayload }: Request, res: Response): Promise<void> {
+  public async getPremium(
+    { query, tokenPayload }: Request,
+    res: Response,
+  ): Promise<void> {
+    // TODO: Check in the list of cities
+    // TODO: lowercase
     if (!query.city) {
       throw new HttpError(
         StatusCodes.BAD_REQUEST,
-        `${query.city} is not a valid city name`,
+        `${query.city} is not supported`,
         'OfferController',
       );
     }

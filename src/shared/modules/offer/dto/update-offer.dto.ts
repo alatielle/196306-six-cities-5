@@ -5,6 +5,7 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
+  IsMongoId,
   IsOptional,
   Max,
   MaxLength,
@@ -14,9 +15,9 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { AmenityType, City, HousingType } from '../../../types/index.js';
+import { AmenityType, HousingType } from '../../../types/index.js';
+import { CoordinatesDto } from '../../coordinates/index.js';
 import { UpdateOfferValidationMessage } from './update-offer.messages.js';
-import { CoordinatesDto } from './coordinates.dto.js';
 
 export class UpdateOfferDto {
   @IsOptional()
@@ -32,10 +33,6 @@ export class UpdateOfferDto {
     message: UpdateOfferValidationMessage.description.maxLength,
   })
   public description?: string;
-
-  @IsOptional()
-  @IsEnum(City, { message: UpdateOfferValidationMessage.city.invalid })
-  public city?: City;
 
   @IsOptional()
   @MaxLength(256, { message: UpdateOfferValidationMessage.image.maxLength })
@@ -88,4 +85,8 @@ export class UpdateOfferDto {
   @ValidateNested()
   @Type(() => CoordinatesDto)
   public location?: CoordinatesDto;
+
+  @IsOptional()
+  @IsMongoId({ message: UpdateOfferValidationMessage.cityId.invalidId })
+  public cityId: string;
 }

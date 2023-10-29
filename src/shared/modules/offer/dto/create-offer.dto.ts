@@ -1,4 +1,4 @@
-import { AmenityType, City, HousingType } from '../../../types/index.js';
+import { AmenityType, HousingType } from '../../../types/index.js';
 import {
   ArrayMaxSize,
   ArrayMinSize,
@@ -12,11 +12,12 @@ import {
   MinLength,
   IsBoolean,
   ValidateNested,
+  IsMongoId,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
+import { CoordinatesDto } from '../../coordinates/index.js';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
-import { CoordinatesDto } from './coordinates.dto.js';
 
 export class CreateOfferDto {
   @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
@@ -36,9 +37,6 @@ export class CreateOfferDto {
     { message: CreateOfferValidationMessage.postDate.invalidFormat },
   )
   public postDate: Date;
-
-  @IsEnum(City, { message: CreateOfferValidationMessage.city.invalid })
-  public city: City;
 
   @MaxLength(256, { message: CreateOfferValidationMessage.image.maxLength })
   public imagePreview: string;
@@ -87,4 +85,7 @@ export class CreateOfferDto {
   public location: CoordinatesDto;
 
   public authorId: string;
+
+  @IsMongoId({ message: CreateOfferValidationMessage.cityId.invalidId })
+  public cityId: string;
 }

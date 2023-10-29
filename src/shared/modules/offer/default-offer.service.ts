@@ -8,11 +8,11 @@ import { DEFAULT_OFFER_AMOUNT } from './offer.constant.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import {
-  authorPipeline,
+  authorPipeline, cityPipeline,
   commentsPipeline,
   finalPipeline,
   getPipeline,
-  getUserPipeline,
+  getUserPipeline
 } from './offer.aggregation.js';
 
 @injectable()
@@ -24,10 +24,10 @@ export class DefaultOfferService implements OfferService {
   ) {}
 
   public async create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>> {
-    const result = await this.offerModel.create(dto);
+    const offer = await this.offerModel.create(dto);
     this.logger.info(`📩New offer created: ${dto.title}`);
 
-    return result;
+    return offer;
   }
 
   public async find(
@@ -79,6 +79,7 @@ export class DefaultOfferService implements OfferService {
         { $sort: { postDate: SortOrder.Desc } },
         ...commentsPipeline,
         ...authorPipeline,
+        ...cityPipeline,
         ...finalPipeline,
       ])
       .exec();
