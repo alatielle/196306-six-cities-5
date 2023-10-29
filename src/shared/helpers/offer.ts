@@ -1,6 +1,5 @@
 import {
   AmenityType,
-  City,
   Coordinates,
   HousingType,
   Offer,
@@ -23,14 +22,6 @@ function parseAmenities(amenities: string): AmenityType[] {
 
     throw new Error(`Amenity type ${amenity} is not supported`);
   });
-}
-
-function parseCity(city: string): City {
-  if (isInEnum<typeof City>(City, city)) {
-    return city;
-  }
-
-  throw new Error(`City ${city} is not supported`);
 }
 
 function parseHousingType(housingType: string): HousingType {
@@ -76,7 +67,8 @@ export function createOffer(offerData: string): Offer {
     title,
     description,
     postDate,
-    city,
+    cityName,
+    cityLocation,
     imagePreview,
     images,
     isPremium,
@@ -96,7 +88,10 @@ export function createOffer(offerData: string): Offer {
     title,
     description,
     postDate: new Date(postDate),
-    city: parseCity(city),
+    city: {
+      name: cityName,
+      location: parseLocation(cityLocation),
+    },
     imagePreview,
     images: images.split(';'),
     isPremium: Boolean(isPremium),

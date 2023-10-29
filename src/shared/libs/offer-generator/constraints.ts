@@ -17,13 +17,3 @@ export const GUESTS = {
   MIN: 1,
   MAX: 10,
 };
-
-export const LATITUDE = {
-  MIN: -90,
-  MAX: 90,
-};
-
-export const LONGITUDE = {
-  MIN: -180,
-  MAX: 180,
-};
