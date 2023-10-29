@@ -402,6 +402,46 @@ paths:
               schema:
                 $ref: '#/components/schemas/generalError'
 
+  /comments:
+    post:
+      tags:
+        - comments
+        - offers
+      summary: Comment creation
+      description: Adds a comments to a given offer.
+      requestBody:
+        description: Information to create a new comment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+      responses:
+        '201':
+          description: Comments has been created. Comment object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+        '401':
+          description: User is not authorized to add comments.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+        '404':
+          description: Offer with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+
   /offers/premium:
     get:
       tags:
@@ -426,39 +466,6 @@ paths:
                 maxItems: 3
                 items:
                   $ref: '#/components/schemas/offerPreview'
-
-  /comments:
-    post:
-      tags:
-        - comments
-      summary: Comment creation
-      description: Adds a comments to a given offer.
-      requestBody:
-        description: Information to create a new comment.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/createComment'
-        required: true
-      responses:
-        '201':
-          description: Comments has been created. Comment object.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/comment'
-        '400':
-          description: Some of the provided information is not correct.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/validationError'
-        '401':
-          description: User is not authorized to add comments.
-        '404':
-          description: Offer with the given ID does not exist.
 
 components:
   schemas:
@@ -786,18 +793,12 @@ components:
       properties:
         text:
           type: string
-          minLength: 5
-          maxLength: 1024
           required: true
         rating:
           type: integer
           example: 4
           required: true
         offerId:
-          type: string
-          example: 6329c3d6a04ab1061c6425ea
-          required: true
-        authorId:
           type: string
           example: 6329c3d6a04ab1061c6425ea
           required: true
