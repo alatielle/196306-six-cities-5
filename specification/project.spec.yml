@@ -342,7 +342,7 @@ paths:
         '204':
           description: Offer has been successfully removed.
         '400':
-          description: Some of the provided information is not correct.
+          description: offerId is not correct.
           content:
             application/json:
               schema:
@@ -389,8 +389,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/comment'
+        '400':
+          description: offerId is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
         '404':
           description: Offer with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
   /offers/premium:
     get:
@@ -801,13 +811,13 @@ components:
         text:
           type: string
           example: Nice property!
+        rating:
+          type: integer
+          example: 4
         postDate:
           type: string
           format: date-time
           example: 2023-10-11T13:15:56.868Z
-        rating:
-          type: integer
-          example: 4
         author:
           $ref: '#/components/schemas/user'
 
