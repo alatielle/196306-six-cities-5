@@ -84,6 +84,33 @@ npm run cli -- --generate 100 ./mocks/mock-data.tsv http://localhost:3123/api
 npm run cli -- --import ./mocks/mock-data.tsv admin test 127.0.0.1 six-cities secret                                                                                                                                                                                                                                         
 ```
 
+## REST API сервис
+
+### Переменные окружения
+
+```bash
+PORT=4000 - Порт для входящих соединений
+
+SALT=secret - Соль для хэширования паролей
+
+DB_HOST=127.0.0.1 - IP-адрес сервера базы данных (MongoDB)
+
+DB_USER=admin - Имя пользователя для подключения к базе данных
+
+DB_PASSWORD=test - Пароль для подключения к базе данных
+
+DB_PORT=27017 - Порт для подключения к базе данных (MongoDB)
+
+DB_NAME=six-cities - Имя базы данных (MongoDB)
+
+DB_MAX_RETRIES=3 - Максильмальное число попыток переподключения к БД
+
+DB_RETRY_TIMEOUT=1000 - Число миллисекунд между попытками подключения к БД
+
+UPLOAD_DIRECTORY=upload - Директория для хранения загружаемых пользователями файлов
+
+JWT_SECRET=super-secret! - Секрет для подписи JWT-токена
+```
 
 ## Структура проекта
 
