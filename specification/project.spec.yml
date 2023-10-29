@@ -159,6 +159,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/generalError'
 
+    put:
+      tags:
+        - users
+        - offers
+      summary: Favorite the offer
+      description: Adds/removes an offer to/from the favorites list.
+      requestBody:
+        description: Information to mark an offer as favorite.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/favoriteOffer'
+      responses:
+        '204':
+          description: Offer's `favorite` status has been successfully updated
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+        '401':
+          description: User is not authorized to favorite offers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+
   /offers:
     get:
       tags:
@@ -324,30 +352,6 @@ paths:
         '404':
           description: Offer with the given ID does not exist.
 
-  /offers/{offerId}/favorite:
-    put:
-      tags:
-        - offers
-      summary: Favorite the offer
-      description: Adds/removes an offer to/from the favorites list.
-      parameters:
-        - in: path
-          name: offerId
-          schema:
-            type: string
-            required: true
-            description: The ID of the offer.
-      requestBody:
-        content:
-          text/plain:
-            schema:
-              type: boolean
-      responses:
-        '204':
-          description: Offer's `favorite` status has been successfully updated
-        '401':
-          description: User is not authorized to favorite offers.
-
   /offers/premium:
     get:
       tags:
@@ -492,6 +496,18 @@ components:
             - Normal
             - Pro
           example: Pro
+
+    favoriteOffer:
+      type: object
+      properties:
+        offerId:
+          type: string
+          required: true
+          example: 6329c3d6a04ab1061c6425ea
+        isFavorite:
+          type: boolean
+          required: true
+          example: true
 
     createOffer:
       type: object
