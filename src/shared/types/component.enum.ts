@@ -17,4 +17,5 @@ export const Component = {
   AuthExceptionFilter: Symbol.for('AuthExceptionFilter'),
   CityModel: Symbol.for('CityModel'),
   CityService: Symbol.for('CityService'),
+  CityController: Symbol.for('CityController'),
 } as const;

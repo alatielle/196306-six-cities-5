@@ -27,7 +27,6 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import {
   DEFAULT_OFFER_AMOUNT,
-  PREMIUM_OFFER_AMOUNT,
 } from './offer.constant.js';
 import { CityService } from '../city/index.js';
 
@@ -59,12 +58,6 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateOfferDto),
       ],
-    });
-
-    this.addRoute({
-      path: '/premium',
-      method: HttpMethod.Get,
-      handler: this.getPremium,
     });
 
     this.addRoute({
@@ -122,7 +115,6 @@ export class OfferController extends BaseController {
       DEFAULT_OFFER_AMOUNT,
     );
     const offers = await this.offerService.find(tokenPayload?.id, amount);
-    console.log(offers);
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
@@ -181,29 +173,6 @@ export class OfferController extends BaseController {
     await this.offerService.deleteById(offerId);
     await this.commentService.deleteByOfferId(offerId);
     this.noContent(res, null);
-  }
-
-  public async getPremium(
-    { query, tokenPayload }: Request,
-    res: Response,
-  ): Promise<void> {
-    // TODO: Check in the list of cities
-    // TODO: lowercase
-    if (!query.city) {
-      throw new HttpError(
-        StatusCodes.BAD_REQUEST,
-        `${query.city} is not supported`,
-        'OfferController',
-      );
-    }
-
-    const offers = await this.offerService.findPremiumByCity(
-      tokenPayload?.id,
-      query.city as string,
-      PREMIUM_OFFER_AMOUNT,
-    );
-
-    this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 
   public async getComments(

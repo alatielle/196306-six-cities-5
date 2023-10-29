@@ -16,14 +16,21 @@ export const cityPipeline = [
   {
     $lookup: {
       from: 'cities',
-      localField: 'cityId',
-      foreignField: '_id',
+      let: { cityId: '$cityId' },
+      pipeline: [
+        { $match: { $expr: { $eq: ['$$cityId', '$_id'] } } },
+        {
+          $project: { _id: 0, id: { $toString: '$_id' }, name: 1, location: 1 },
+        },
+      ],
       as: 'cities',
     },
   },
   {
     $addFields: {
-      city: { $arrayElemAt: ['$cities', 0] },
+      city: {
+        $arrayElemAt: ['$cities', 0],
+      },
     },
   },
   {

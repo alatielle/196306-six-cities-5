@@ -40,4 +40,8 @@ export class DefaultCityService implements CityService {
     const existingCity = await this.findByCityName(cityName);
     return existingCity ?? (await this.create(dto));
   }
+
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.cityModel.exists({ _id: documentId })) !== null;
+  }
 }

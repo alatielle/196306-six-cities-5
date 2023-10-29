@@ -45,16 +45,23 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async findPremiumByCity(
+  public async findPremiumByCityId(
     currentUserId: string | undefined,
-    city: string,
+    cityId: string,
     limit = DEFAULT_OFFER_AMOUNT,
   ): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
         {
           $match: {
-            $and: [{ isPremium: true }, { city: city }],
+            $and: [
+              { isPremium: true },
+              {
+                $expr: {
+                  $eq: ['$cityId', { $toObjectId: cityId }],
+                },
+              },
+            ],
           },
         },
         { $sort: { postDate: SortOrder.Desc } },
