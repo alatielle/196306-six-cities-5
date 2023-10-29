@@ -130,7 +130,30 @@ paths:
                     example:
                       upload/Uq-PzHXRZnm6NzYvfjFGA.png
         '401':
-          description: A user is not authorized.
+          description: A user is not authorized to upload an avatar.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+
+  /users/favorites:
+    get:
+      tags:
+        - users
+        - offers
+      summary: List of favorite offers
+      description: Returns all the offers that have been added to favorites list by a current user.
+      responses:
+        '200':
+          description: List of offers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offerPreview'
+        '401':
+          description: User is not authorized to view favorite offers.
           content:
             application/json:
               schema:
@@ -300,24 +323,6 @@ paths:
                   $ref: '#/components/schemas/comment'
         '404':
           description: Offer with the given ID does not exist.
-
-  /offers/favorites:
-    get:
-      tags:
-        - offers
-      summary: List of favorite offers
-      description: Returns all the offers that have been added to favorites list by a current user.
-      responses:
-        '200':
-          description: List of offers.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/offerPreview'
-        '401':
-          description: User is not authorized to view favorite offers.
 
   /offers/{offerId}/favorite:
     put:
