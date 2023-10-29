@@ -374,18 +374,14 @@ components:
     validationError:
       type: object
       properties:
-        message:
-          type: string
-          description: A description of the validation error.
-          example: Password too short
         field:
           type: string
           description: The name of the field that failed validation.
           example: password
-        code:
+        message:
           type: string
-          description: An error code associated with the validation error.
-          example: validation.createUser.password.tooShort
+          description: A description of the validation error.
+          example: Password too short
 
     createUser:
       type: object
