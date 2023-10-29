@@ -341,12 +341,30 @@ paths:
       responses:
         '204':
           description: Offer has been successfully removed.
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
         '401':
           description: User is not authorized to delete offers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
         '403':
           description: User is not authorized to delete this offer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
         '404':
           description: Offer with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
   /offers/{offerId}/comments:
     get:
