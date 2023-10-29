@@ -234,11 +234,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/validationError'
+                $ref: '#/components/schemas/validationError'
         '401':
           description: User is not authorized to create offers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
   /offers/{offerId}:
     get:
@@ -520,17 +522,11 @@ components:
           type: string
           required: true
           example: A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
-        city:
+        postDate:
           type: string
-          enum:
-            - Amsterdam
-            - Brussels
-            - Cologne
-            - Dusseldorf
-            - Hamburg
-            - Paris
+          format: date-time
           required: true
-          example: Amsterdam
+          example: "2023-01-30T08:30:00Z"
         imagePreview:
           type: string
           required: true
@@ -548,14 +544,7 @@ components:
           required: true
           example: true
         housingType:
-          type: string
-          enum:
-            - Apartment
-            - House
-            - Room
-            - Hotel
-          required: true
-          example: Apartment
+          $ref: '#/components/schemas/housingType'
         roomAmount:
           type: integer
           required: true
@@ -596,6 +585,10 @@ components:
               example: 2.351499
           required: true
         authorId:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+          required: true
+        cityId:
           type: string
           example: 6329c3d6a04ab1061c6425ea
           required: true
@@ -690,6 +683,9 @@ components:
     offer:
       type: object
       properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
         title:
           type: string
           example: Beautiful & luxurious studio at great location
@@ -701,15 +697,7 @@ components:
           format: date-time
           example: 2023-10-11T13:15:56.868Z
         city:
-          type: string
-          enum:
-            - Amsterdam
-            - Brussels
-            - Cologne
-            - Dusseldorf
-            - Hamburg
-            - Paris
-          example: Amsterdam
+          $ref: '#/components/schemas/city'
         imagePreview:
           type: string
           example: https://s3.amasonaws.com/image-preview.png
@@ -731,13 +719,7 @@ components:
           format: float
           example: 4.2
         housingType:
-          type: string
-          enum:
-            - Apartment
-            - House
-            - Room
-            - Hotel
-          example: Apartment
+          $ref: '#/components/schemas/housingType'
         roomAmount:
           type: integer
           example: 3
@@ -749,29 +731,9 @@ components:
           format: float
           example: 100
         amenities:
-          type: array
-          items:
-            type: string
-            enum:
-              - Breakfast
-              - AirConditioning
-              - LaptopFriendlyWorkspace
-              - BabySeat
-              - Washer
-              - Towels
-              - Fridge
-            example: Fridge
+          $ref: '#/components/schemas/amenities'
         location:
-          type: object
-          properties:
-            latitude:
-              type: number
-              format: float
-              example: 48.85661
-            longitude:
-              type: number
-              format: float
-              example: 2.351499
+          $ref: '#/components/schemas/location'
         commentAmount:
           type: integer
           example: 5
