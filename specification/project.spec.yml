@@ -262,8 +262,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/offer'
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
         '404':
           description: Offer with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
     patch:
       tags:
