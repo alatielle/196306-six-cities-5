@@ -395,6 +395,10 @@ components:
           format: email
           required: true
           example: keks@htmlacademy.ru
+        avatarPath:
+          type: string
+          required: false
+          example: upload/ketUeXWH-AxExEduf3lSp.png
         name:
           type: string
           required: true
@@ -403,7 +407,7 @@ components:
           type: string
           format: password
           required: true
-          example: 123456
+          example: 12345678
         type:
           type: string
           enum:
@@ -411,10 +415,6 @@ components:
             - Pro
           required: true
           example: Pro
-        avatarPath:
-          type: string
-          required: false
-          example: https://s3.amazonaws.com/uifaces/faces/twitter/hugocornejo/128.jpg
 
     authorizeUser:
       type: object
