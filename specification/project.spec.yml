@@ -784,48 +784,34 @@ components:
         id:
           type: string
           example: 6329c3d6a04ab1061c6425ea
-        price:
-          type: number
-          format: float
-          example: 100
         title:
           type: string
           example: Beautiful & luxurious studio at great location
         housingType:
-          type: string
-          enum:
-            - Apartment
-            - House
-            - Room
-            - Hotel
-          example: Apartment
-        isFavorite:
-          type: boolean
-          example: true
+          $ref: '#/components/schemas/housingType'
         postDate:
           type: string
           format: date-time
           example: 2023-10-11T13:15:56.868Z
         city:
-          type: string
-          enum:
-            - Amsterdam
-            - Brussels
-            - Cologne
-            - Dusseldorf
-            - Hamburg
-            - Paris
-          example: Amsterdam
+          $ref: '#/components/schemas/city'
         imagePreview:
           type: string
           example: https://s3.amasonaws.com/image-preview.png
         isPremium:
           type: boolean
           example: false
+        isFavorite:
+          type: boolean
+          example: true
         rating:
           type: number
           format: float
           example: 4.2
+        price:
+          type: number
+          format: float
+          example: 100
         commentAmount:
           type: integer
           example: 5
@@ -869,3 +855,50 @@ components:
           example: 4
         author:
           $ref: '#/components/schemas/user'
+
+    amenities:
+      type: array
+      items:
+        type: string
+        enum:
+          - Breakfast
+          - AirConditioning
+          - LaptopFriendlyWorkspace
+          - BabySeat
+          - Washer
+          - Towels
+          - Fridge
+        example: Fridge
+
+    housingType:
+      type: string
+      enum:
+        - Apartment
+        - House
+        - Room
+        - Hotel
+      example: Apartment
+
+    location:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 48.85661
+        longitude:
+          type: number
+          format: float
+          example: 2.351499
+
+    city:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+        name:
+          type: string
+          example: Amsterdam
+        location:
+          $ref: '#/components/schemas/location'
