@@ -38,9 +38,13 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/validationError'
+                $ref: '#/components/schemas/validationError'
+        '403':
+          description: A logged in user can not register.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
         '409':
           description: A user with this email already exists.
           content:
@@ -59,7 +63,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/authorizeUser'
+              $ref: '#/components/schemas/loginUser'
         required: true
       responses:
         '200':
@@ -374,14 +378,19 @@ components:
     validationError:
       type: object
       properties:
-        field:
-          type: string
-          description: The name of the field that failed validation.
-          example: password
-        message:
-          type: string
-          description: A description of the validation error.
-          example: Password too short
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: The name of the field that failed validation.
+                example: password
+              message:
+                type: string
+                description: A description of the validation error.
+                example: Password too short
 
     createUser:
       type: object
@@ -412,31 +421,30 @@ components:
           required: true
           example: Pro
 
-    authorizeUser:
+    loginUser:
       type: object
       properties:
         login:
           type: string
+          required: true
           example: keks@htmlacademy.ru
         password:
           type: string
-          example: 123456
+          required: true
+          example: 12345678
 
     user:
       type: object
       properties:
-        id:
-          type: string
-          example: 6329c3d6a04ab1061c6425ea
         email:
           type: string
           example: keks@htmlacademy.ru
+        avatarPath:
+          type: string
+          example: upload/ketUeXWH-AxExEduf3lSp.png
         name:
           type: string
           example: Keks
-        avatarPath:
-          type: string
-          example: https://s3.amazonaws.com/uifaces/faces/twitter/hugocornejo/128.jpg
         type:
           type: string
           enum:
