@@ -442,20 +442,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/generalError'
 
-  /offers/premium:
+  /cities/:cityId/premium:
     get:
       tags:
+        - cities
         - offers
       summary: List of premium offers
       description: Returns a list of premium offers for a given city.
       parameters:
-        - in: query
-          name: city
+        - in: path
+          name: cityId
           schema:
             type: string
             required: true
             description: The city to get the premium offers for.
-            example: Paris
       responses:
         '200':
           description: List of premium offers.
@@ -463,9 +463,20 @@ paths:
             application/json:
               schema:
                 type: array
-                maxItems: 3
                 items:
                   $ref: '#/components/schemas/offerPreview'
+        '400':
+          description: cityId is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
+        '404':
+          description: City with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
 components:
   schemas:
