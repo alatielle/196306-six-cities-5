@@ -10,7 +10,9 @@ export function createCityContainer() {
   const cityContainer = new Container();
 
   cityContainer.bind<CityService>(Component.CityService).to(DefaultCityService);
-  cityContainer.bind<types.ModelType<CityEntity>>(Component.CityModel).toConstantValue(CityModel);
+  cityContainer
+    .bind<types.ModelType<CityEntity>>(Component.CityModel)
+    .toConstantValue(CityModel);
 
   return cityContainer;
 }

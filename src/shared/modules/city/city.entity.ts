@@ -1,17 +1,23 @@
-import { defaultClasses, getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { City, Coordinates } from '../../types/index.js';
+import {
+  defaultClasses,
+  getModelForClass,
+  modelOptions,
+  prop,
+} from '@typegoose/typegoose';
+import { City } from '../../types/index.js';
+import { Coordinates } from '../coordinates/index.js';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export interface CityEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'cities'
-  }
+    collection: 'cities',
+  },
 })
 // eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class CityEntity extends defaultClasses.TimeStamps implements City {
-  @prop({required: true, trim: true})
+  @prop({ required: true, trim: true })
   public name: string;
 
   @prop({ required: true, _id: false })

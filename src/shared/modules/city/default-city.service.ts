@@ -15,9 +15,7 @@ export class DefaultCityService implements CityService {
     private readonly cityModel: types.ModelType<CityEntity>,
   ) {}
 
-  public async create(
-    dto: CreateCityDto,
-  ): Promise<DocumentType<CityEntity>> {
+  public async create(dto: CreateCityDto): Promise<DocumentType<CityEntity>> {
     const city = await this.cityModel.create(dto);
     this.logger.info(`🏘️New city created: ${dto.name}`);
     return city;
@@ -40,6 +38,6 @@ export class DefaultCityService implements CityService {
     dto: CreateCityDto,
   ): Promise<DocumentType<CityEntity>> {
     const existingCity = await this.findByCityName(cityName);
-    return existingCity ?? await this.create(dto);
+    return existingCity ?? (await this.create(dto));
   }
 }
