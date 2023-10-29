@@ -29,6 +29,7 @@ import {
   DEFAULT_OFFER_AMOUNT,
   PREMIUM_OFFER_AMOUNT,
 } from './offer.constant.js';
+import { CityService } from '../city/index.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -37,6 +38,8 @@ export class OfferController extends BaseController {
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.CommentService)
     private readonly commentService: CommentService,
+    @inject(Component.CityService)
+    private readonly cityService: CityService,
   ) {
     super(logger);
 
@@ -150,9 +153,23 @@ export class OfferController extends BaseController {
     { params, body, tokenPayload }: UpdateOfferRequest,
     res: Response,
   ): Promise<void> {
-    const { offerId } = params;
-    await this.offerService.updateById(offerId, body);
-    const offer = await this.offerService.findById(tokenPayload.id, offerId);
+    if (body.cityId) {
+      const foundCity = await this.cityService.findByCityId(body.cityId);
+
+      if (!foundCity) {
+        throw new HttpError(
+          StatusCodes.BAD_REQUEST,
+          `City with id ${body.cityId} does not exist`,
+          'OfferController',
+        );
+      }
+    }
+
+    await this.offerService.updateById(params.offerId, body);
+    const offer = await this.offerService.findById(
+      tokenPayload.id,
+      params.offerId,
+    );
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 

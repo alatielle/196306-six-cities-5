@@ -8,11 +8,12 @@ import { DEFAULT_OFFER_AMOUNT } from './offer.constant.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import {
-  authorPipeline, cityPipeline,
+  authorPipeline,
+  cityPipeline,
   commentsPipeline,
   finalPipeline,
   getPipeline,
-  getUserPipeline
+  getUserPipeline,
 } from './offer.aggregation.js';
 
 @injectable()
