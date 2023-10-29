@@ -11,6 +11,7 @@ tags:
   - name: offers
   - name: users
   - name: comments
+  - name: cities
 
 paths:
   /users/register:
@@ -72,8 +73,24 @@ paths:
             text/plain:
               schema:
                 type: string
+        '400':
+          description: Some of the provided information is not correct.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/validationError'
         '401':
+          description: A user is not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+        '404':
           description: A user with specified credentials was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
     get:
       tags:

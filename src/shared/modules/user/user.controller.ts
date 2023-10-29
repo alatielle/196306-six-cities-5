@@ -19,7 +19,6 @@ import { UserService } from './user-service.interface.js';
 import { CreateUserRequest } from './types/create-user-request.type.js';
 import { LoginUserRequest } from './types/login-user-request.type.js';
 import { UserRdo } from './rdo/user.rdo.js';
-import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
@@ -118,11 +117,7 @@ export class UserController extends BaseController {
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    const responseData = fillDTO(LoggedUserRdo, {
-      email: user.email,
-      token,
-    });
-    this.ok(res, responseData);
+    this.ok(res, token);
   }
 
   public async checkToken(

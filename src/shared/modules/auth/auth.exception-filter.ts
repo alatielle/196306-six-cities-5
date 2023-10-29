@@ -4,6 +4,7 @@ import { ExceptionFilter } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { BaseUserException } from './errors/index.js';
+import { createErrorObject } from '../../helpers/index.js';
 
 @injectable()
 export class AuthExceptionFilter implements ExceptionFilter {
@@ -22,9 +23,6 @@ export class AuthExceptionFilter implements ExceptionFilter {
     }
 
     this.logger.error(`[AuthModule] ${error.message}`, error);
-    res.status(error.httpStatusCode).json({
-      type: 'AUTHORIZATION',
-      error: error.message,
-    });
+    res.status(error.httpStatusCode).json(createErrorObject(error.message));
   }
 }
