@@ -111,7 +111,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/generalError'
 
-  /users/{usedId}/avatar:
+  /users/avatar:
     post:
       tags:
         - users
@@ -120,6 +120,21 @@ paths:
       responses:
         '201':
           description: Image has been uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  filepath:
+                    type: string
+                    example:
+                      upload/Uq-PzHXRZnm6NzYvfjFGA.png
+        '401':
+          description: A user is not authorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
 
   /offers:
     get:
