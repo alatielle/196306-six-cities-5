@@ -411,12 +411,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/generalError'
 
-  /offers/{offerId}/imagePreview:
+  /offers/{offerId}/images:
     post:
       tags:
         - offers
-      summary: Upload preview image
-      description: Uploads offer's preview. Offer image should have a `png` or `jpg` format.
+      summary: Upload offer images
+      description: Uploads images describing the property. Images should have a `png` or `jpg` format.
       requestBody:
         content:
           multipart/form-data:
@@ -428,18 +428,19 @@ paths:
                   format: binary
       responses:
         '201':
-          description: Image has been uploaded.
+          description: Images have been uploaded.
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  image:
-                    type: string
-                    example:
-                      http://mysite.com/upload/Uq-PzHXRZnm6NzYvfjFGA.png
+                  images:
+                    type: array
+                    items:
+                      type: string
+                      example: http://mysite.com/upload/Uq-PzHXRZnm6NzYvfjFGA.png
         '401':
-          description: A user is not authorized to upload an image.
+          description: A user is not authorized to upload images.
           content:
             application/json:
               schema:
@@ -671,10 +672,6 @@ components:
           format: date-time
           required: true
           example: "2023-01-30T08:30:00Z"
-        imagePreview:
-          type: string
-          required: true
-          example: https://s3.amasonaws.com/image-preview.png
         images:
           type: array
           minItems: 6
@@ -746,9 +743,6 @@ components:
         description:
           type: string
           example: A quiet cozy and picturesque that hides behind a a river by the unique lightness of Amsterdam.
-        imagePreview:
-          type: string
-          example: https://s3.amasonaws.com/image-preview.png
         images:
           type: array
           minItems: 6
