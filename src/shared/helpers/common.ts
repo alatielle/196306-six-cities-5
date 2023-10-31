@@ -22,5 +22,5 @@ export function getErrorMessage(error: unknown): string {
 }
 
 export function getFullServerPath(host: string, port: number) {
-  return `https://${host}:${port}`;
+  return `http://${host}:${port}`;
 }

@@ -139,15 +139,10 @@ export class UserController extends BaseController {
     this.ok(res, fillDTO(LoggedUserRdo, user));
   }
 
-  public async uploadAvatar(
-    { tokenPayload: { id }, file }: Request,
-    res: Response
-  ) {
-    const avatarPath = file?.path;
-    await this.userService.updateById(id, { avatarPath });
-    this.created(res, fillDTO(UploadUserAvatarRdo, {
-      filepath: avatarPath
-    }));
+  public async uploadAvatar({ tokenPayload: { id }, file }: Request, res: Response) {
+    const uploadedFile = { avatarPath: file?.filename };
+    await this.userService.updateById(id, uploadedFile);
+    this.created(res, fillDTO(UploadUserAvatarRdo, { filepath: uploadedFile.avatarPath }));
   }
 
   public async getFavorites(

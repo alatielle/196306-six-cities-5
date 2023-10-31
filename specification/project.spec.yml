@@ -68,11 +68,11 @@ paths:
         required: true
       responses:
         '200':
-          description: A user has been authorized. User token.
+          description: A user has been authorized. User data with token.
           content:
-            text/plain:
+            application/json:
               schema:
-                type: string
+                $ref: '#/components/schemas/loggedUser'
         '400':
           description: Some of the provided information is not correct.
           content:
@@ -99,11 +99,11 @@ paths:
       description: Returns authorized user's information.
       responses:
         '200':
-          description: User session token is valid. User object.
+          description: User session token is valid. Logged user object.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: '#/components/schemas/loggedUser'
         '401':
           description: User session token is invalid.
           content:
@@ -128,7 +128,7 @@ paths:
                   filepath:
                     type: string
                     example:
-                      upload/Uq-PzHXRZnm6NzYvfjFGA.png
+                      http://mysite.com/upload/Uq-PzHXRZnm6NzYvfjFGA.png
         '401':
           description: A user is not authorized to upload an avatar.
           content:
@@ -556,9 +556,34 @@ components:
           required: true
           example: 12345678
 
+    loggedUser:
+      type: object
+      properties:
+        token:
+          type: string
+          example: long-token-string
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+        avatarPath:
+          type: string
+          example: upload/ketUeXWH-AxExEduf3lSp.png
+        name:
+          type: string
+          example: Keks
+        type:
+          type: string
+          enum:
+            - Normal
+            - Pro
+          example: Pro
+
     user:
       type: object
       properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
         email:
           type: string
           example: keks@htmlacademy.ru
