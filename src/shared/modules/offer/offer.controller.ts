@@ -204,10 +204,9 @@ export class OfferController extends BaseController {
     const { offerId} = params;
     const fileNames = files.map((file) => file.filename);
     const updateDto = {
-      imagePreview: fileNames[0],
       images: fileNames
     };
     await this.offerService.updateById(offerId, updateDto);
-    this.created(res, fillDTO(UploadImagesRdo, { images: updateDto.images }));
+    this.created(res, fillDTO(UploadImagesRdo, updateDto));
   }
 }

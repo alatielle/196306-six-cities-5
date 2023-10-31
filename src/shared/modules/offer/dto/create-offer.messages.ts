@@ -10,6 +10,11 @@ export const CreateOfferValidationMessage = {
   postDate: {
     invalidFormat: 'postDate must be a valid ISO date',
   },
+  images: {
+    invalidFormat: 'images must be an array',
+    maxLength: 'Too short for field «images»',
+    invalidSize: 'Should always be 6 images',
+  },
   price: {
     invalidFormat: 'Price must be an integer',
     minValue: 'Minimum price is 100',
