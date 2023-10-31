@@ -15,6 +15,7 @@ export type RestSchema = {
   DB_MAX_RETRIES: number;
   DB_RETRY_TIMEOUT: number;
   UPLOAD_DIRECTORY: string;
+  STATIC_DIRECTORY: string;
   JWT_SECRET: string;
 };
 
@@ -84,6 +85,12 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'UPLOAD_DIRECTORY',
     default: null,
+  },
+  STATIC_DIRECTORY: {
+    doc: 'Directory with the static resources',
+    format: String,
+    env: 'STATIC_DIRECTORY',
+    default: 'public'
   },
   JWT_SECRET: {
     doc: 'Secret for sign JWT',
