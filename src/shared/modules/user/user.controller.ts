@@ -29,8 +29,7 @@ export class UserController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
-    @inject(Component.Config)
-    private readonly configService: Config<RestSchema>,
+    @inject(Component.Config) private readonly configService: Config<RestSchema>,
     @inject(Component.AuthService) private readonly authService: AuthService,
     @inject(Component.OfferService) private readonly offerService: OfferService,
   ) {

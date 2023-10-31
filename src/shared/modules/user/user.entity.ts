@@ -9,7 +9,6 @@ import {
 import { User, UserType } from '../../types/index.js';
 import { createSHA256 } from '../../helpers/index.js';
 import { OfferEntity } from '../offer/index.js';
-import { DEFAULT_AVATAR_PATH } from './user.constant.js';
 
 export interface UserEntity extends defaultClasses.Base {}
 
@@ -22,7 +21,7 @@ export class UserEntity extends defaultClasses.TimeStamps implements User {
   @prop({ unique: true, required: true })
   public email: string;
 
-  @prop({ required: false, default: DEFAULT_AVATAR_PATH })
+  @prop({ required: false, default: '' })
   public avatarPath: string;
 
   @prop({ required: true, default: '' })
