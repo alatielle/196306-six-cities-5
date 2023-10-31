@@ -486,24 +486,38 @@ components:
         error:
           type: string
           description: A description of the error.
-          example: Error description
+          example: Offer with id _ not found.
+        errorType:
+          type: string
+          description: A type of the error.
+          example: COMMON_ERROR
 
     validationError:
       type: object
       properties:
-        errors:
+        error:
+          type: string
+          description: A description of the error.
+          example: Validation error
+        errorType:
+          type: string
+          description: A type of the error.
+          example: VALIDATION_ERROR
+        details:
           type: array
           items:
             type: object
             properties:
-              field:
+              property:
                 type: string
-                description: The name of the field that failed validation.
-                example: password
-              message:
-                type: string
-                description: A description of the validation error.
-                example: Password too short
+                description: The name of the property that failed validation.
+                example: price
+              messages:
+                type: array
+                items:
+                  type: string
+                  description: The constraint.
+                  example: Minimum price is 100
 
     createUser:
       type: object
