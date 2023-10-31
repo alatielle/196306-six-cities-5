@@ -1,9 +1,9 @@
 import { Expose } from 'class-transformer';
 import { UserType } from '../../../types/index.js';
 
-export class UserRdo {
+export class LoggedUserRdo {
   @Expose()
-  public id: string;
+  public token: string;
 
   @Expose()
   public email: string;

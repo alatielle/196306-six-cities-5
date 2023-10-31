@@ -3,13 +3,13 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
+  HttpError,
   HttpMethod,
   PrivateRouteMiddleware,
   UploadFileMiddleware,
-  ValidateDtoMiddleware,
+  ValidateDtoMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { HttpError } from '../../libs/rest/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
 import { Component } from '../../types/index.js';
 import { AuthService } from '../auth/index.js';
@@ -23,6 +23,8 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
 import { FavoriteOfferRequest } from './types/favorite-offer-request.type.js';
+import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
+import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -31,7 +33,7 @@ export class UserController extends BaseController {
     @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
     @inject(Component.AuthService) private readonly authService: AuthService,
-    @inject(Component.OfferService) private readonly offerService: OfferService,
+    @inject(Component.OfferService) private readonly offerService: OfferService
   ) {
     super(logger);
 
@@ -41,20 +43,20 @@ export class UserController extends BaseController {
       path: '/register',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateUserDto)],
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
     });
 
     this.addRoute({
       path: '/login',
       method: HttpMethod.Post,
       handler: this.login,
-      middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
 
     this.addRoute({
       path: '/login',
       method: HttpMethod.Get,
-      handler: this.checkToken,
+      handler: this.checkToken
     });
 
     this.addRoute({
@@ -65,16 +67,16 @@ export class UserController extends BaseController {
         new PrivateRouteMiddleware(),
         new UploadFileMiddleware(
           this.configService.get('UPLOAD_DIRECTORY'),
-          'avatar',
-        ),
-      ],
+          'avatar'
+        )
+      ]
     });
 
     this.addRoute({
       path: '/favorites',
       method: HttpMethod.Get,
       handler: this.getFavorites,
-      middlewares: [new PrivateRouteMiddleware()],
+      middlewares: [new PrivateRouteMiddleware()]
     });
 
     this.addRoute({
@@ -83,14 +85,14 @@ export class UserController extends BaseController {
       handler: this.markAsFavorite,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateDtoMiddleware(FavoriteOfferDto),
-      ],
+        new ValidateDtoMiddleware(FavoriteOfferDto)
+      ]
     });
   }
 
   public async create(
     { body, tokenPayload }: CreateUserRequest,
-    res: Response,
+    res: Response
   ): Promise<void> {
     if (tokenPayload) {
       throw new HttpError(StatusCodes.FORBIDDEN, 'Forbidden', 'UserController');
@@ -102,13 +104,13 @@ export class UserController extends BaseController {
       throw new HttpError(
         StatusCodes.CONFLICT,
         `User with email "${body.email}" already exists.`,
-        'UserController',
+        'UserController'
       );
     }
 
     const result = await this.userService.create(
       body,
-      this.configService.get('SALT'),
+      this.configService.get('SALT')
     );
     this.created(res, fillDTO(UserRdo, result));
   }
@@ -116,12 +118,13 @@ export class UserController extends BaseController {
   public async login({ body }: LoginUserRequest, res: Response): Promise<void> {
     const user = await this.authService.verify(body);
     const token = await this.authService.authenticate(user);
-    this.ok(res, token);
+    const responseData = fillDTO(LoggedUserRdo, user);
+    this.ok(res, Object.assign(responseData, { token }));
   }
 
   public async checkToken(
     { tokenPayload: { email } }: Request,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const user = await this.userService.findByEmail(email);
 
@@ -129,29 +132,27 @@ export class UserController extends BaseController {
       throw new HttpError(
         StatusCodes.UNAUTHORIZED,
         'Unauthorized',
-        'UserController',
+        'UserController'
       );
     }
 
-    this.ok(res, fillDTO(UserRdo, user));
+    this.ok(res, fillDTO(LoggedUserRdo, user));
   }
 
   public async uploadAvatar(
     { tokenPayload: { id }, file }: Request,
-    res: Response,
+    res: Response
   ) {
     const avatarPath = file?.path;
-
     await this.userService.updateById(id, { avatarPath });
-
-    this.created(res, {
-      filepath: avatarPath,
-    });
+    this.created(res, fillDTO(UploadUserAvatarRdo, {
+      filepath: avatarPath
+    }));
   }
 
   public async getFavorites(
     { tokenPayload: { id } }: Request,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const offers = await this.offerService.findFavoriteByUserId(id);
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
@@ -159,13 +160,13 @@ export class UserController extends BaseController {
 
   public async markAsFavorite(
     { body, tokenPayload: { id, email } }: FavoriteOfferRequest,
-    res: Response,
+    res: Response
   ): Promise<void> {
     if (!(await this.offerService.exists(body.offerId))) {
       throw new HttpError(
         StatusCodes.NOT_FOUND,
         `Offer with id ${body.offerId} not found.`,
-        'UserController',
+        'UserController'
       );
     }
 
@@ -184,7 +185,7 @@ export class UserController extends BaseController {
     }
 
     await this.userService.updateById(id, {
-      favorites: [...favorites],
+      favorites: [...favorites]
     });
 
     this.noContent(res, null);
