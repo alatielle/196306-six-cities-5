@@ -527,10 +527,6 @@ components:
           format: email
           required: true
           example: keks@htmlacademy.ru
-        avatarPath:
-          type: string
-          required: false
-          example: upload/ketUeXWH-AxExEduf3lSp.png
         name:
           type: string
           required: true
