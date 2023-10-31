@@ -16,21 +16,19 @@
       "Discover the epitome of city living in our contemporary apartment nestled in the bustling heart of downtown. Whether you're a solo traveler, a couple on a romantic getaway, or a group of friends exploring the city's vibrant culture, our Airbnb-style apartment offers the ideal blend of comfort, style, and convenience.",
       "Discover your ideal urban getaway in our stylish and contemporary apartment located right in the heart of the city. Whether you're a solo traveler, a couple seeking a romantic escape, or a group of friends exploring the urban delights, our Airbnb-style apartment offers the perfect blend of comfort, convenience, and modern elegance."
     ],
-    "previewImages": [
-      "https://loremflickr.com/320/240/apartment?lock=7930348279169024",
-      "https://loremflickr.com/320/240/apartment?lock=417870053900288",
-      "https://loremflickr.com/320/240/apartment?lock=7616080983883776",
-      "https://loremflickr.com/320/240/apartment?lock=3952689633296384",
-      "https://loremflickr.com/320/240/apartment?lock=8952323971743744",
-      "https://loremflickr.com/320/240/apartment?lock=4469215201329152"
-    ],
     "roomImages": [
-      "https://loremflickr.com/640/480/room?lock=5978553621413888",
-      "https://loremflickr.com/640/480/room?lock=3212152007557120",
-      "https://loremflickr.com/640/480/room?lock=4530660563746816",
-      "https://loremflickr.com/640/480/room?lock=4106759761297408",
-      "https://loremflickr.com/640/480/room?lock=91022344323072",
-      "https://loremflickr.com/640/480/room?lock=5345736875048960"
+      "image1.png",
+      "image2.png",
+      "image3.png",
+      "image4.png",
+      "image5.png",
+      "image6.png",
+      "image7.png",
+      "image8.png",
+      "image9.png",
+      "image10.png",
+      "image11.png",
+      "image11.png"
     ],
     "users": [
       "Rene",
@@ -56,27 +54,43 @@
       "Maryse67@yahoo.com"
     ],
     "avatars": [
-      "https://s3.amazonaws.com/uifaces/faces/twitter/aleclarsoniv/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/privetwagner/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/colgruv/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/balintorosz/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/arpitnj/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/daykiine/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/baliomega/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/adhiardana/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/ponchomendivil/128.jpg",
-      "https://s3.amazonaws.com/uifaces/faces/twitter/hugocornejo/128.jpg"
+      "aleclarsoniv.jpg",
+      "privetwagner.jpg",
+      "colgruv.jpg",
+      "balintorosz.jpg",
+      "arpitnj.jpg",
+      "daykiine.jpg",
+      "baliomega.jpg",
+      "adhiardana.jpg",
+      "ponchomendivil.jpg",
+      "hugocornejo.jpg"
     ],
     "cities": [
-      { "name": "Amsterdam", "latitude": 52.370216, "longitude": 4.895168 },
-      { "name": "Brussels", "latitude": 50.846557, "longitude": 4.351697 },
+      {
+        "name": "Amsterdam",
+        "latitude": 52.370216,
+        "longitude": 4.895168
+      },
+      {
+        "name": "Brussels",
+        "latitude": 50.846557,
+        "longitude": 4.351697
+      },
       {
         "name": "Cologne",
         "latitude": 50.938361,
         "longitude": 6.959974
       },
-      { "name": "Dusseldorf", "latitude": 51.225402, "longitude": 6.776314 },
-      { "name": "Hamburg", "latitude": 53.550341, "longitude": 10.000654 },
+      {
+        "name": "Dusseldorf",
+        "latitude": 51.225402,
+        "longitude": 6.776314
+      },
+      {
+        "name": "Hamburg",
+        "latitude": 53.550341,
+        "longitude": 10.000654
+      },
       {
         "name": "Paris",
         "latitude": 48.85661,

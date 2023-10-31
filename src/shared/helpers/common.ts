@@ -6,10 +6,10 @@ export function generateRandomValue(
   return Number((Math.random() * (max - min) + min).toFixed(numAfterDigit));
 }
 
-export function getRandomItems<T>(items: T[]): T[] {
+export function getRandomItems<T>(items: T[], amount?: number): T[] {
   const startPosition = generateRandomValue(0, items.length - 1);
   const endPosition =
-    startPosition + generateRandomValue(startPosition + 1, items.length);
+    startPosition + (amount ?? generateRandomValue(startPosition + 1, items.length));
   return items.slice(startPosition, endPosition);
 }
 

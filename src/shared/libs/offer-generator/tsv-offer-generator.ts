@@ -14,7 +14,7 @@ import {
   getRandomItem,
   getRandomItems,
 } from '../../helpers/index.js';
-import { GUESTS, PRICE, ROOMS, WEEK_DAY } from './constraints.js';
+import { GUESTS, PRICE, ROOMS, WEEK_DAY, IMAGES_AMOUNT } from './constraints.js';
 
 const formatLocation = ({ latitude, longitude }: Coordinates) =>
   [latitude, longitude].join(';');
@@ -29,8 +29,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       .subtract(generateRandomValue(WEEK_DAY.FIRST, WEEK_DAY.LAST), 'day')
       .toISOString();
     const city = getRandomItem(this.mockData.cities);
-    const imagePreview = getRandomItem(this.mockData.previewImages);
-    const images = getRandomItems(this.mockData.roomImages).join(';');
+    const images = getRandomItems(this.mockData.roomImages, IMAGES_AMOUNT).join(';');
     const isPremium = getRandomItem([true, false]);
     const housingType = getRandomItem(Object.values(HousingType));
     const roomAmount = generateRandomValue(ROOMS.MIN, ROOMS.MAX);
@@ -49,7 +48,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       postDate,
       city.name,
       formatLocation(city),
-      imagePreview,
       images,
       isPremium,
       housingType,

@@ -17,3 +17,5 @@ export const GUESTS = {
   MIN: 1,
   MAX: 10,
 };
+
+export const IMAGES_AMOUNT = 6;
