@@ -45,6 +45,8 @@ npm run cli -- --import ./mocks/mock-data.tsv admin test 127.0.0.1 six-cities se
 #### Переменные окружения
 
 ```bash
+HOST=localhost - Имя хоста, на котором стартует сервер
+
 PORT=4000 - Порт для входящих соединений
 
 SALT=secret - Соль для хэширования паролей
