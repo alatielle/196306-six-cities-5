@@ -12,6 +12,7 @@ import {
   ExceptionFilter,
   ParseTokenMiddleware,
 } from '../shared/libs/rest/index.js';
+import { STATIC_FILES_ROUTE, STATIC_UPLOAD_ROUTE } from './rest.constant.js';
 
 @injectable()
 export class RestApplication {
@@ -66,8 +67,8 @@ export class RestApplication {
     );
 
     this.server.use(express.json());
-    this.server.use('/upload', express.static(this.config.get('UPLOAD_DIRECTORY')));
-    this.server.use('/static', express.static(this.config.get('STATIC_DIRECTORY')));
+    this.server.use(STATIC_UPLOAD_ROUTE, express.static(this.config.get('UPLOAD_DIRECTORY')));
+    this.server.use(STATIC_FILES_ROUTE, express.static(this.config.get('STATIC_DIRECTORY')));
     this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
     this.server.use(cors());
   }
