@@ -7,6 +7,7 @@ import { DatabaseClient, MongoDatabaseClient } from '../shared/libs/database-cli
 import {
   BaseExceptionFilter,
   ExceptionFilter,
+  FileUploadExceptionFilter,
   HttpErrorExceptionFilter,
   PathTransformer,
   ValidationExceptionFilter
@@ -42,6 +43,10 @@ export function createRestApplicationContainer() {
   restApplicationContainer
     .bind<ExceptionFilter>(Component.ValidationExceptionFilter)
     .to(ValidationExceptionFilter)
+    .inSingletonScope();
+  restApplicationContainer
+    .bind<ExceptionFilter>(Component.FileUploadExceptionFilter)
+    .to(FileUploadExceptionFilter)
     .inSingletonScope();
   restApplicationContainer
     .bind<PathTransformer>(Component.PathTransformer)

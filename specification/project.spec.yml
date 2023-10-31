@@ -117,6 +117,15 @@ paths:
         - users
       summary: Upload avatar image
       description: Uploads user's avatar. Avatar image should have a `png` or `jpg` format.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
       responses:
         '201':
           description: Image has been uploaded.
@@ -397,6 +406,40 @@ paths:
                 $ref: '#/components/schemas/validationError'
         '404':
           description: Offer with the given ID does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+
+  /offers/{offerId}/imagePreview:
+    post:
+      tags:
+        - offers
+      summary: Upload preview image
+      description: Uploads offer's preview. Offer image should have a `png` or `jpg` format.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Image has been uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image:
+                    type: string
+                    example:
+                      http://mysite.com/upload/Uq-PzHXRZnm6NzYvfjFGA.png
+        '401':
+          description: A user is not authorized to upload an image.
           content:
             application/json:
               schema:

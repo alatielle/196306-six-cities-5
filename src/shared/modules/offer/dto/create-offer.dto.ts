@@ -1,7 +1,5 @@
 import { AmenityType, HousingType } from '../../../types/index.js';
 import {
-  ArrayMaxSize,
-  ArrayMinSize,
   IsArray,
   IsDateString,
   IsEnum,
@@ -37,18 +35,6 @@ export class CreateOfferDto {
     { message: CreateOfferValidationMessage.postDate.invalidFormat },
   )
   public postDate: Date;
-
-  @MaxLength(256, { message: CreateOfferValidationMessage.image.maxLength })
-  public imagePreview: string;
-
-  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
-  @MaxLength(256, {
-    each: true,
-    message: CreateOfferValidationMessage.images.maxLength,
-  })
-  @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
-  @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
-  public images: string[];
 
   @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
   public isPremium: boolean;

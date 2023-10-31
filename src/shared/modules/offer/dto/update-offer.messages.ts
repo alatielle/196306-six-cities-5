@@ -7,14 +7,6 @@ export const UpdateOfferValidationMessage = {
     minLength: 'Minimum description length must be 20',
     maxLength: 'Maximum description length must be 1024',
   },
-  image: {
-    maxLength: 'Too short for field «image»',
-  },
-  images: {
-    invalidFormat: 'images must be an array',
-    maxLength: 'Too short for field «images»',
-    invalidSize: 'Should always be 6 images',
-  },
   price: {
     invalidFormat: 'Price must be an integer',
     minValue: 'Minimum price is 100',

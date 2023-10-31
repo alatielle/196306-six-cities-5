@@ -1,6 +1,4 @@
 import {
-  ArrayMaxSize,
-  ArrayMinSize,
   IsArray,
   IsBoolean,
   IsEnum,
@@ -33,17 +31,6 @@ export class UpdateOfferDto {
     message: UpdateOfferValidationMessage.description.maxLength,
   })
   public description?: string;
-
-  @IsOptional()
-  @MaxLength(256, { message: UpdateOfferValidationMessage.image.maxLength })
-  public imagePreview?: string;
-
-  @IsOptional()
-  @IsArray({ message: UpdateOfferValidationMessage.images.invalidFormat })
-  @MaxLength(256, { message: UpdateOfferValidationMessage.images.maxLength })
-  @ArrayMinSize(6, { message: UpdateOfferValidationMessage.images.invalidSize })
-  @ArrayMaxSize(6, { message: UpdateOfferValidationMessage.images.invalidSize })
-  public images?: string[];
 
   @IsOptional()
   @IsBoolean({ message: UpdateOfferValidationMessage.premium.invalidFormat })
@@ -88,5 +75,5 @@ export class UpdateOfferDto {
 
   @IsOptional()
   @IsMongoId({ message: UpdateOfferValidationMessage.cityId.invalidId })
-  public cityId: string;
+  public cityId?: string;
 }

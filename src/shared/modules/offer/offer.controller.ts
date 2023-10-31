@@ -3,18 +3,20 @@ import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   BaseController,
-  HttpMethod,
-  ValidateDtoMiddleware,
-  ValidateObjectIdMiddleware,
-  HttpError,
   DocumentExistsMiddleware,
+  HttpError,
+  HttpMethod,
   PrivateRouteMiddleware,
+  UploadFilesMiddleware,
   ValidateAuthorMiddleware,
+  ValidateDtoMiddleware,
+  ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { Component } from '../../types/index.js';
 import { fillDTO } from '../../helpers/index.js';
 import { parseAsInteger } from '../../helpers/parse.js';
+import { Config, RestSchema } from '../../libs/config/index.js';
 import { OfferService } from './offer-service.interface.js';
 import { CommentService } from '../comment/index.js';
 import { CommentRdo } from '../comment/rdo/comment.rdo.js';
@@ -25,20 +27,18 @@ import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import {
-  DEFAULT_OFFER_AMOUNT,
-} from './offer.constant.js';
+import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_IMAGES_AMOUNT } from './offer.constant.js';
 import { CityService } from '../city/index.js';
+import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 
 @injectable()
 export class OfferController extends BaseController {
   constructor(
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
-    @inject(Component.CommentService)
-    private readonly commentService: CommentService,
-    @inject(Component.CityService)
-    private readonly cityService: CityService,
+    @inject(Component.CommentService) private readonly commentService: CommentService,
+    @inject(Component.CityService) private readonly cityService: CityService,
+    @inject(Component.Config) private readonly configService: Config<RestSchema>
   ) {
     super(logger);
 
@@ -47,7 +47,7 @@ export class OfferController extends BaseController {
     this.addRoute({
       path: '/',
       method: HttpMethod.Get,
-      handler: this.index,
+      handler: this.index
     });
 
     this.addRoute({
@@ -56,8 +56,8 @@ export class OfferController extends BaseController {
       handler: this.create,
       middlewares: [
         new PrivateRouteMiddleware(),
-        new ValidateDtoMiddleware(CreateOfferDto),
-      ],
+        new ValidateDtoMiddleware(CreateOfferDto)
+      ]
     });
 
     this.addRoute({
@@ -66,8 +66,8 @@ export class OfferController extends BaseController {
       handler: this.show,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-      ],
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
 
     this.addRoute({
@@ -79,8 +79,8 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new ValidateDtoMiddleware(UpdateOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
-      ],
+        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
 
     this.addRoute({
@@ -91,8 +91,8 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
-      ],
+        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
     });
 
     this.addRoute({
@@ -101,18 +101,31 @@ export class OfferController extends BaseController {
       handler: this.getComments,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
+    });
+
+    this.addRoute({
+      path: '/:offerId/images',
+      method: HttpMethod.Post,
+      handler: this.uploadImages,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
-      ],
+        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
+        new UploadFilesMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image', DEFAULT_OFFER_IMAGES_AMOUNT)
+      ]
     });
   }
 
   public async index(
     { query, tokenPayload }: Request,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const amount = Math.max(
       parseAsInteger(query.limit) ?? 0,
-      DEFAULT_OFFER_AMOUNT,
+      DEFAULT_OFFER_AMOUNT
     );
     const offers = await this.offerService.find(tokenPayload?.id, amount);
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
@@ -120,22 +133,22 @@ export class OfferController extends BaseController {
 
   public async create(
     { body, tokenPayload }: CreateOfferRequest,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const createdOffer = await this.offerService.create({
       ...body,
-      authorId: tokenPayload.id,
+      authorId: tokenPayload.id
     });
     const offer = await this.offerService.findById(
       tokenPayload.id,
-      createdOffer.id,
+      createdOffer.id
     );
     this.created(res, fillDTO(OfferRdo, offer));
   }
 
   public async show(
     { params: { offerId }, tokenPayload }: Request<ParamOfferId>,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const offer = await this.offerService.findById(tokenPayload?.id, offerId);
     this.ok(res, fillDTO(OfferRdo, offer));
@@ -143,7 +156,7 @@ export class OfferController extends BaseController {
 
   public async update(
     { params, body, tokenPayload }: UpdateOfferRequest,
-    res: Response,
+    res: Response
   ): Promise<void> {
     if (body.cityId) {
       const foundCity = await this.cityService.findByCityId(body.cityId);
@@ -152,7 +165,7 @@ export class OfferController extends BaseController {
         throw new HttpError(
           StatusCodes.BAD_REQUEST,
           `City with id ${body.cityId} does not exist`,
-          'OfferController',
+          'OfferController'
         );
       }
     }
@@ -160,14 +173,14 @@ export class OfferController extends BaseController {
     await this.offerService.updateById(params.offerId, body);
     const offer = await this.offerService.findById(
       tokenPayload.id,
-      params.offerId,
+      params.offerId
     );
     this.ok(res, fillDTO(OfferRdo, offer));
   }
 
   public async delete(
     { params }: Request<ParamOfferId>,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const { offerId } = params;
     await this.offerService.deleteById(offerId);
@@ -177,9 +190,24 @@ export class OfferController extends BaseController {
 
   public async getComments(
     { params }: Request<ParamOfferId>,
-    res: Response,
+    res: Response
   ): Promise<void> {
     const comments = await this.commentService.findByOfferId(params.offerId);
     this.ok(res, fillDTO(CommentRdo, comments));
+  }
+
+  public async uploadImages({ params, files }: Request<ParamOfferId>, res: Response) {
+    if (!Array.isArray(files)) {
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, 'No files were uploaded');
+    }
+
+    const { offerId} = params;
+    const fileNames = files.map((file) => file.filename);
+    const updateDto = {
+      imagePreview: fileNames[0],
+      images: fileNames
+    };
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadImagesRdo, { images: updateDto.images }));
   }
 }
