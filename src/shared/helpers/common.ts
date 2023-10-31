@@ -20,3 +20,7 @@ export function getRandomItem<T>(items: T[]): T {
 export function getErrorMessage(error: unknown): string {
   return error instanceof Error ? error.message : '';
 }
+
+export function getFullServerPath(host: string, port: number) {
+  return `https://${host}:${port}`;
+}

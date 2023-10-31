@@ -6,7 +6,7 @@ import { Logger } from '../shared/libs/logger/index.js';
 import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { Component } from '../shared/types/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
-import { getMongoURI } from '../shared/helpers/index.js';
+import { getFullServerPath, getMongoURI } from '../shared/helpers/index.js';
 import {
   Controller,
   ExceptionFilter,
@@ -66,14 +66,9 @@ export class RestApplication {
     );
 
     this.server.use(express.json());
-    this.server.use(
-      '/static',
-      express.static(this.config.get('UPLOAD_DIRECTORY')),
-    );
+    this.server.use('/static', express.static(this.config.get('UPLOAD_DIRECTORY')));
     this.server.use('/static', express.static('public'));
-    this.server.use(
-      authenticateMiddleware.execute.bind(authenticateMiddleware),
-    );
+    this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
     this.server.use(cors());
   }
 
@@ -105,8 +100,6 @@ export class RestApplication {
 
     this.logger.info('Initializing server…');
     await this._initServer();
-    this.logger.info(
-      `🚀 Server started on http://localhost:${this.config.get('PORT')}.`,
-    );
+    this.logger.info(`🚀 Server started on ${getFullServerPath(this.config.get('HOST'), this.config.get('PORT'))}`);
   }
 }
