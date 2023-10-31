@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Elena Rashkovan](https://up.htmlacademy.ru/nodejs-api/5/user/196306).
-* Наставник: `Константин Ильин`.
+* Студент: [Елена Рашкован](https://htmlacademy.ru/profile/id196306).
+* Наставник: [Константин Ильин](https://htmlacademy.ru/profile/id2374827).
 
 ---
 
