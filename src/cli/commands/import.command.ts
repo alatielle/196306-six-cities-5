@@ -25,10 +25,10 @@ import { Offer } from '../../shared/types/index.js';
 import { DEFAULT_DB_PORT, DEFAULT_USER_PASSWORD } from './command.constant.js';
 
 export class ImportCommand implements Command {
-  private userService: UserService;
-  private offerService: OfferService;
-  private cityService: CityService;
-  private databaseClient: DatabaseClient;
+  private readonly userService: UserService;
+  private readonly offerService: OfferService;
+  private readonly cityService: CityService;
+  private readonly databaseClient: DatabaseClient;
   private readonly logger: Logger;
   private salt: string;
 

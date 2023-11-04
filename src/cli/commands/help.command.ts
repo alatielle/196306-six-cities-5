@@ -6,7 +6,7 @@ export class HelpCommand implements Command {
     return '--help';
   }
 
-  public run(..._parameters: string[]): void {
+  public run(): void {
     console.info(`Программа для подготовки данных для REST API сервера.
 
 ${chalk.bold('ПРИМЕР')}
@@ -14,13 +14,13 @@ ${chalk.bold('ПРИМЕР')}
 
 ${chalk.bold('КОМАНДЫ')}
     ${chalk.bold('--version')}
-        Выводит номер версии
+        Выводит информацию о версии приложения из файла package.json
     ${chalk.bold('--help')}
-        Печатает этот текст
+        Выводит информацию о списке поддерживаемых приложением команд
     ${chalk.bold('--import')} ${chalk.underline('path')} ${chalk.underline('db_login')} ${chalk.underline('db_pass')} ${chalk.underline('db_host')} ${chalk.underline('db_name')} ${chalk.underline('salt')}
-        Импортирует данные из TSV
+        Импортирует данные о предложениях об аренде из tsv-файла в базу данных
     ${chalk.bold('--generate')} ${chalk.underline('n')} ${chalk.underline('path')} ${chalk.underline('url')}
-        Генерирует произвольное количество тестовых данных
+        Генерирует n предложений об аренде в файл формата tsv
 `);
   }
 }

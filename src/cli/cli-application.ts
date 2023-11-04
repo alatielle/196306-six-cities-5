@@ -3,12 +3,11 @@ import { CommandParser } from './command-parser.js';
 
 export class CLIApplication {
   private commands: Record<string, Command> = {};
-
-  constructor(private readonly defaultCommand: string = '--help') {}
+  private readonly defaultCommand: string = '--help';
 
   public registerCommands(commandList: Command[]): void {
     commandList.forEach((command) => {
-      if (Object.hasOwn(this.commands, command.getName())) {
+      if (this.commands[command.getName()]) {
         throw new Error(`Command ${command.getName()} is already registered`);
       }
       this.commands[command.getName()] = command;

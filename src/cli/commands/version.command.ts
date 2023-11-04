@@ -39,7 +39,7 @@ export class VersionCommand implements Command {
     return '--version';
   }
 
-  public run(..._parameters: string[]): void {
+  public run(): void {
     try {
       const version = this.readVersion();
       this.logger.info(chalk.green(version));

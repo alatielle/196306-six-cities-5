@@ -1,9 +1,7 @@
-type CommandName = string;
-type CommandArgument = string;
-type ParsedCommand = Record<CommandName, CommandArgument[]>;
+type ParsedCommand = Record<string, string[]>;
 
 export class CommandParser {
-  static parse(cliArguments: CommandArgument[]): ParsedCommand {
+  static parse(cliArguments: string[]): ParsedCommand {
     const parsedCommand: ParsedCommand = {};
     let currentCommand = '';
 

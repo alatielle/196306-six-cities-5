@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'reflect-metadata';
 import chalk from 'chalk';
-import { readdirSync } from 'node:fs';
+import { readdir } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { CLIApplication, Command } from './cli/index.js';
 
@@ -10,8 +10,8 @@ const COMMAND = {
   PATTERN: '.command.ts',
 };
 
-function getFilesByPattern(dirPath: string, pattern: string) {
-  const dirContent = readdirSync(resolve(dirPath));
+async function getFilesByPattern(dirPath: string, pattern: string) {
+  const dirContent = await readdir(resolve(dirPath));
   const regExp = new RegExp(pattern, 'i');
 
   return dirContent
@@ -21,7 +21,7 @@ function getFilesByPattern(dirPath: string, pattern: string) {
 
 async function bootstrap() {
   const cliApplication = new CLIApplication();
-  const commandFiles = getFilesByPattern(COMMAND.DIR, COMMAND.PATTERN);
+  const commandFiles = await getFilesByPattern(COMMAND.DIR, COMMAND.PATTERN);
   const commands: Command[] = [];
   for (const fileName of commandFiles) {
     const { default: CommandClass } = await import(fileName);
