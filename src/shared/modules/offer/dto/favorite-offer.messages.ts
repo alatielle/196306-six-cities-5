@@ -1,8 +1,5 @@
-export const FavoriteOfferMessages = {
-  offerId: {
-    invalidId: 'offerId field must be a valid id',
-  },
-  isFavorite: {
-    invalidFormat: 'isFavorite must be a boolean',
+export const FAVORITE_OFFER_MESSAGES = {
+  IS_FAVORITE: {
+    INVALID_FORMAT: 'isFavorite must be a boolean',
   },
 } as const;

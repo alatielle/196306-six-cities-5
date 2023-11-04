@@ -1,12 +1,12 @@
 import { IsLatitude, IsLongitude } from 'class-validator';
-import { CoordinatesValidationMessage } from './coordinates.messages.js';
+import { COORDINATES_MESSAGES } from './coordinates.messages.js';
 
 export class CoordinatesDto {
-  @IsLatitude({ message: CoordinatesValidationMessage.latitude.invalidFormat })
+  @IsLatitude({ message: COORDINATES_MESSAGES.LATITUDE.INVALID_FORMAT })
   public latitude: number;
 
   @IsLongitude({
-    message: CoordinatesValidationMessage.longitude.invalidFormat,
+    message: COORDINATES_MESSAGES.LONGITUDE.INVALID_FORMAT,
   })
   public longitude: number;
 }

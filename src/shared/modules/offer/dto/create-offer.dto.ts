@@ -16,63 +16,63 @@ import {
 import { Type } from 'class-transformer';
 
 import { CoordinatesDto } from './coordinates.dto.js';
-import { CreateOfferValidationMessage } from './create-offer.messages.js';
+import { CREATE_OFFER_MESSAGES } from './create-offer.messages.js';
+import {
+  DESCRIPTION_LENGTH,
+  GUESTS,
+  IMAGE_LENGTH,
+  OFFER_IMAGES_AMOUNT,
+  PRICE,
+  ROOMS,
+  TITLE_LENGTH
+} from '../offer.constant.js';
 
 export class CreateOfferDto {
-  @MinLength(10, { message: CreateOfferValidationMessage.title.minLength })
-  @MaxLength(100, { message: CreateOfferValidationMessage.title.maxLength })
+  @MinLength(TITLE_LENGTH.MIN, { message: CREATE_OFFER_MESSAGES.TITLE.MIN_LENGTH })
+  @MaxLength(TITLE_LENGTH.MAX, { message: CREATE_OFFER_MESSAGES.TITLE.MAX_LENGTH })
   public title: string;
 
-  @MinLength(20, {
-    message: CreateOfferValidationMessage.description.minLength
-  })
-  @MaxLength(1024, {
-    message: CreateOfferValidationMessage.description.maxLength
-  })
+  @MinLength(DESCRIPTION_LENGTH.MIN, { message: CREATE_OFFER_MESSAGES.DESCRIPTION.MIN_LENGTH })
+  @MaxLength(DESCRIPTION_LENGTH.MAX, { message: CREATE_OFFER_MESSAGES.DESCRIPTION.MAX_LENGTH })
   public description: string;
 
-  @IsDateString(
-    {},
-    { message: CreateOfferValidationMessage.postDate.invalidFormat }
-  )
+  @IsDateString({}, { message: CREATE_OFFER_MESSAGES.POST_DATE.INVALID_FORMAT })
   public postDate: Date;
 
-  @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
-  @MaxLength(256, {
+  @IsArray({ message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_FORMAT })
+  @MaxLength(IMAGE_LENGTH.MAX, {
     each: true,
-    message: CreateOfferValidationMessage.images.maxLength
+    message: CREATE_OFFER_MESSAGES.IMAGES.MAX_LENGTH
   })
-  @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
-  @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
+  @ArrayMinSize(OFFER_IMAGES_AMOUNT, { message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_SIZE })
+  @ArrayMaxSize(OFFER_IMAGES_AMOUNT, { message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_SIZE })
   public images: string[];
 
-  @IsBoolean({ message: CreateOfferValidationMessage.premium.invalidFormat })
+  @IsBoolean({ message: CREATE_OFFER_MESSAGES.PREMIUM.INVALID_FORMAT })
   public isPremium: boolean;
 
-  @IsEnum(HousingType, {
-    message: CreateOfferValidationMessage.housingType.invalid
-  })
+  @IsEnum(HousingType, { message: CREATE_OFFER_MESSAGES.HOUSING_TYPE.INVALID })
   public housingType: HousingType;
 
-  @IsInt({ message: CreateOfferValidationMessage.rooms.invalidFormat })
-  @Min(1, { message: CreateOfferValidationMessage.rooms.minValue })
-  @Max(8, { message: CreateOfferValidationMessage.rooms.maxValue })
+  @IsInt({ message: CREATE_OFFER_MESSAGES.ROOMS.INVALID_FORMAT })
+  @Min(ROOMS.MIN, { message: CREATE_OFFER_MESSAGES.ROOMS.MIN_VALUE })
+  @Max(ROOMS.MAX, { message: CREATE_OFFER_MESSAGES.ROOMS.MAX_VALUE })
   public roomAmount: number;
 
-  @IsInt({ message: CreateOfferValidationMessage.guests.invalidFormat })
-  @Min(1, { message: CreateOfferValidationMessage.guests.minValue })
-  @Max(10, { message: CreateOfferValidationMessage.guests.maxValue })
+  @IsInt({ message: CREATE_OFFER_MESSAGES.GUESTS.INVALID_FORMAT })
+  @Min(GUESTS.MIN, { message: CREATE_OFFER_MESSAGES.GUESTS.MIN_VALUE })
+  @Max(GUESTS.MAX, { message: CREATE_OFFER_MESSAGES.GUESTS.MAX_VALUE })
   public guestAmount: number;
 
-  @IsInt({ message: CreateOfferValidationMessage.price.invalidFormat })
-  @Min(100, { message: CreateOfferValidationMessage.price.minValue })
-  @Max(100000, { message: CreateOfferValidationMessage.price.maxValue })
+  @IsInt({ message: CREATE_OFFER_MESSAGES.PRICE.INVALID_FORMAT })
+  @Min(PRICE.MIN, { message: CREATE_OFFER_MESSAGES.PRICE.MIN_VALUE })
+  @Max(PRICE.MAX, { message: CREATE_OFFER_MESSAGES.PRICE.MAX_VALUE })
   public price: number;
 
-  @IsArray({ message: CreateOfferValidationMessage.amenities.invalidFormat })
+  @IsArray({ message: CREATE_OFFER_MESSAGES.AMENITIES.INVALID_FORMAT })
   @IsEnum(AmenityType, {
     each: true,
-    message: CreateOfferValidationMessage.amenities.invalid
+    message: CREATE_OFFER_MESSAGES.AMENITIES.INVALID
   })
   public amenities: AmenityType[];
 
@@ -82,8 +82,6 @@ export class CreateOfferDto {
 
   public authorId: string;
 
-  @IsEnum(City, {
-    message: CreateOfferValidationMessage.city.invalidFormat
-  })
+  @IsEnum(City, { message: CREATE_OFFER_MESSAGES.CITY.INVALID_FORMAT })
   public city: City;
 }

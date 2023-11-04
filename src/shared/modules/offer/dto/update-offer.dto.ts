@@ -14,56 +14,51 @@ import { Type } from 'class-transformer';
 
 import { AmenityType, City, HousingType } from '../../../types/index.js';
 import { CoordinatesDto } from './coordinates.dto.js';
-import { UpdateOfferValidationMessage } from './update-offer.messages.js';
+import { UPDATE_OFFER_MESSAGES } from './update-offer.messages.js';
+import { DESCRIPTION_LENGTH, GUESTS, PRICE, ROOMS, TITLE_LENGTH } from '../offer.constant.js';
 
 export class UpdateOfferDto {
   @IsOptional()
-  @MinLength(10, { message: UpdateOfferValidationMessage.title.minLength })
-  @MaxLength(100, { message: UpdateOfferValidationMessage.title.maxLength })
+  @MinLength(TITLE_LENGTH.MIN, { message: UPDATE_OFFER_MESSAGES.TITLE.MIN_LENGTH })
+  @MaxLength(TITLE_LENGTH.MAX, { message: UPDATE_OFFER_MESSAGES.TITLE.MAX_LENGTH })
   public title?: string;
 
   @IsOptional()
-  @MinLength(20, {
-    message: UpdateOfferValidationMessage.description.minLength,
-  })
-  @MaxLength(1024, {
-    message: UpdateOfferValidationMessage.description.maxLength,
-  })
+  @MinLength(DESCRIPTION_LENGTH.MIN, { message: UPDATE_OFFER_MESSAGES.DESCRIPTION.MIN_LENGTH })
+  @MaxLength(DESCRIPTION_LENGTH.MAX, { message: UPDATE_OFFER_MESSAGES.DESCRIPTION.MAX_LENGTH })
   public description?: string;
 
   @IsOptional()
-  @IsBoolean({ message: UpdateOfferValidationMessage.premium.invalidFormat })
+  @IsBoolean({ message: UPDATE_OFFER_MESSAGES.PREMIUM.INVALID_FORMAT })
   public isPremium?: boolean;
 
   @IsOptional()
-  @IsEnum(HousingType, {
-    message: UpdateOfferValidationMessage.housingType.invalid,
-  })
+  @IsEnum(HousingType, { message: UPDATE_OFFER_MESSAGES.HOUSING_TYPE.INVALID })
   public housingType?: HousingType;
 
   @IsOptional()
-  @IsInt({ message: UpdateOfferValidationMessage.rooms.invalidFormat })
-  @Min(1, { message: UpdateOfferValidationMessage.rooms.minValue })
-  @Max(8, { message: UpdateOfferValidationMessage.rooms.maxValue })
+  @IsInt({ message: UPDATE_OFFER_MESSAGES.ROOMS.INVALID_FORMAT })
+  @Min(ROOMS.MIN, { message: UPDATE_OFFER_MESSAGES.ROOMS.MIN_VALUE })
+  @Max(ROOMS.MAX, { message: UPDATE_OFFER_MESSAGES.ROOMS.MAX_VALUE })
   public roomAmount?: number;
 
   @IsOptional()
-  @IsInt({ message: UpdateOfferValidationMessage.guests.invalidFormat })
-  @Min(1, { message: UpdateOfferValidationMessage.guests.minValue })
-  @Max(10, { message: UpdateOfferValidationMessage.guests.maxValue })
+  @IsInt({ message: UPDATE_OFFER_MESSAGES.GUESTS.INVALID_FORMAT })
+  @Min(GUESTS.MIN, { message: UPDATE_OFFER_MESSAGES.GUESTS.MIN_VALUE })
+  @Max(GUESTS.MAX, { message: UPDATE_OFFER_MESSAGES.GUESTS.MAX_VALUE })
   public guestAmount?: number;
 
   @IsOptional()
-  @IsInt({ message: UpdateOfferValidationMessage.price.invalidFormat })
-  @Min(100, { message: UpdateOfferValidationMessage.price.minValue })
-  @Max(100000, { message: UpdateOfferValidationMessage.price.maxValue })
+  @IsInt({ message: UPDATE_OFFER_MESSAGES.PRICE.INVALID_FORMAT })
+  @Min(PRICE.MIN, { message: UPDATE_OFFER_MESSAGES.PRICE.MIN_VALUE })
+  @Max(PRICE.MAX, { message: UPDATE_OFFER_MESSAGES.PRICE.MAX_VALUE })
   public price?: number;
 
   @IsOptional()
-  @IsArray({ message: UpdateOfferValidationMessage.amenities.invalidFormat })
+  @IsArray({ message: UPDATE_OFFER_MESSAGES.AMENITIES.INVALID_FORMAT })
   @IsEnum(AmenityType, {
     each: true,
-    message: UpdateOfferValidationMessage.amenities.invalid,
+    message: UPDATE_OFFER_MESSAGES.AMENITIES.INVALID
   })
   public amenities?: AmenityType[];
 
@@ -72,8 +67,7 @@ export class UpdateOfferDto {
   @Type(() => CoordinatesDto)
   public location?: CoordinatesDto;
 
-  @IsEnum(City, {
-    message: UpdateOfferValidationMessage.city.invalidFormat
-  })
+  @IsOptional()
+  @IsEnum(City, { message: UPDATE_OFFER_MESSAGES.CITY.INVALID_FORMAT })
   public city: City;
 }

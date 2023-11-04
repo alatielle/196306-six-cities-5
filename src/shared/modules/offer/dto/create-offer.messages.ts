@@ -1,48 +1,57 @@
 import { AmenityType, City, HousingType } from '../../../types/index.js';
+import {
+  DESCRIPTION_LENGTH,
+  GUESTS,
+  PRICE,
+  ROOMS,
+  TITLE_LENGTH,
+  OFFER_IMAGES_AMOUNT,
+  IMAGE_LENGTH
+} from '../offer.constant.js';
 
-export const CreateOfferValidationMessage = {
-  title: {
-    minLength: 'Minimum title length must be 10',
-    maxLength: 'Maximum title length must be 100',
+export const CREATE_OFFER_MESSAGES = {
+  TITLE: {
+    MIN_LENGTH: `Minimum title length must be ${TITLE_LENGTH.MIN}`,
+    MAX_LENGTH: `Maximum title length must be ${TITLE_LENGTH.MAX}`,
   },
-  description: {
-    minLength: 'Minimum description length must be 20',
-    maxLength: 'Maximum description length must be 1024',
+  DESCRIPTION: {
+    MIN_LENGTH: `Minimum description length must be ${DESCRIPTION_LENGTH.MIN}`,
+    MAX_LENGTH: `Maximum description length must be ${DESCRIPTION_LENGTH.MAX}`,
   },
-  postDate: {
-    invalidFormat: 'postDate must be a valid ISO date',
+  POST_DATE: {
+    INVALID_FORMAT: 'postDate must be a valid ISO date',
   },
-  images: {
-    invalidFormat: 'images must be an array',
-    maxLength: 'Too short for field «images»',
-    invalidSize: 'Should always be 6 images',
+  IMAGES: {
+    INVALID_FORMAT: 'images must be an array',
+    MAX_LENGTH: `Max length is ${IMAGE_LENGTH}`,
+    INVALID_SIZE: `Should always be ${OFFER_IMAGES_AMOUNT} images`,
   },
-  price: {
-    invalidFormat: 'Price must be an integer',
-    minValue: 'Minimum price is 100',
-    maxValue: 'Maximum price is 100000',
+  PRICE: {
+    INVALID_FORMAT: 'Price must be an integer',
+    MIN_VALUE: `Minimum price is ${PRICE.MIN}`,
+    MAX_VALUE: `Maximum price is ${PRICE.MAX}`,
   },
-  city: {
-    invalidFormat: `city field must be one of: ${Object.values(City)}`,
+  CITY: {
+    INVALID_FORMAT: `city field must be one of: ${Object.values(City)}`,
   },
-  housingType: {
-    invalid: `housingType must be one of: ${Object.values(HousingType)}`,
+  HOUSING_TYPE: {
+    INVALID: `housingType must be one of: ${Object.values(HousingType)}`,
   },
-  premium: {
-    invalidFormat: 'premium must be a boolean',
+  PREMIUM: {
+    INVALID_FORMAT: 'premium must be a boolean',
   },
-  amenities: {
-    invalidFormat: 'amenities must be an array',
-    invalid: `Must be ${Object.values(AmenityType)}`,
+  AMENITIES: {
+    INVALID_FORMAT: 'amenities must be an array',
+    INVALID: `Must be ${Object.values(AmenityType)}`,
   },
-  guests: {
-    invalidFormat: 'guestAmount must be an integer',
-    minValue: 'Minimum guest amount is 1',
-    maxValue: 'Maximum guest amount is 10',
+  GUESTS: {
+    INVALID_FORMAT: 'guestAmount must be an integer',
+    MIN_VALUE: `Minimum guest amount is ${GUESTS.MIN}`,
+    MAX_VALUE: `Maximum guest amount is ${GUESTS.MAX}`,
   },
-  rooms: {
-    invalidFormat: 'roomAmount must be an integer',
-    minValue: 'Minimum room amount is 1',
-    maxValue: 'Maximum room amount is 8',
+  ROOMS: {
+    INVALID_FORMAT: 'roomAmount must be an integer',
+    MIN_VALUE: `Minimum room amount is ${ROOMS.MIN}`,
+    MAX_VALUE: `Maximum room amount is ${ROOMS.MAX}`,
   },
 } as const;
