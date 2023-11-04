@@ -8,21 +8,17 @@ import { Logger } from '../../logger/index.js';
 import { Route } from '../types/index.js';
 import { PathTransformer } from '../transform/index.js';
 import { Controller } from './controller.interface.js';
-
-const DEFAULT_CONTENT_TYPE = 'application/json';
+import { DEFAULT_CONTENT_TYPE } from './controller.constant.js';
 
 @injectable()
 export abstract class BaseController implements Controller {
-  private readonly _router: Router;
+  private readonly expressRouter: Router = Router();
+  @inject(Component.PathTransformer) private readonly pathTransformer: PathTransformer;
 
-  @inject(Component.PathTransformer) private pathTransformer: PathTransformer;
-
-  constructor(protected readonly logger: Logger) {
-    this._router = Router();
-  }
+  constructor(protected readonly logger: Logger) {}
 
   get router() {
-    return this._router;
+    return this.expressRouter;
   }
 
   public addRoute(route: Route) {
@@ -33,7 +29,7 @@ export abstract class BaseController implements Controller {
     const allHandlers = middlewareHandlers
       ? [...middlewareHandlers, wrapperAsyncHandler]
       : wrapperAsyncHandler;
-    this._router[route.method](route.path, allHandlers);
+    this.expressRouter[route.method](route.path, allHandlers);
     this.logger.info(
       `Route registered: ${route.method.toUpperCase()} ${route.path}`
     );

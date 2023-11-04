@@ -72,13 +72,13 @@ export const configRestSchema = convict<RestSchema>({
     doc: 'Max amount of DB connection retries',
     format: Number,
     env: 'DB_MAX_RETRIES',
-    default: 5,
+    default: null,
   },
   DB_RETRY_TIMEOUT: {
     doc: 'Timeout between DB connection retries (milliseconds)',
     format: Number,
     env: 'DB_RETRY_TIMEOUT',
-    default: 1000,
+    default: null,
   },
   UPLOAD_DIRECTORY: {
     doc: 'Directory for upload files',

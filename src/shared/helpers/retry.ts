@@ -1,22 +1,19 @@
 import { setTimeout } from 'node:timers/promises';
 
-const RETRY_COUNT = 3;
-const RETRY_TIMEOUT = 1000;
-
 interface RetryConfig {
   operation: () => Promise<void>;
   onSuccess?: () => void;
   onError?: (attempt: number, error: unknown) => void;
-  attempts?: number;
-  timeout?: number;
+  attempts: number;
+  timeout: number;
 }
 
 export async function retry({
   operation,
   onSuccess,
   onError,
-  attempts = RETRY_COUNT,
-  timeout = RETRY_TIMEOUT
+  attempts,
+  timeout
 }: RetryConfig): Promise<void> {
   let attempt = 0;
 

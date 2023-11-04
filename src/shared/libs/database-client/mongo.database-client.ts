@@ -19,10 +19,7 @@ export class MongoDatabaseClient implements DatabaseClient {
     return this.isConnected;
   }
 
-  public async connect(
-    uri: string,
-    options: { maxRetries?: number; retryTimeout?: number } = {},
-  ) {
+  public async connect(uri: string, maxRetries: number, retryTimeout: number) {
     if (this.isConnectedToDatabase()) {
       throw new Error('MongoDB client is already connected');
     }
@@ -30,8 +27,8 @@ export class MongoDatabaseClient implements DatabaseClient {
     this.logger.info('Trying to connect to MongoDB…');
 
     await retry({
-      attempts: options.maxRetries,
-      timeout: options.retryTimeout,
+      attempts: maxRetries,
+      timeout: retryTimeout,
       operation: async () => {
         this.mongoose = await Mongoose.connect(uri);
         this.isConnected = true;
@@ -40,12 +37,11 @@ export class MongoDatabaseClient implements DatabaseClient {
         this.logger.info('🍃 Database connection established.');
       },
       onError: (attempt: number, error: unknown) => {
-        const isLastAttempt =
-          Boolean(options.maxRetries) && attempt === options.maxRetries;
+        const isLastAttempt = attempt === maxRetries;
 
         if (isLastAttempt) {
           throw new Error(
-            `Unable to establish database connection after ${options.maxRetries} attempts`,
+            `Unable to establish database connection after ${maxRetries} attempts`,
           );
         }
 

@@ -2,25 +2,16 @@ import dayjs from 'dayjs';
 import { randomCirclePoint } from 'random-location';
 
 import { OfferGenerator } from './offer-generator.interface.js';
-import {
-  AmenityType,
-  Coordinates,
-  HousingType,
-  type MockServerData,
-  UserType,
-} from '../../types/index.js';
-import {
-  generateRandomValue,
-  getRandomItem,
-  getRandomItems,
-} from '../../helpers/index.js';
-import { GUESTS, PRICE, ROOMS, WEEK_DAY, IMAGES_AMOUNT } from './constraints.js';
-
-const formatLocation = ({ latitude, longitude }: Coordinates) =>
-  [latitude, longitude].join(';');
+import { AmenityType, Coordinates, HousingType, type MockServerData, UserType } from '../../types/index.js';
+import { generateRandomValue, getRandomItem, getRandomItems } from '../../helpers/index.js';
+import { GUESTS, IMAGES_AMOUNT, PRICE, ROOMS, WEEK_DAY } from './constraints.js';
 
 export class TSVOfferGenerator implements OfferGenerator {
   constructor(private readonly mockData: MockServerData) {}
+
+  private formatLocation({ latitude, longitude }: Coordinates) {
+    return [latitude, longitude].join(';');
+  }
 
   public generate(): string {
     const title = getRandomItem(this.mockData.titles);
@@ -47,7 +38,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       description,
       postDate,
       city.name,
-      formatLocation(city),
+      this.formatLocation(city),
       images,
       isPremium,
       housingType,
@@ -59,7 +50,7 @@ export class TSVOfferGenerator implements OfferGenerator {
       email,
       userType,
       avatarPath,
-      formatLocation(location),
+      this.formatLocation(location)
     ].join('\t');
   }
 }

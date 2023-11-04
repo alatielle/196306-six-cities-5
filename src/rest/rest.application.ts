@@ -38,10 +38,11 @@ export class RestApplication {
       this.config.get('DB_NAME')
     );
 
-    return this.databaseClient.connect(mongoUri, {
-      maxRetries: this.config.get('DB_MAX_RETRIES'),
-      retryTimeout: this.config.get('DB_RETRY_TIMEOUT')
-    });
+    return this.databaseClient.connect(
+      mongoUri,
+      this.config.get('DB_MAX_RETRIES'),
+      this.config.get('DB_RETRY_TIMEOUT')
+    );
   }
 
   private async initServer() {

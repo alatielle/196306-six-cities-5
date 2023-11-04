@@ -1,8 +1,7 @@
 import { createReadStream } from 'node:fs';
 import EventEmitter from 'node:events';
 import { FileReader } from './file-reader.interface.js';
-
-const CHUNK_SIZE = 16384; // 16KB
+import { CHUNK_SIZE } from './file-reaser.constant.js';
 
 export class TSVFileReader extends EventEmitter implements FileReader {
   constructor(private readonly filename: string) {
