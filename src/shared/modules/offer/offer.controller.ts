@@ -29,7 +29,7 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DEFAULT_OFFER_AMOUNT, OFFER_IMAGES_AMOUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
-import { ParamCity } from './type/param-city.type.js';
+import { QueryCity } from './type/query-city.type.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
 import { FavoriteOfferRequest } from './type/favorite-offer-request.type.js';
 
@@ -60,6 +60,19 @@ export class OfferController extends BaseController {
         new PrivateRouteMiddleware(),
         new ValidateDtoMiddleware(CreateOfferDto)
       ]
+    });
+
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()]
+    });
+
+    this.addRoute({
+      path: '/premium',
+      method: HttpMethod.Get,
+      handler: this.getPremiumOffers
     });
 
     this.addRoute({
@@ -118,23 +131,6 @@ export class OfferController extends BaseController {
         new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
         new UploadFilesMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image', OFFER_IMAGES_AMOUNT)
       ]
-    });
-
-    this.addRoute({
-      path: '/:offerId/premium',
-      method: HttpMethod.Get,
-      handler: this.getPremiumOffers,
-      middlewares: [
-        new ValidateObjectIdMiddleware('offerId'),
-        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
-      ]
-    });
-
-    this.addRoute({
-      path: '/favorites',
-      method: HttpMethod.Get,
-      handler: this.getFavorites,
-      middlewares: [new PrivateRouteMiddleware()]
     });
 
     this.addRoute({
@@ -230,12 +226,12 @@ export class OfferController extends BaseController {
   }
 
   public async getPremiumOffers(
-    { params, tokenPayload }: Request<ParamCity>,
+    { query, tokenPayload }: Request<unknown, unknown, unknown, QueryCity>,
     res: Response
   ): Promise<void> {
     const offers = await this.offerService.findPremiumByCity(
       tokenPayload?.id,
-      params.city,
+      query.city as string,
       PREMIUM_OFFER_AMOUNT
     );
 
