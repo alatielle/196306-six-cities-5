@@ -6,6 +6,7 @@ import {
   HttpError,
   HttpMethod,
   PrivateRouteMiddleware,
+  PublicOnlyMiddleware,
   UploadFileMiddleware,
   ValidateDtoMiddleware
 } from '../../libs/rest/index.js';
@@ -29,7 +30,7 @@ export class UserController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>,
-    @inject(Component.AuthService) private readonly authService: AuthService,
+    @inject(Component.AuthService) private readonly authService: AuthService
   ) {
     super(logger);
 
@@ -39,7 +40,10 @@ export class UserController extends BaseController {
       path: '/register',
       method: HttpMethod.Post,
       handler: this.create,
-      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
+      middlewares: [
+        new PublicOnlyMiddleware(),
+        new ValidateDtoMiddleware(CreateUserDto)
+      ]
     });
 
     this.addRoute({
@@ -70,13 +74,9 @@ export class UserController extends BaseController {
   }
 
   public async create(
-    { body, tokenPayload }: CreateUserRequest,
+    { body }: CreateUserRequest,
     res: Response
   ): Promise<void> {
-    if (tokenPayload) {
-      throw new HttpError(StatusCodes.FORBIDDEN, 'Forbidden', 'UserController');
-    }
-
     const isExistingUser = await this.userService.findByEmail(body.email);
 
     if (isExistingUser) {
@@ -106,15 +106,6 @@ export class UserController extends BaseController {
     res: Response
   ): Promise<void> {
     const user = await this.userService.findByEmail(email);
-
-    if (!user) {
-      throw new HttpError(
-        StatusCodes.UNAUTHORIZED,
-        'Unauthorized',
-        'UserController'
-      );
-    }
-
     this.ok(res, fillDTO(LoggedUserRdo, user));
   }
 
