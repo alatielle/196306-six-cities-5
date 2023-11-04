@@ -23,6 +23,7 @@ import { CreateUserDto } from './dto/create-user.dto.js';
 import { LoginUserDto } from './dto/login-user.dto.js';
 import { LoggedUserRdo } from './rdo/logged-user.rdo.js';
 import { UploadUserAvatarRdo } from './rdo/upload-user-avatar.rdo.js';
+import { ALLOWED_AVATAR_MIME_TYPES } from './user.constant.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -67,7 +68,8 @@ export class UserController extends BaseController {
         new PrivateRouteMiddleware(),
         new UploadFileMiddleware(
           this.configService.get('UPLOAD_DIRECTORY'),
-          'avatar'
+          'avatar',
+          ALLOWED_AVATAR_MIME_TYPES
         )
       ]
     });

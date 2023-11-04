@@ -23,7 +23,7 @@ export const CREATE_OFFER_MESSAGES = {
   },
   IMAGES: {
     INVALID_FORMAT: 'images must be an array',
-    MAX_LENGTH: `Max length is ${IMAGE_LENGTH}`,
+    MAX_LENGTH: `Max length is ${IMAGE_LENGTH.MAX}`,
     INVALID_SIZE: `Should always be ${OFFER_IMAGES_AMOUNT} images`,
   },
   PRICE: {

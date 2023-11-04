@@ -7,7 +7,7 @@ import {
   HttpError,
   HttpMethod,
   PrivateRouteMiddleware,
-  UploadFilesMiddleware,
+  UploadFileMiddleware,
   ValidateAuthorMiddleware,
   ValidateDtoMiddleware,
   ValidateObjectIdMiddleware
@@ -27,7 +27,13 @@ import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { DEFAULT_OFFER_AMOUNT, MAX_OFFER_AMOUNT, OFFER_IMAGES_AMOUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
+import {
+  ALLOWED_IMAGE_MIME_TYPES,
+  DEFAULT_OFFER_AMOUNT,
+  MAX_OFFER_AMOUNT,
+  OFFER_IMAGES_AMOUNT,
+  PREMIUM_OFFER_AMOUNT
+} from './offer.constant.js';
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 import { QueryCity } from './type/query-city.type.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
@@ -129,7 +135,12 @@ export class OfferController extends BaseController {
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
         new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
-        new UploadFilesMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image', OFFER_IMAGES_AMOUNT)
+        new UploadFileMiddleware(
+          this.configService.get('UPLOAD_DIRECTORY'),
+          'image',
+          ALLOWED_IMAGE_MIME_TYPES,
+          OFFER_IMAGES_AMOUNT
+        )
       ]
     });
 

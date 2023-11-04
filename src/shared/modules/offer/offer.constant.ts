@@ -31,3 +31,9 @@ export const GUESTS = {
 export const IMAGE_LENGTH = {
   MAX: 256
 };
+
+export const ALLOWED_IMAGE_MIME_TYPES = [
+  'image/png',
+  'image/jpeg',
+  'image/jpg'
+];
