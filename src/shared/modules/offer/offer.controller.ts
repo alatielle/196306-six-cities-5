@@ -13,13 +13,13 @@ import {
   ValidateObjectIdMiddleware
 } from '../../libs/rest/index.js';
 import { Logger } from '../../libs/logger/index.js';
-import { Component } from '../../types/index.js';
-import { fillDTO } from '../../helpers/index.js';
-import { parseAsInteger } from '../../helpers/parse.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
-import { OfferService } from './offer-service.interface.js';
+import { Component } from '../../types/index.js';
+import { fillDTO, parseAsInteger } from '../../helpers/index.js';
+import { UserService } from '../user/index.js';
 import { CommentService } from '../comment/index.js';
 import { CommentRdo } from '../comment/rdo/comment.rdo.js';
+import { OfferService } from './offer-service.interface.js';
 import { CreateOfferRequest } from './type/create-offer-request.type.js';
 import { UpdateOfferRequest } from './type/update-offer-request.type.js';
 import { ParamOfferId } from './type/param-offerid.type.js';
@@ -30,6 +30,8 @@ import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_IMAGES_AMOUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 import { ParamCity } from './type/param-city.type.js';
+import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
+import { FavoriteOfferRequest } from './type/favorite-offer-request.type.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -37,6 +39,7 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.CommentService) private readonly commentService: CommentService,
+    @inject(Component.UserService) private readonly userService: UserService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>
   ) {
     super(logger);
@@ -123,6 +126,25 @@ export class OfferController extends BaseController {
       handler: this.getPremiumOffers,
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
+    });
+
+    this.addRoute({
+      path: '/favorites',
+      method: HttpMethod.Get,
+      handler: this.getFavorites,
+      middlewares: [new PrivateRouteMiddleware()]
+    });
+
+    this.addRoute({
+      path: '/:offerId/favorite',
+      method: HttpMethod.Put,
+      handler: this.markAsFavorite,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new ValidateDtoMiddleware(FavoriteOfferDto),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
       ]
     });
@@ -218,5 +240,33 @@ export class OfferController extends BaseController {
     );
 
     this.ok(res, fillDTO(OfferPreviewRdo, offers));
+  }
+
+  public async getFavorites(
+    { tokenPayload: { id } }: Request,
+    res: Response
+  ): Promise<void> {
+    const offers = await this.offerService.findFavoriteByUserId(id);
+    this.ok(res, fillDTO(OfferPreviewRdo, offers));
+  }
+
+  public async markAsFavorite(
+    { body, params, tokenPayload: { id, email } }: FavoriteOfferRequest,
+    res: Response
+  ): Promise<void> {
+    const user = await this.userService.findByEmail(email);
+    const favorites = new Set(user!.favorites.map((offer) => offer.id));
+
+    if (body.isFavorite) {
+      favorites.add(params.offerId);
+    } else {
+      favorites.delete(params.offerId);
+    }
+
+    await this.userService.updateById(id, {
+      favorites: [...favorites]
+    });
+
+    this.noContent(res, null);
   }
 }
