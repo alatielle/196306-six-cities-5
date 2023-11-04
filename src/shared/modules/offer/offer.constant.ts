@@ -1,4 +1,5 @@
 export const DEFAULT_OFFER_AMOUNT = 60;
+export const MAX_OFFER_AMOUNT = 1000;
 export const OFFER_IMAGES_AMOUNT = 6;
 export const PREMIUM_OFFER_AMOUNT = 3;
 

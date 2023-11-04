@@ -27,7 +27,7 @@ import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { DEFAULT_OFFER_AMOUNT, OFFER_IMAGES_AMOUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
+import { DEFAULT_OFFER_AMOUNT, MAX_OFFER_AMOUNT, OFFER_IMAGES_AMOUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 import { QueryCity } from './type/query-city.type.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
@@ -151,7 +151,7 @@ export class OfferController extends BaseController {
     res: Response
   ): Promise<void> {
     const amount = Math.max(
-      parseAsInteger(query.limit) ?? 0,
+      Math.min(parseAsInteger(query.limit) ?? 0, MAX_OFFER_AMOUNT),
       DEFAULT_OFFER_AMOUNT
     );
     const offers = await this.offerService.find(tokenPayload?.id, amount);
