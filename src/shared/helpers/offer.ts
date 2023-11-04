@@ -11,7 +11,7 @@ function isInEnum<E extends Record<string, string>>(
   enumeration: E,
   value: string,
 ): value is E[keyof E] {
-  return Object.values(enumeration).indexOf(value) !== -1;
+  return Object.values(enumeration).includes(value);
 }
 
 function parseAmenities(amenities: string): AmenityType[] {
