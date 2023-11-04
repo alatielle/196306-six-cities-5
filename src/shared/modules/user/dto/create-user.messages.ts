@@ -1,16 +1,19 @@
-export const CreateUserMessages = {
-  email: {
-    invalidFormat: 'email must be a valid address',
+import { UserType } from '../../../types/index.js';
+import { NAME_LENGTH, PASSWORD_LENGTH } from '../user.constant.js';
+
+export const CREATE_USER_MESSAGES = {
+  EMAIL: {
+    INVALID_FORMAT: 'email must be a valid address'
   },
-  name: {
-    invalidFormat: 'name is required',
-    lengthField: 'min length is 1, max is 15',
+  NAME: {
+    INVALID_FORMAT: 'name is required',
+    LENGTH_FIELD: `min length is ${NAME_LENGTH.MIN}, max is ${NAME_LENGTH.MAX}`
   },
-  password: {
-    invalidFormat: 'password is required',
-    lengthField: 'min length for password is 6, max is 12',
+  PASSWORD: {
+    INVALID_FORMAT: 'password is required',
+    LENGTH_FIELD: `min length is ${PASSWORD_LENGTH.MIN}, max is ${PASSWORD_LENGTH.MAX}`
   },
-  type: {
-    invalidFormat: 'type must be Normal or Pro',
-  },
+  TYPE: {
+    INVALID_FORMAT: `type must be one of: ${Object.values(UserType)}`
+  }
 } as const;
