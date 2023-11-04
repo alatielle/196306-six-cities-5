@@ -15,7 +15,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { CoordinatesDto } from '../../coordinates/index.js';
+import { CoordinatesDto } from './coordinates.dto.js';
 import { CreateOfferValidationMessage } from './create-offer.messages.js';
 
 export class CreateOfferDto {

@@ -1,7 +1,6 @@
 import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
-import { AmenityType, HousingType, City } from '../../types/index.js';
+import { AmenityType, HousingType, City, Coordinates } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
-import { Coordinates } from '../coordinates/index.js';
 
 export interface OfferEntity extends defaultClasses.Base {}
 

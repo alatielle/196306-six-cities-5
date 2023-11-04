@@ -13,7 +13,7 @@ import {
 import { Type } from 'class-transformer';
 
 import { AmenityType, City, HousingType } from '../../../types/index.js';
-import { CoordinatesDto } from '../../coordinates/index.js';
+import { CoordinatesDto } from './coordinates.dto.js';
 import { UpdateOfferValidationMessage } from './update-offer.messages.js';
 
 export class UpdateOfferDto {
