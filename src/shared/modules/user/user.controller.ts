@@ -106,6 +106,15 @@ export class UserController extends BaseController {
     res: Response
   ): Promise<void> {
     const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
+        'UserController'
+      );
+    }
+
     this.ok(res, fillDTO(LoggedUserRdo, user));
   }
 
