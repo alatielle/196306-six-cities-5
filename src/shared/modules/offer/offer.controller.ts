@@ -27,9 +27,9 @@ import { OfferRdo } from './rdo/offer.rdo.js';
 import { OfferPreviewRdo } from './rdo/offer-preview.rdo.js';
 import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
-import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_IMAGES_AMOUNT } from './offer.constant.js';
-import { CityService } from '../city/index.js';
+import { DEFAULT_OFFER_AMOUNT, DEFAULT_OFFER_IMAGES_AMOUNT, PREMIUM_OFFER_AMOUNT } from './offer.constant.js';
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
+import { ParamCity } from './type/param-city.type.js';
 
 @injectable()
 export class OfferController extends BaseController {
@@ -37,7 +37,6 @@ export class OfferController extends BaseController {
     @inject(Component.Logger) protected readonly logger: Logger,
     @inject(Component.OfferService) private readonly offerService: OfferService,
     @inject(Component.CommentService) private readonly commentService: CommentService,
-    @inject(Component.CityService) private readonly cityService: CityService,
     @inject(Component.Config) private readonly configService: Config<RestSchema>
   ) {
     super(logger);
@@ -117,6 +116,16 @@ export class OfferController extends BaseController {
         new UploadFilesMiddleware(this.configService.get('UPLOAD_DIRECTORY'), 'image', DEFAULT_OFFER_IMAGES_AMOUNT)
       ]
     });
+
+    this.addRoute({
+      path: '/:offerId/premium',
+      method: HttpMethod.Get,
+      handler: this.getPremiumOffers,
+      middlewares: [
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
+    });
   }
 
   public async index(
@@ -158,18 +167,6 @@ export class OfferController extends BaseController {
     { params, body, tokenPayload }: UpdateOfferRequest,
     res: Response
   ): Promise<void> {
-    if (body.cityId) {
-      const foundCity = await this.cityService.findByCityId(body.cityId);
-
-      if (!foundCity) {
-        throw new HttpError(
-          StatusCodes.BAD_REQUEST,
-          `City with id ${body.cityId} does not exist`,
-          'OfferController'
-        );
-      }
-    }
-
     await this.offerService.updateById(params.offerId, body);
     const offer = await this.offerService.findById(
       tokenPayload.id,
@@ -201,12 +198,25 @@ export class OfferController extends BaseController {
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, 'No files were uploaded');
     }
 
-    const { offerId} = params;
+    const { offerId } = params;
     const fileNames = files.map((file) => file.filename);
     const updateDto = {
       images: fileNames
     };
     await this.offerService.updateById(offerId, updateDto);
     this.created(res, fillDTO(UploadImagesRdo, updateDto));
+  }
+
+  public async getPremiumOffers(
+    { params, tokenPayload }: Request<ParamCity>,
+    res: Response
+  ): Promise<void> {
+    const offers = await this.offerService.findPremiumByCity(
+      tokenPayload?.id,
+      params.city,
+      PREMIUM_OFFER_AMOUNT
+    );
+
+    this.ok(res, fillDTO(OfferPreviewRdo, offers));
   }
 }

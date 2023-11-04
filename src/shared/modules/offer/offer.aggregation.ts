@@ -12,32 +12,6 @@ export const commentsPipeline = [
   },
 ];
 
-export const cityPipeline = [
-  {
-    $lookup: {
-      from: 'cities',
-      let: { cityId: '$cityId' },
-      pipeline: [
-        { $match: { $expr: { $eq: ['$$cityId', '$_id'] } } },
-        {
-          $project: { _id: 0, id: { $toString: '$_id' }, name: 1, location: 1 },
-        },
-      ],
-      as: 'cities',
-    },
-  },
-  {
-    $addFields: {
-      city: {
-        $arrayElemAt: ['$cities', 0],
-      },
-    },
-  },
-  {
-    $unset: ['cities'],
-  },
-];
-
 export const authorPipeline = [
   {
     $lookup: {
@@ -112,7 +86,6 @@ export const getPipeline = (userId?: string) => {
     ...commentsPipeline,
     ...authorPipeline,
     ...userPipeline,
-    ...cityPipeline,
     ...finalPipeline,
   ];
 };

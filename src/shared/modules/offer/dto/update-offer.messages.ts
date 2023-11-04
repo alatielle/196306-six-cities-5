@@ -1,3 +1,5 @@
+import { AmenityType, City, HousingType } from '../../../types/index.js';
+
 export const UpdateOfferValidationMessage = {
   title: {
     minLength: 'Minimum title length must be 10',
@@ -12,19 +14,18 @@ export const UpdateOfferValidationMessage = {
     minValue: 'Minimum price is 100',
     maxValue: 'Maximum price is 100000',
   },
-  cityId: {
-    invalidId: 'cityId field must be a valid id',
+  city: {
+    invalidFormat: `city field must be one of: ${Object.values(City)}`,
   },
   housingType: {
-    invalid: 'housingType must be one of: apartment, house, room, hotel',
+    invalid: `housingType must be one of: ${Object.values(HousingType)}`,
   },
   premium: {
     invalidFormat: 'premium must be a boolean',
   },
   amenities: {
     invalidFormat: 'amenities must be an array',
-    invalid:
-      'Must be Breakfast, Air conditioning, Laptop friendly workspace, Baby seat, Washer, Towels, Fridge',
+    invalid: `Must be ${Object.values(AmenityType)}`,
   },
   guests: {
     invalidFormat: 'guestAmount must be an integer',

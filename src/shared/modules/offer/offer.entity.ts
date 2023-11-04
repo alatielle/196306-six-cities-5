@@ -1,21 +1,14 @@
-import {
-  defaultClasses,
-  getModelForClass,
-  modelOptions,
-  prop,
-  Ref,
-} from '@typegoose/typegoose';
-import { AmenityType, HousingType } from '../../types/index.js';
+import { defaultClasses, getModelForClass, modelOptions, prop, Ref } from '@typegoose/typegoose';
+import { AmenityType, HousingType, City } from '../../types/index.js';
 import { UserEntity } from '../user/index.js';
-import { CityEntity } from '../city/index.js';
 import { Coordinates } from '../coordinates/index.js';
 
 export interface OfferEntity extends defaultClasses.Base {}
 
 @modelOptions({
   schemaOptions: {
-    collection: 'offers',
-  },
+    collection: 'offers'
+  }
 })
 export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({ trim: true, required: true })
@@ -36,7 +29,7 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({
     type: String,
     enum: HousingType,
-    required: true,
+    required: true
   })
   public housingType: HousingType;
 
@@ -50,9 +43,16 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public price: number;
 
   @prop({
+    type: String,
+    enum: City,
+    required: true
+  })
+  public city: City;
+
+  @prop({
     type: [String],
     enum: AmenityType,
-    required: true,
+    required: true
   })
   public amenities: AmenityType[];
 
@@ -60,14 +60,8 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public location: Coordinates;
 
   @prop({
-    ref: () => CityEntity,
-    required: true,
-  })
-  public cityId: Ref<CityEntity>;
-
-  @prop({
     ref: () => UserEntity,
-    required: true,
+    required: true
   })
   public authorId: Ref<UserEntity>;
 }

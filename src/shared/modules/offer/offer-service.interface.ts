@@ -26,9 +26,9 @@ export interface OfferService extends DocumentExists, IsDocumentAuthor {
     dto: UpdateOfferDto | UpdateOfferImagesDto
   ): Promise<DocumentType<OfferEntity> | null>;
 
-  findPremiumByCityId(
+  findPremiumByCity(
     currentUserId: string | undefined,
-    cityId: string,
+    city: string,
     amount?: number
   ): Promise<DocumentType<OfferEntity>[]>;
 

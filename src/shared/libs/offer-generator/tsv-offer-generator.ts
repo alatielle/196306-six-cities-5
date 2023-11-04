@@ -38,7 +38,6 @@ export class TSVOfferGenerator implements OfferGenerator {
       description,
       postDate,
       city.name,
-      this.formatLocation(city),
       images,
       isPremium,
       housingType,

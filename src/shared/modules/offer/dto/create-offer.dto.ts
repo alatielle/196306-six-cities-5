@@ -1,8 +1,9 @@
-import { AmenityType, HousingType } from '../../../types/index.js';
+import { AmenityType, City, HousingType } from '../../../types/index.js';
 import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsInt,
@@ -10,9 +11,7 @@ import {
   MaxLength,
   Min,
   MinLength,
-  IsBoolean,
-  ValidateNested,
-  IsMongoId,
+  ValidateNested
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -25,23 +24,23 @@ export class CreateOfferDto {
   public title: string;
 
   @MinLength(20, {
-    message: CreateOfferValidationMessage.description.minLength,
+    message: CreateOfferValidationMessage.description.minLength
   })
   @MaxLength(1024, {
-    message: CreateOfferValidationMessage.description.maxLength,
+    message: CreateOfferValidationMessage.description.maxLength
   })
   public description: string;
 
   @IsDateString(
     {},
-    { message: CreateOfferValidationMessage.postDate.invalidFormat },
+    { message: CreateOfferValidationMessage.postDate.invalidFormat }
   )
   public postDate: Date;
 
   @IsArray({ message: CreateOfferValidationMessage.images.invalidFormat })
   @MaxLength(256, {
     each: true,
-    message: CreateOfferValidationMessage.images.maxLength,
+    message: CreateOfferValidationMessage.images.maxLength
   })
   @ArrayMinSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
   @ArrayMaxSize(6, { message: CreateOfferValidationMessage.images.invalidSize })
@@ -51,7 +50,7 @@ export class CreateOfferDto {
   public isPremium: boolean;
 
   @IsEnum(HousingType, {
-    message: CreateOfferValidationMessage.housingType.invalid,
+    message: CreateOfferValidationMessage.housingType.invalid
   })
   public housingType: HousingType;
 
@@ -73,7 +72,7 @@ export class CreateOfferDto {
   @IsArray({ message: CreateOfferValidationMessage.amenities.invalidFormat })
   @IsEnum(AmenityType, {
     each: true,
-    message: CreateOfferValidationMessage.amenities.invalid,
+    message: CreateOfferValidationMessage.amenities.invalid
   })
   public amenities: AmenityType[];
 
@@ -83,6 +82,8 @@ export class CreateOfferDto {
 
   public authorId: string;
 
-  @IsMongoId({ message: CreateOfferValidationMessage.cityId.invalidId })
-  public cityId: string;
+  @IsEnum(City, {
+    message: CreateOfferValidationMessage.city.invalidFormat
+  })
+  public city: City;
 }

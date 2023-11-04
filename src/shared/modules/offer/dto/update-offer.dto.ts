@@ -3,7 +3,6 @@ import {
   IsBoolean,
   IsEnum,
   IsInt,
-  IsMongoId,
   IsOptional,
   Max,
   MaxLength,
@@ -13,7 +12,7 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-import { AmenityType, HousingType } from '../../../types/index.js';
+import { AmenityType, City, HousingType } from '../../../types/index.js';
 import { CoordinatesDto } from '../../coordinates/index.js';
 import { UpdateOfferValidationMessage } from './update-offer.messages.js';
 
@@ -73,7 +72,8 @@ export class UpdateOfferDto {
   @Type(() => CoordinatesDto)
   public location?: CoordinatesDto;
 
-  @IsOptional()
-  @IsMongoId({ message: UpdateOfferValidationMessage.cityId.invalidId })
-  public cityId?: string;
+  @IsEnum(City, {
+    message: UpdateOfferValidationMessage.city.invalidFormat
+  })
+  public city: City;
 }

@@ -9,7 +9,6 @@ import { CreateOfferDto } from './dto/create-offer.dto.js';
 import { UpdateOfferDto } from './dto/update-offer.dto.js';
 import {
   authorPipeline,
-  cityPipeline,
   commentsPipeline,
   finalPipeline,
   getPipeline,
@@ -44,23 +43,16 @@ export class DefaultOfferService implements OfferService {
       .exec();
   }
 
-  public async findPremiumByCityId(
+  public async findPremiumByCity(
     currentUserId: string | undefined,
-    cityId: string,
+    city: string,
     limit = DEFAULT_OFFER_AMOUNT,
   ): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .aggregate([
         {
           $match: {
-            $and: [
-              { isPremium: true },
-              {
-                $expr: {
-                  $eq: ['$cityId', { $toObjectId: cityId }],
-                },
-              },
-            ],
+            $and: [{ isPremium: true }, { city: city }],
           },
         },
         { $sort: { postDate: SortOrder.Desc } },
@@ -86,7 +78,6 @@ export class DefaultOfferService implements OfferService {
         { $sort: { postDate: SortOrder.Desc } },
         ...commentsPipeline,
         ...authorPipeline,
-        ...cityPipeline,
         ...finalPipeline,
       ])
       .exec();
