@@ -98,13 +98,13 @@ paths:
       description: Returns authorized user's information.
       responses:
         '200':
-          description: User session token is valid. Logged user object.
+          description: User token is valid. Logged user object.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/loggedUser'
         '401':
-          description: User session token is invalid.
+          description: User token is invalid.
           content:
             application/json:
               schema:
@@ -202,7 +202,6 @@ paths:
   /offers/favorites:
     get:
       tags:
-        - users
         - offers
       summary: List of favorite offers
       description: Returns all the offers that have been added to favorites list by a current user.
@@ -379,7 +378,6 @@ paths:
     get:
       tags:
         - offers
-        - comments
       summary: List of comments
       description: Returns a list of last comments for a given offer.
       parameters:
@@ -449,7 +447,6 @@ paths:
   /offers/{offerId}/favorite:
     put:
       tags:
-        - users
         - offers
       summary: Favorite the offer
       description: Adds/removes an offer to/from the favorites list.
@@ -479,7 +476,6 @@ paths:
     post:
       tags:
         - comments
-        - offers
       summary: Comment creation
       description: Adds a comments to a given offer.
       requestBody:
@@ -627,10 +623,6 @@ components:
     favoriteOffer:
       type: object
       properties:
-        offerId:
-          type: string
-          required: true
-          example: 6329c3d6a04ab1061c6425ea
         isFavorite:
           type: boolean
           required: true
@@ -709,9 +701,9 @@ components:
           type: string
           example: 6329c3d6a04ab1061c6425ea
           required: true
-        cityId:
+        city:
           type: string
-          example: 6329c3d6a04ab1061c6425ea
+          example: Hamburg
           required: true
 
     updateOffer:
@@ -749,9 +741,8 @@ components:
           $ref: '#/components/schemas/amenities'
         location:
           $ref: '#/components/schemas/location'
-        cityId:
-          type: string
-          example: 6329c3d6a04ab1061c6425ea
+        city:
+          $ref: '#/components/schemas/city'
 
     offer:
       type: object
@@ -921,16 +912,8 @@ components:
           example: 2.351499
 
     city:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 6329c3d6a04ab1061c6425ea
-        name:
-          type: string
-          example: Amsterdam
-        location:
-          $ref: '#/components/schemas/location'
+      type: string
+      example: Amsterdam
 
     userType:
       type: string
