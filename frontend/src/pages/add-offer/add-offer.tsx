@@ -1,10 +1,10 @@
-import { NewOffer } from '../../types/types';
+import { OfferDraft, OfferFormOutput } from '../../types/types';
 import { CITIES, CityLocation } from '../../const';
 import OfferForm from '../../components/offer-form/offer-form';
 import { useAppDispatch } from '../../hooks';
 import { postOffer } from '../../store/action';
 
-const emptyOffer: NewOffer = {
+const emptyOffer: OfferDraft = {
   title: '',
   description: '',
   city: { name: CITIES[0], location: CityLocation[CITIES[0]] },
@@ -22,19 +22,20 @@ const emptyOffer: NewOffer = {
 const AddOffer = (): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
-  const handleFormSubmit = (offerData: NewOffer) => {
+  const handleFormSubmit = (offerData: OfferFormOutput) => {
     dispatch(postOffer(offerData));
   };
 
   return (
-    <main className="page__main">
-      <div className="container">
+    <main className='page__main'>
+      <div className='container'>
         <section>
           <h1>Add new offer</h1>
           <OfferForm offer={emptyOffer} onSubmit={handleFormSubmit} />
         </section>
       </div>
     </main>
-  );};
+  );
+};
 
 export default AddOffer;

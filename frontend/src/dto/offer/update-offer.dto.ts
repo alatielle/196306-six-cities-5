@@ -1,6 +1,6 @@
 import { HousingType, AmenityType, City, Coordinates } from './types';
 
-export class CreateOfferDto {
+export class UpdateOfferDto {
   public title?: string;
 
   public description?: string;

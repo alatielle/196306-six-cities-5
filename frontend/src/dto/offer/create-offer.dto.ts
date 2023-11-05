@@ -7,8 +7,6 @@ export class CreateOfferDto {
 
   public postDate!: string;
 
-  public images!: string[];
-
   public isPremium!: boolean;
 
   public housingType!: HousingType;

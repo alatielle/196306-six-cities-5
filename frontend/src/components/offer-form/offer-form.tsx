@@ -1,7 +1,7 @@
 import { FormEvent, useCallback, useState } from 'react';
 import Select from 'react-select';
 
-import { City, NewOffer, Offer } from '../../types/types';
+import { City, OfferDraft, OfferFormOutput, Type } from '../../types/types';
 
 import LocationPicker from '../location-picker/location-picker';
 import { CITIES, CityLocation, GOODS, TYPES } from '../../const';
@@ -45,27 +45,40 @@ const getCity = (cityName: FormDataEntryValue | null): City => {
   return { name: CITIES[0], location: CityLocation[CITIES[0]] };
 };
 
+const getType = (entry: FormDataEntryValue | null): Type => {
+  const type = String(entry);
+  if (type && TYPES.some((t) => t === type)) {
+    return type as Type;
+  }
+
+  return TYPES[0];
+};
+
+const getImage = (entry: FormDataEntryValue | null): File | undefined => {
+  return entry instanceof File && Boolean(entry.name) ? entry : undefined;
+};
+
 const getImages = (
   entries: IterableIterator<[string, FormDataEntryValue]>
-): string[] => {
-  const enteredImages: string[] = [];
+): File[] => {
+  const enteredImages: File[] = [];
   for (const entry of entries) {
-    if (entry[0].startsWith(FormFieldName.image) && typeof entry[1] === 'string') {
+    if (entry[0].startsWith(FormFieldName.image) && entry[1] instanceof File && Boolean(entry[1].name)) {
       enteredImages.push(entry[1]);
     }
   }
   return enteredImages;
 };
 
-type OfferFormProps<T> = {
-  offer: T;
-  onSubmit: (offerData: T) => void;
+type OfferFormProps = {
+  offer: OfferDraft;
+  onSubmit: (offerData: OfferFormOutput) => void;
 };
 
-const OfferForm = <T extends Offer | NewOffer>({
+const OfferForm = ({
   offer,
   onSubmit,
-}: OfferFormProps<T>): JSX.Element => {
+}: OfferFormProps): JSX.Element => {
   const {
     title,
     description,
@@ -100,13 +113,12 @@ const OfferForm = <T extends Offer | NewOffer>({
     const form = e.currentTarget;
     const formData = new FormData(form);
     const data = {
-      ...offer,
-      title: formData.get(FormFieldName.title),
-      description: formData.get(FormFieldName.description),
+      title: String(formData.get(FormFieldName.title)),
+      description: String(formData.get(FormFieldName.description)),
       city: getCity(formData.get(FormFieldName.cityName)),
-      previewImage: formData.get(FormFieldName.previewImage),
+      previewImage: getImage(formData.get(FormFieldName.previewImage)),
       isPremium: Boolean(formData.get(FormFieldName.isPremium)),
-      type: formData.get(FormFieldName.type),
+      type: getType(formData.get(FormFieldName.type)),
       bedrooms: Number(formData.get(FormFieldName.bedrooms)),
       maxAdults: Number(formData.get(FormFieldName.maxAdults)),
       price: Number(formData.get(FormFieldName.price)),
@@ -171,28 +183,29 @@ const OfferForm = <T extends Offer | NewOffer>({
         </label>
         <input
           className="form__input offer-form__text-input"
-          type="url"
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
           placeholder="Preview image"
           name={FormFieldName.previewImage}
           id="previewImage"
-          required
-          defaultValue={previewImage}
+          required={!(previewImage)}
         />
       </div>
       <fieldset className="images-fieldset">
         {images.map((image, index) => (
-          <div key={image} className="form__input-wrapper">
+          // eslint-disable-next-line react/no-array-index-key
+          <div key={`image-${index}`} className="form__input-wrapper">
             <label htmlFor={`image=${index}`} className="offer-form__label">
           Offer Image #{index + 1}
             </label>
             <input
               className="form__input offer-form__text-input"
-              type="url"
+              type="file"
+              accept="image/png, image/jpeg, image/jpg"
               placeholder="Offer image"
               name={`${FormFieldName.image}-${index}`}
               id={`image-${index}`}
-              required
-              defaultValue={image}
+              required={!(image)}
             />
           </div>
         ))}

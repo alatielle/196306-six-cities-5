@@ -1,4 +1,4 @@
-import { City, HousingType } from './types';
+import { City, Coordinates, HousingType } from './types';
 
 export class OfferPreviewDto {
   public id!: string;
@@ -8,6 +8,8 @@ export class OfferPreviewDto {
   public postDate!: string;
 
   public city!: City;
+
+  public location!: Coordinates;
 
   public imagePreview!: string;
 

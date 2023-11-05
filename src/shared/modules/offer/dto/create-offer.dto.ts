@@ -17,15 +17,7 @@ import { Type } from 'class-transformer';
 
 import { CoordinatesDto } from './coordinates.dto.js';
 import { CREATE_OFFER_MESSAGES } from './create-offer.messages.js';
-import {
-  DESCRIPTION_LENGTH,
-  GUESTS,
-  IMAGE_LENGTH,
-  OFFER_IMAGES_AMOUNT,
-  PRICE,
-  ROOMS,
-  TITLE_LENGTH
-} from '../offer.constant.js';
+import { DESCRIPTION_LENGTH, GUESTS, OFFER_IMAGES_AMOUNT, PRICE, ROOMS, TITLE_LENGTH } from '../offer.constant.js';
 
 export class CreateOfferDto {
   @MinLength(TITLE_LENGTH.MIN, { message: CREATE_OFFER_MESSAGES.TITLE.MIN_LENGTH })
@@ -38,15 +30,6 @@ export class CreateOfferDto {
 
   @IsDateString({}, { message: CREATE_OFFER_MESSAGES.POST_DATE.INVALID_FORMAT })
   public postDate: Date;
-
-  @IsArray({ message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_FORMAT })
-  @MaxLength(IMAGE_LENGTH.MAX, {
-    each: true,
-    message: CREATE_OFFER_MESSAGES.IMAGES.MAX_LENGTH
-  })
-  @ArrayMinSize(OFFER_IMAGES_AMOUNT, { message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_SIZE })
-  @ArrayMaxSize(OFFER_IMAGES_AMOUNT, { message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_SIZE })
-  public images: string[];
 
   @IsBoolean({ message: CREATE_OFFER_MESSAGES.PREMIUM.INVALID_FORMAT })
   public isPremium: boolean;
@@ -84,4 +67,9 @@ export class CreateOfferDto {
 
   @IsEnum(City, { message: CREATE_OFFER_MESSAGES.CITY.INVALID_FORMAT })
   public city: City;
+
+  @IsArray({ message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_FORMAT })
+  @ArrayMinSize(OFFER_IMAGES_AMOUNT, { message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_SIZE })
+  @ArrayMaxSize(OFFER_IMAGES_AMOUNT, { message: CREATE_OFFER_MESSAGES.IMAGES.INVALID_SIZE })
+  public images: string[];
 }

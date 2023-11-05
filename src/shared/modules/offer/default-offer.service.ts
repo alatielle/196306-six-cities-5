@@ -14,6 +14,7 @@ import {
   getPipeline,
   getUserPipeline,
 } from './offer.aggregation.js';
+import { UpdateOfferImagesDto } from './dto/update-offer-images.dto.js';
 
 @injectable()
 export class DefaultOfferService implements OfferService {
@@ -110,7 +111,7 @@ export class DefaultOfferService implements OfferService {
 
   public async updateById(
     offerId: string,
-    dto: UpdateOfferDto,
+    dto: UpdateOfferDto | UpdateOfferImagesDto,
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
       .findByIdAndUpdate(offerId, dto, { new: true })

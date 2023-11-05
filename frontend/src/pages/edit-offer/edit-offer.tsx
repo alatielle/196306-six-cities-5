@@ -6,7 +6,7 @@ import OfferForm from '../../components/offer-form/offer-form';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { editOffer, fetchOffer } from '../../store/action';
 import { getIsOfferLoading, getOffer } from '../../store/site-data/selectors';
-import { Offer } from '../../types/types';
+import { OfferFormOutput } from '../../types/types';
 
 const EditOffer = (): JSX.Element | null => {
   const params = useParams();
@@ -29,13 +29,14 @@ const EditOffer = (): JSX.Element | null => {
     return null;
   }
 
-  const handleFormSubmit = (offerData: Offer) => {
-    dispatch(editOffer(offerData));
+  const handleFormSubmit = (offerData: OfferFormOutput) => {
+    console.log(offerData);
+    dispatch(editOffer({ ...offerData, id: offer.id }));
   };
 
   return (
-    <main className="page__main">
-      <div className="container">
+    <main className='page__main'>
+      <div className='container'>
         <section>
           <h1>Edit offer</h1>
           <OfferForm offer={offer} onSubmit={handleFormSubmit} />

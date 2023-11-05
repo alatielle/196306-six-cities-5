@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 
 import { createAPI } from '../api';
 import { rootReducer } from './root-reducer';
-import { fetchOffers, fetchFavoriteOffers, fetchUserStatus } from './action';
+import { fetchFavoriteOffers, fetchOffers, fetchUserStatus } from './action';
 import history from '../history';
 
 const api = createAPI();
@@ -13,9 +13,9 @@ const store = configureStore({
       extraArgument: {
         api,
         history
-      },
-    },
-  }),
+      }
+    }
+  })
 });
 
 store.dispatch(fetchUserStatus());

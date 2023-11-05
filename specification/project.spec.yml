@@ -409,6 +409,39 @@ paths:
               schema:
                 $ref: '#/components/schemas/generalError'
 
+  /offers/{offerId}/preview:
+    post:
+      tags:
+        - offers
+      summary: Upload offer preview image
+      description: Uploads preview image. Image should have a `png` or `jpg` format.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                preview:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Image has been uploaded.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imagePreview:
+                    type: string
+                    example: http://mysite.com/upload/Uq-PzHXRZnm6NzYvfjFGA.png
+        '401':
+          description: A user is not authorized to upload images.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generalError'
+
   /offers/{offerId}/images:
     post:
       tags:

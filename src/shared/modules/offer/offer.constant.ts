@@ -28,10 +28,6 @@ export const GUESTS = {
   MAX: 10
 };
 
-export const IMAGE_LENGTH = {
-  MAX: 256
-};
-
 export const ALLOWED_IMAGE_MIME_TYPES = [
   'image/png',
   'image/jpeg',

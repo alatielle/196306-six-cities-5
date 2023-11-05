@@ -63,7 +63,7 @@ export const finalPipeline = [
       commentAmount: { $size: '$comments' },
       rating: { $ifNull: [{ $avg: '$comments.rating' }, 0] },
       isFavorite: { $in: ['$_id', { $ifNull: ['$user.favorites', []] }] },
-      imagePreview: { $arrayElemAt: ['$images', 0] },
+      imagePreview: 1,
       postDate: 1,
       isPremium: 1,
       price: 1,

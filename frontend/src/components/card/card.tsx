@@ -1,12 +1,12 @@
 import { memo } from 'react';
 import { Link } from 'react-router-dom';
 
-import type { Offer } from '../../types/types';
+import type { OfferPreview } from '../../types/types';
 import { AppRoute } from '../../const';
 import { capitalize, getStarsWidth } from '../../utils';
 import Bookmark from '../bookmark/bookmark';
 
-type CardProps = Offer & {
+type CardProps = OfferPreview & {
   onMouseEnter?: (id: string) => void;
   onMouseLeave?: () => void;
   isMini?: boolean;

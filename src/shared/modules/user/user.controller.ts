@@ -104,10 +104,18 @@ export class UserController extends BaseController {
   }
 
   public async checkToken(
-    { tokenPayload: { email } }: Request,
+    { tokenPayload }: Request,
     res: Response
   ): Promise<void> {
-    const user = await this.userService.findByEmail(email);
+    if (!tokenPayload) {
+      throw new HttpError(
+        StatusCodes.UNAUTHORIZED,
+        'Unauthorized',
+        'UserController'
+      );
+    }
+
+    const user = await this.userService.findByEmail(tokenPayload.email);
 
     if (!user) {
       throw new HttpError(

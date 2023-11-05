@@ -29,17 +29,20 @@ export type Comment = {
   user: User;
 };
 
-export type Offer = {
+export type OfferPreview = {
   id: string;
+  title: string;
   price: number;
   rating: number;
-  title: string;
   isPremium: boolean;
   isFavorite: boolean;
   city: City;
-  location: Location;
   previewImage: string;
   type: Type;
+  location: Location;
+};
+
+export type Offer = OfferPreview & {
   bedrooms: number;
   description: string;
   goods: string[];
@@ -48,11 +51,10 @@ export type Offer = {
   maxAdults: number;
 };
 
-export type NewOffer = {
+export type OfferDraft = {
   title: string;
   description: string;
   city: City;
-  previewImage: string;
   isPremium: boolean;
   type: Type;
   bedrooms: number;
@@ -60,7 +62,23 @@ export type NewOffer = {
   price: number;
   goods: string[];
   location: Location;
+  previewImage: string;
   images: string[];
+}
+
+export type OfferFormOutput = {
+  title: string;
+  description: string;
+  city: City;
+  isPremium: boolean;
+  type: Type;
+  bedrooms: number;
+  maxAdults: number;
+  price: number;
+  goods: string[];
+  location: Location;
+  previewImage?: File;
+  images: File[];
 };
 
 export type NewComment = Pick<Comment, 'comment' | 'rating'>;
@@ -70,3 +88,8 @@ export type CommentAuth = NewComment &
 export type FavoriteAuth = Offer['id'];
 export type UserRegister = Omit<User, 'avatarUrl'> &
   Pick<UserAuth, 'password'> & { avatar?: File };
+
+export type ValidationErrorField = {
+  value: string;
+  messages: string[];
+}

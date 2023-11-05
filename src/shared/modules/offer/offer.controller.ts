@@ -37,6 +37,7 @@ import {
 import { UploadImagesRdo } from './rdo/upload-images.rdo.js';
 import { QueryCity } from './type/query-city.type.js';
 import { FavoriteOfferDto } from './dto/favorite-offer.dto.js';
+import { UploadPreviewRdo } from './rdo/upload-preview.rdo.js';
 import { FavoriteOfferRequest } from './type/favorite-offer-request.type.js';
 
 @injectable()
@@ -123,6 +124,23 @@ export class OfferController extends BaseController {
       middlewares: [
         new ValidateObjectIdMiddleware('offerId'),
         new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId')
+      ]
+    });
+
+    this.addRoute({
+      path: '/:offerId/preview',
+      method: HttpMethod.Post,
+      handler: this.uploadPreview,
+      middlewares: [
+        new PrivateRouteMiddleware(),
+        new ValidateObjectIdMiddleware('offerId'),
+        new DocumentExistsMiddleware(this.offerService, 'Offer', 'offerId'),
+        new ValidateAuthorMiddleware(this.offerService, 'Offer', 'offerId'),
+        new UploadFileMiddleware(
+          this.configService.get('UPLOAD_DIRECTORY'),
+          'preview',
+          ALLOWED_IMAGE_MIME_TYPES
+        )
       ]
     });
 
@@ -222,15 +240,27 @@ export class OfferController extends BaseController {
     this.ok(res, fillDTO(CommentRdo, comments));
   }
 
+  public async uploadPreview({ params, file }: Request<ParamOfferId>, res: Response) {
+    if (!file) {
+      throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, 'No file was uploaded');
+    }
+
+    const { offerId } = params;
+    const updateDto = {
+      imagePreview: file.filename
+    };
+    await this.offerService.updateById(offerId, updateDto);
+    this.created(res, fillDTO(UploadPreviewRdo, updateDto));
+  }
+
   public async uploadImages({ params, files }: Request<ParamOfferId>, res: Response) {
     if (!Array.isArray(files)) {
       throw new HttpError(StatusCodes.INTERNAL_SERVER_ERROR, 'No files were uploaded');
     }
 
     const { offerId } = params;
-    const fileNames = files.map((file) => file.filename);
     const updateDto = {
-      images: fileNames
+      images: files.map((file) => file.filename)
     };
     await this.offerService.updateById(offerId, updateDto);
     this.created(res, fillDTO(UploadImagesRdo, updateDto));
